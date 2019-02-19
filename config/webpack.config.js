@@ -18,8 +18,8 @@ const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
-const paths = require('./paths');
-const getClientEnvironment = require('./env');
+const paths = require('./paths-client');
+const getClientEnvironment = require('./env-server');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin-alt');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
@@ -249,7 +249,7 @@ module.exports = function(webpackEnv) {
       // if there are any conflicts. This matches Node resolution mechanism.
       // https://github.com/facebook/create-react-app/issues/253
       modules: ['node_modules'].concat(
-        // It is guaranteed to exist because we tweak it in `env.js`
+        // It is guaranteed to exist because we tweak it in `env-server.js`
         process.env.NODE_PATH.split(path.delimiter).filter(Boolean)
       ),
       // These are the reasonable defaults supported by the Node ecosystem.
@@ -518,7 +518,7 @@ module.exports = function(webpackEnv) {
       // the requesting resource.
       new ModuleNotFoundPlugin(paths.appPath),
       // Makes some environment variables available to the JS code, for example:
-      // if (process.env.NODE_ENV === 'production') { ... }. See `./env.js`.
+      // if (process.env.NODE_ENV === 'production') { ... }. See `./env-server.js`.
       // It is absolutely essential that NODE_ENV is set to production
       // during a production build.
       // Otherwise React will be compiled in the very slow development mode.

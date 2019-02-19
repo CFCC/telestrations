@@ -2,10 +2,10 @@
 
 const fs = require('fs');
 const path = require('path');
-const paths = require('./paths');
+const paths = require('./paths-server');
 
-// Make sure that including paths.js after env.js will read .env variables.
-delete require.cache[require.resolve('./paths')];
+// Make sure that including paths-client.js after env-server.js will read .env variables.
+delete require.cache[require.resolve('./paths-server')];
 
 const NODE_ENV = process.env.NODE_ENV;
 if (!NODE_ENV) {

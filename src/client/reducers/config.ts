@@ -5,7 +5,11 @@ export interface Config {
     ip: String
 }
 
-export default function configReducer(state: Config, action: configCreators.ConfigCreator): Config {
+const defaultState: Config = {
+    ip: ''
+};
+
+export default function configReducer(state: Config = defaultState, action: configCreators.ConfigCreator): Config {
     switch (action.type) {
         case configActions.SET_IP:
             return Object.assign({}, state, {

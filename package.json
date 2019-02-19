@@ -68,8 +68,8 @@
     "workbox-webpack-plugin": "3.6.3"
   },
   "scripts": {
-    "start": "concurrently \"node scripts/start.js\" \"node src/server/index.js\"",
-    "build": "node scripts/build.js",
+    "start": "concurrently \"node scripts/start-server.js\" \"node scripts/start-client.js\"",
+    "build": "concurrently \"node scripts/build-server.js\" \"node scripts/build-client.js\"",
     "test": "node scripts/test.js"
   },
   "eslintConfig": {
