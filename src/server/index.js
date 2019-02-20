@@ -8,6 +8,8 @@ const io = socketIo(server);
 io.on('connection', client => {
     controller.addPlayerToGame();
 
+    client.on('start game', () => io.emit('start game'));
+
     client.on('event', data => { /* … */ });
     client.on('disconnect', () => { /* … */ });
 });
