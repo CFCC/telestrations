@@ -1,4 +1,7 @@
 export type SET_IP = 'CONFIG_SET_IP';
 export const SET_IP: SET_IP = 'CONFIG_SET_IP';
 
-export type CONFIG_ACTION = SET_IP;
+export type SET_GAME_STATE = 'CONFIG_SET_GAME_STATE';
+export const SET_GAME_STATE: SET_GAME_STATE = 'CONFIG_SET_GAME_STATE';
+
+export type CONFIG_ACTION = SET_IP | SET_GAME_STATE;
