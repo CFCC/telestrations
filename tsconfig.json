@@ -20,7 +20,7 @@
 		"noEmit": true
 	},
 	"include": [
-		"src/client/**/*",
+		"src/**/*",
 		"custom-types.d.ts"
 	],
 	"exclude": [

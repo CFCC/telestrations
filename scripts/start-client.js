@@ -28,7 +28,7 @@ const {
     prepareUrls,
 } = require('react-dev-utils/WebpackDevServerUtils');
 const paths = require('../config/paths-client');
-const configFactory = require('../config/webpack.config');
+const configFactory = require('../config/webpack.config-client');
 const createDevServerConfig = require('../config/webpackDevServer.config');
 
 const useYarn = fs.existsSync(paths.yarnLockFile);

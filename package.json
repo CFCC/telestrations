@@ -58,6 +58,7 @@
     "resolve": "1.10.0",
     "sass-loader": "7.1.0",
     "socket.io": "^2.2.0",
+    "socket.io-client": "^2.2.0",
     "style-loader": "0.23.1",
     "terser-webpack-plugin": "1.2.2",
     "typescript": "^3.3.3",
@@ -68,7 +69,7 @@
     "workbox-webpack-plugin": "3.6.3"
   },
   "scripts": {
-    "start": "concurrently \"node scripts/start-server.js\" \"node scripts/start-client.js\" \"node src/server/index.js\"",
+    "start": "concurrently \"node scripts/start-server.js\" \"node scripts/start-client.js\" \"node --experimental-modules src/server/index.mjs\"",
     "build": "concurrently \"node scripts/build-server.js\" \"node scripts/build-client.js\"",
     "test": "node scripts/test.js"
   },
@@ -130,5 +131,8 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "@types/socket.io-client": "^1.4.32"
   }
 }

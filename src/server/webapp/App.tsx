@@ -1,21 +1,55 @@
 import React, {Component} from 'react';
-import {Button, TextField} from "@material-ui/core";
+import socketIo from 'socket.io-client';
+import {Button, CircularProgress, createStyles, Theme, withStyles, WithStyles} from "@material-ui/core";
 
-class App extends Component {
+const styles = (theme: Theme) => createStyles({
+    app: {
+        backgroundColor: '#FFC20E',
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column',
+        height: '100vh'
+    },
+    progress: {
+        margin: theme.spacing.unit * 5
+    }
+});
+
+interface LoadingScreenProps extends WithStyles<typeof styles> {
+
+}
+
+interface LoadingScreenState {
+    players: Array<String>
+}
+
+class LoadingScreen extends Component<LoadingScreenProps, LoadingScreenState> {
+    io = socketIo('localhost:8081');
+
+    constructor(props: LoadingScreenProps) {
+        super(props);
+
+        this.io.on('player added', (players: Array<String>) => this.setState({players}));
+    }
+
     state = {
-        ip: ""
+        players: []
     };
-
-    changeIp = (e: React.ChangeEvent<HTMLInputElement>) => this.setState({ip: e.target.value});
 
     render() {
         return (
-            <div>
-                <TextField value={this.state.ip} onChange={this.changeIp}/>
-                <Button/>
+            <div className={this.props.classes.app}>
+                <img src="/logo.png" alt="Telestrations logo" />
+                <h1>Waiting for clients to connect</h1>
+                <h3>Start the game when everyone's joined!</h3>
+                <CircularProgress className={this.props.classes.progress} />
+                <ul>
+                    {this.state.players.map(player => <li>{player}</li>)}
+                </ul>
+                <Button>Start Game</Button>
             </div>
         );
     }
 }
 
-export default App;
+export default withStyles(styles)(LoadingScreen);
