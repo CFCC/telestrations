@@ -11,6 +11,9 @@ const styles = (theme: Theme) => createStyles({
     },
     progress: {
         margin: theme.spacing.unit * 5
+    },
+    img: {
+        maxWidth: '80%'
     }
 });
 
@@ -18,7 +21,7 @@ class LoadingScreen extends Component<WithStyles<typeof styles>> {
     render() {
         return (
             <div className={this.props.classes.app}>
-                <img src="/logo.png" alt="Telestrations logo" />
+                <img src="/logo.png" alt="Telestrations logo" className={this.props.classes.img} />
                 <h1>Waiting for the game to start</h1>
                 <h3>Have your host start the game when everyone's joined!</h3>
                 <CircularProgress className={this.props.classes.progress} />

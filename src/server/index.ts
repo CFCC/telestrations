@@ -9,14 +9,16 @@ let clients = [];
 
 io.on('connection', client => {
     client.on('i am a server', () => {
+        console.log('we have our server!');
         serverWebapp = client;
     });
 
     client.on('i am a client', () => {
         clients.push(client);
 
-        controller.addPlayerToGame();
-        server.emit('player added', controller.getPlayers());
+        controller.addPlayerToGame('client ' + clients.length);
+        console.log('added client ' + clients.length);
+        io.emit('player added', controller.getPlayers());
     });
 
     client.on('start game', () => io.emit('start game'));

@@ -1,6 +1,6 @@
-const players = [];
+const players: Array<String> = [];
 
-function addPlayerToGame(player) {
+function addPlayerToGame(player: String) {
     players.push(player);
 }
 

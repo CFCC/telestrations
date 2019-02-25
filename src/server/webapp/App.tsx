@@ -12,6 +12,9 @@ const styles = (theme: Theme) => createStyles({
     },
     progress: {
         margin: theme.spacing.unit * 5
+    },
+    img: {
+        maxWidth: '80%'
     }
 });
 
@@ -29,7 +32,11 @@ class LoadingScreen extends Component<LoadingScreenProps, LoadingScreenState> {
     constructor(props: LoadingScreenProps) {
         super(props);
 
-        this.io.on('player added', (players: Array<String>) => this.setState({players}));
+        this.io.emit('i am a server');
+        this.io.on('player added', (players: Array<String>) => {
+            console.log("i got new players");
+            this.setState({players})
+        });
     }
 
     state = {
@@ -39,7 +46,7 @@ class LoadingScreen extends Component<LoadingScreenProps, LoadingScreenState> {
     render() {
         return (
             <div className={this.props.classes.app}>
-                <img src="/logo.png" alt="Telestrations logo" />
+                <img src="/logo.png" alt="Telestrations logo" className={this.props.classes.img} />
                 <h1>Waiting for clients to connect</h1>
                 <h3>Start the game when everyone's joined!</h3>
                 <CircularProgress className={this.props.classes.progress} />
