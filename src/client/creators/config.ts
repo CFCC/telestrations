@@ -1,5 +1,5 @@
 import * as configActions from '../actions/config';
-import {GameState} from '../../../custom-types';
+import {GameState} from '../../../types';
 
 export interface setIp {
     type: configActions.SET_IP;

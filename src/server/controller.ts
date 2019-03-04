@@ -1,13 +1,32 @@
-const players: Array<String> = [];
+import {Client, GameItem} from "../../types";
+import {remove} from 'lodash';
 
-function addPlayerToGame(player: String) {
+const players: Array<Client> = [];
+let gameStarted = false;
+
+let gameOrder: Array<String> = [];
+let game: Array<GameItem> = [];
+
+function addPlayer(player: Client) {
     players.push(player);
 }
 
-function getPlayers() {
+function getPlayers(): Array<Client> {
     return players;
 }
 
+function removePlayer(player: Client) {
+    remove(players, p => p.id === player.id);
+}
+
+function startGame() {
+    gameStarted = true;
+}
+
+function isStarted(): boolean {
+    return gameStarted;
+}
+
 export default {
-    addPlayerToGame, getPlayers
+    addPlayerToGame: addPlayer, getPlayers, removePlayer, startGame, isStarted
 };

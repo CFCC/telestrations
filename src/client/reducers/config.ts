@@ -1,6 +1,6 @@
 import * as configCreators from '../creators/config';
 import * as configActions from '../actions/config';
-import {GameState} from "../../../custom-types";
+import {GameState} from "../../../types";
 
 export interface Config {
     ip: String,
