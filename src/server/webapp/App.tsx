@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import socketIo from 'socket.io-client';
+import io from './socket-io';
 import {Button, CircularProgress, createStyles, Theme, withStyles, WithStyles} from "@material-ui/core";
 
 const styles = (theme: Theme) => createStyles({
@@ -14,7 +14,7 @@ const styles = (theme: Theme) => createStyles({
         margin: theme.spacing.unit * 5
     },
     img: {
-        maxWidth: '80%'
+        maxWidth: '50%'
     }
 });
 
@@ -27,16 +27,11 @@ interface LoadingScreenState {
 }
 
 class LoadingScreen extends Component<LoadingScreenProps, LoadingScreenState> {
-    io = socketIo('localhost:8081');
-
     constructor(props: LoadingScreenProps) {
         super(props);
 
-        this.io.emit('i am a server');
-        this.io.on('player added', (players: Array<String>) => {
-            console.log("i got new players");
-            this.setState({players})
-        });
+        io.emit('i am a server');
+        io.on('player added', (players: Array<String>) => this.setState({players}));
     }
 
     state = {

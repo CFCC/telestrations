@@ -1,5 +1,9 @@
 import React, {ChangeEvent, Component} from 'react';
-import {CircularProgress, createStyles, Theme, withStyles, WithStyles} from "@material-ui/core";
+import {Button, CircularProgress, createStyles, TextField, Theme, WithStyles} from "@material-ui/core";
+import {State} from "../reducers";
+import {Dispatch} from "redux";
+import {connectAndStyle} from "../util";
+import * as ConfigCreators from '../creators/config';
 
 const styles = (theme: Theme) => createStyles({
     app: {
@@ -17,30 +21,47 @@ const styles = (theme: Theme) => createStyles({
     }
 });
 
-interface LoadingScreenState {
-    nameSubmitted: boolean;
+interface StateProps {
+    nickname: string;
+    nicknameSubmitted: boolean;
 }
 
-class LoadingScreen extends Component<WithStyles<typeof styles>, LoadingScreenState> {
-    state = {
-        nameSubmitted: false
-    };
+interface DispatchProps {
+    submitNickname: () => ConfigCreators.submitNickname,
+    setNickname: (nickname: String) => ConfigCreators.setNickname
+}
 
-    submitNickname = (e: ChangeEvent<HTMLInputElement>) => {
-
-        this.setState({nameSubmitted: true});
-    };
-
+class LoadingScreen extends Component<WithStyles<typeof styles> & StateProps & DispatchProps> {
     render() {
         return (
             <div className={this.props.classes.app}>
                 <img src="/logo.png" alt="Telestrations logo" className={this.props.classes.img} />
-                <h1>Waiting for the game to start</h1>
-                <h3>Have your host start the game when everyone's joined!</h3>
-                <CircularProgress className={this.props.classes.progress} />
+                {this.props.nicknameSubmitted
+                    ? <div>
+                        <h1>Waiting for the game to start</h1>
+                        <h3>Have your host start the game when everyone's joined!</h3>
+                        <CircularProgress className={this.props.classes.progress} />
+                    </div>
+                    : <div>
+                        <h1>What is your name?</h1>
+                        <TextField value={this.props.nickname}
+                                   onChange={(e: ChangeEvent<HTMLInputElement>) => this.props.setNickname(e.target.value)} />
+                        <Button onClick={this.props.submitNickname}>Join Game</Button>
+                    </div>
+                }
             </div>
         );
     }
 }
 
-export default withStyles(styles)(LoadingScreen);
+const mapStateToProps = (state: State): StateProps => ({
+    nickname: state.config.nickname,
+    nicknameSubmitted: state.config.nicknameSubmitted
+});
+
+const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
+    submitNickname: () => dispatch(ConfigCreators.submitNickname()),
+    setNickname: (nickname: String) => dispatch(ConfigCreators.setNickname(nickname))
+});
+
+export default connectAndStyle(LoadingScreen, mapStateToProps, mapDispatchToProps, styles);

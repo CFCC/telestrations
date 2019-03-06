@@ -54,7 +54,7 @@
     "react-app-polyfill": "^0.2.1",
     "react-dev-utils": "^7.0.3",
     "react-dom": "^16.8.1",
-    "react-redux": "^6.0.0",
+    "react-redux": "^6.0.1",
     "react-sketch": "^0.5.1",
     "redux": "^4.0.1",
     "resolve": "1.10.0",
@@ -138,6 +138,7 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.121",
+    "@types/react-redux": "^7.0.1",
     "@types/socket.io-client": "^1.4.32",
     "@types/uuid": "^3.4.4"
   }

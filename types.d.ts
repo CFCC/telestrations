@@ -18,3 +18,9 @@ export interface GameItem {
     // Even indices (including 0) are sentences, odd indices are base64 sources of images
     content: Array<String>;
 }
+
+declare global {
+    interface Window {
+        __REDUX_DEVTOOLS_EXTENSION__: any
+    }
+}

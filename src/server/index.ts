@@ -11,7 +11,6 @@ let clients: Array<Client> = [];
 
 io.on('connection', client => {
     client.on('i am a server', () => {
-        console.log('we have our server!');
         serverWebapp = client;
 
         client.on('start game', () => {
@@ -29,9 +28,8 @@ io.on('connection', client => {
             };
 
             clients.push(c);
-
-            game.addPlayerToGame(name);
-            io.emit('player added', game.getPlayers());
+            game.addPlayerToGame(c);
+            io.emit('player added', game.getPlayers().map(p => p.nickname));
 
             client.on('finished game turn', packet => {
 
