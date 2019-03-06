@@ -1,3 +1,11 @@
 import socketIo from 'socket.io-client';
+import store from './store';
+import * as ConfigCreators from './creators/config';
 
-export default socketIo('localhost:8081');
+const io = socketIo('localhost:8081');
+
+io.on('start game', () => {
+    store.dispatch(ConfigCreators.setGameState('typing'));
+});
+
+export default io;

@@ -3,9 +3,7 @@ import {remove} from 'lodash';
 
 const players: Array<Client> = [];
 let gameStarted = false;
-
-let gameOrder: Array<String> = [];
-let game: Array<GameItem> = [];
+const game: Array<GameItem> = [];
 
 function addPlayer(player: Client) {
     players.push(player);

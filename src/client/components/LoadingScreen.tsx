@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {ChangeEvent, Component} from 'react';
 import {CircularProgress, createStyles, Theme, withStyles, WithStyles} from "@material-ui/core";
 
 const styles = (theme: Theme) => createStyles({
@@ -17,7 +17,20 @@ const styles = (theme: Theme) => createStyles({
     }
 });
 
-class LoadingScreen extends Component<WithStyles<typeof styles>> {
+interface LoadingScreenState {
+    nameSubmitted: boolean;
+}
+
+class LoadingScreen extends Component<WithStyles<typeof styles>, LoadingScreenState> {
+    state = {
+        nameSubmitted: false
+    };
+
+    submitNickname = (e: ChangeEvent<HTMLInputElement>) => {
+
+        this.setState({nameSubmitted: true});
+    };
+
     render() {
         return (
             <div className={this.props.classes.app}>
