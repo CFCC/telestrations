@@ -18,6 +18,7 @@ class App extends Component<StateProps> {
             case 'drawing': return <Drawing/>;
             case 'typing': return <Typing/>;
             case 'finished': return <Finished/>;
+            default: return <div />;
         }
     }
 }

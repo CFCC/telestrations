@@ -38,6 +38,8 @@ class LoadingScreen extends Component<LoadingScreenProps, LoadingScreenState> {
         players: []
     };
 
+    startGame = () => io.emit('start game');
+
     render() {
         return (
             <div className={this.props.classes.app}>
@@ -48,7 +50,7 @@ class LoadingScreen extends Component<LoadingScreenProps, LoadingScreenState> {
                 <ul>
                     {this.state.players.map(player => <li>{player}</li>)}
                 </ul>
-                <Button>Start Game</Button>
+                <Button onClick={this.startGame}>Start Game</Button>
             </div>
         );
     }

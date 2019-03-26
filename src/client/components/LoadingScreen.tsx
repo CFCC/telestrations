@@ -2,7 +2,7 @@ import React, {ChangeEvent, Component} from 'react';
 import {Button, CircularProgress, createStyles, TextField, Theme, WithStyles} from "@material-ui/core";
 import {State} from "../reducers";
 import {Dispatch} from "redux";
-import {connectAndStyle} from "../util";
+import {connectAndStyle} from "../../../util";
 import * as ConfigCreators from '../creators/config';
 
 const styles = (theme: Theme) => createStyles({
