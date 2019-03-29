@@ -8,4 +8,8 @@ io.on('start game', () => {
     store.dispatch(ConfigCreators.setGameState('typing'));
 });
 
+io.on('game already started', () => {
+    store.dispatch(ConfigCreators.setGameState('already started'));
+})
+
 export default io;

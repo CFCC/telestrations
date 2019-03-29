@@ -14,6 +14,7 @@ interface StateProps {
 class App extends Component<StateProps> {
     render() {
         switch (this.props.gameState) {
+            case 'already started':
             case 'loading': return <LoadingScreen />;
             case 'drawing': return <Drawing/>;
             case 'typing': return <Typing/>;

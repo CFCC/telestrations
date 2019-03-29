@@ -1,7 +1,7 @@
 /// <reference types="react-scripts" />
 import {Socket} from "socket.io";
 
-export type GameState = 'loading' | 'drawing' | 'typing' | 'finished';
+export type GameState = 'loading' | 'drawing' | 'typing' | 'finished' | 'already started';
 
 export type UUID = String;
 
