@@ -1,8 +1,23 @@
 import React, {Component} from 'react';
 import io from './socket-io';
-import {Button, CircularProgress, createStyles, Theme, withStyles, WithStyles} from "@material-ui/core";
+import {AccountCircle as PersonIcon} from '@material-ui/icons'
+import {
+    Button,
+    createStyles,
+    List,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    WithStyles,
+    withStyles
+} from "@material-ui/core";
+import {
+    blue, cyan, green, indigo, lime, orange, purple, red, teal, yellow
+} from '@material-ui/core/colors';
 
-const styles = (theme: Theme) => createStyles({
+const colors = [blue, cyan, green, indigo, lime, orange, purple, red, teal, yellow];
+
+const styles = createStyles({
     app: {
         backgroundColor: '#FFC20E',
         display: 'flex',
@@ -10,11 +25,11 @@ const styles = (theme: Theme) => createStyles({
         flexDirection: 'column',
         height: '100vh'
     },
-    progress: {
-        margin: theme.spacing.unit * 5
-    },
     img: {
         maxWidth: '50%'
+    },
+    header: {
+        textAlign: 'center'
     }
 });
 
@@ -44,13 +59,25 @@ class LoadingScreen extends Component<LoadingScreenProps, LoadingScreenState> {
         return (
             <div className={this.props.classes.app}>
                 <img src="/logo.png" alt="Telestrations logo" className={this.props.classes.img} />
-                <h1>Waiting for clients to connect</h1>
+                <h1 className={this.props.classes.header}>Waiting for clients to connect</h1>
                 <h3>Start the game when everyone's joined!</h3>
-                <CircularProgress className={this.props.classes.progress} />
-                <ul>
-                    {this.state.players.map(player => <li>{player}</li>)}
-                </ul>
-                <Button onClick={this.startGame}>Start Game</Button>
+                <List>
+                    {this.state.players.map(player => <ListItem>
+                            <ListItemIcon>
+                                <PersonIcon style={{
+                                    color: colors[Math.floor(Math.random() * colors.length)][500]
+                                }} />
+                            </ListItemIcon>
+                            <ListItemText
+                                primary={player}
+                            />
+                        </ListItem>
+                    )}
+                </List>
+                <Button onClick={this.startGame}
+                        variant="raised"
+                        color="primary"
+                        disabled={this.state.players.length === 0}>Start Game</Button>
             </div>
         );
     }
