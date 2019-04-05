@@ -1,6 +1,6 @@
 import * as configCreators from '../creators/config';
 import * as configActions from '../actions/config';
-import {GameState} from "../../../types";
+import {GameState} from "../../types";
 import io from '../socket-io';
 
 export interface Config {
@@ -11,7 +11,7 @@ export interface Config {
 
 const defaultState: Config = {
     nicknameSubmitted: false,
-    state: 'loading',
+    state: GameState.LOADING,
     nickname: ''
 };
 

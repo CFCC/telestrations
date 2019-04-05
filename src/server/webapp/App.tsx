@@ -1,11 +1,7 @@
 import React, {Component} from 'react';
 import LoadingScreen from "./components/LoadingScreen";
 import {State} from "./reducers";
-import {GameState} from "../../../types";
-import Finished from "./components/Finished";
-import Lobby from './components/Lobby';
-import Monitor from './components/Monitor';
-import SingleMonitor from './components/SingleMonitor';
+import {GameState} from "../../types";
 import {connect} from "react-redux";
 
 interface StateProps {
@@ -14,8 +10,9 @@ interface StateProps {
 
 class App extends Component<StateProps> {
     render() {
+
         switch (this.props.gameState) {
-            case 'loading': return <LoadingScreen />;
+            case GameState.LOADING: return <LoadingScreen />;
             default: return <div />;
         }
     }

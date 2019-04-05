@@ -1,4 +1,4 @@
-import {Client, GameItem} from "../../types";
+import {Client, GameItem} from "../types";
 import {remove} from 'lodash';
 
 const players: Array<Client> = [];

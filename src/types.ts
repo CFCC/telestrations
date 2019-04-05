@@ -1,7 +1,6 @@
-/// <reference types="react-scripts" />
 import {Socket} from "socket.io";
 
-export type GameState = 'loading' | 'drawing' | 'typing' | 'finished' | 'already started';
+export enum GameState {LOADING = 'loading' , DRAWING = 'drawing', TYPING = 'typing', FINISHED = 'finished', ALREADY_STARTED = 'already started'};
 
 export type UUID = String;
 
