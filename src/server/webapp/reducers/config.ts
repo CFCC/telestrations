@@ -1,14 +1,13 @@
 import * as configCreators from '../creators/config';
 import * as configActions from '../actions/config';
-import {GameState} from "../../../../types";
-import io from '../socket-io';
+import {GameState} from "../../../types";
 
 export interface Config {
     state: GameState;
 }
 
 const defaultState: Config = {
-    state: 'loading',
+    state: GameState.LOADING,
 };
 
 export default function configReducer(state: Config = defaultState, action: configCreators.ConfigCreator): Config {

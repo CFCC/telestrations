@@ -127,8 +127,8 @@
       "node"
     ],
     "watchPlugins": [
-      "/home/jpitlor/Code/cfcc/telestrations/node_modules/jest-watch-typeahead/filename.js",
-      "/home/jpitlor/Code/cfcc/telestrations/node_modules/jest-watch-typeahead/testname.js"
+      "./node_modules/jest-watch-typeahead/filename.js",
+      "./node_modules/jest-watch-typeahead/testname.js"
     ]
   },
   "babel": {

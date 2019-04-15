@@ -2,7 +2,7 @@ import socketIo from 'socket.io';
 import http from 'http';
 import game from './controller';
 import uuid from 'uuid/v4';
-import {Client} from "../../types";
+import {Client} from "../types";
 
 const server = http.createServer();
 const io = socketIo(server);
