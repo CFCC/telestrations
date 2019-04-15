@@ -10,7 +10,6 @@ interface StateProps {
 
 class App extends Component<StateProps> {
     render() {
-
         switch (this.props.gameState) {
             case GameState.LOADING: return <LoadingScreen />;
             default: return <div />;

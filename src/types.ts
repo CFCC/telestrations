@@ -1,6 +1,12 @@
 import {Socket} from "socket.io";
 
-export enum GameState {LOADING = 'loading' , DRAWING = 'drawing', TYPING = 'typing', FINISHED = 'finished', ALREADY_STARTED = 'already started'};
+export enum GameState {
+    LOADING = 'loading',
+    DRAWING = 'drawing',
+    TYPING = 'typing',
+    FINISHED = 'finished',
+    ALREADY_STARTED = 'already started'
+}
 
 export type UUID = String;
 

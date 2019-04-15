@@ -24,7 +24,7 @@
     "css-loader": "1.0.0",
     "dotenv": "6.0.0",
     "dotenv-expand": "4.2.0",
-    "eslint": "5.12.0",
+    "eslint": "^5.16.0",
     "eslint-config-react-app": "^3.0.7",
     "eslint-loader": "2.1.1",
     "eslint-plugin-flowtype": "2.50.1",
@@ -76,9 +76,6 @@
     "start": "concurrently \"node scripts/start-server.js\" \"node scripts/start-client.js\" \"ts-node src/server/index.ts\"",
     "build": "concurrently \"node scripts/build-server.js\" \"node scripts/build-client.js\"",
     "test": "node scripts/test.js"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
   },
   "browserslist": [
     ">0.2%",
@@ -140,6 +137,8 @@
     "@types/lodash": "^4.14.121",
     "@types/react-redux": "^7.0.1",
     "@types/socket.io-client": "^1.4.32",
-    "@types/uuid": "^3.4.4"
+    "@types/uuid": "^3.4.4",
+    "@typescript-eslint/eslint-plugin": "^1.6.0",
+    "@typescript-eslint/parser": "^1.6.0"
   }
 }
