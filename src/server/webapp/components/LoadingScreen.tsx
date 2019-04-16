@@ -77,7 +77,7 @@ class LoadingScreen extends Component<LoadingScreenProps, LoadingScreenState> {
                 <Button onClick={this.startGame}
                         variant="contained"
                         color="primary"
-                        disabled={this.state.players.length === 0}>Start Game</Button>
+                        disabled={this.state.players.length < 2}>Start Game</Button>
             </div>
         );
     }
