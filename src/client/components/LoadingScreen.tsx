@@ -13,7 +13,8 @@ const styles = (theme: Theme) => createStyles({
         flexDirection: 'column',
         height: '100vh',
         overflow: 'auto',
-        padding: '1em'
+        padding: '1em',
+        marginBottom: '1em'
     },
     progress: {
         margin: theme.spacing.unit * 5
