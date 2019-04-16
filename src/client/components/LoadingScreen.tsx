@@ -1,9 +1,8 @@
 import React, {ChangeEvent, Component} from 'react';
 import {Button, CircularProgress, createStyles, TextField, Theme, WithStyles} from "@material-ui/core";
-import {State} from "../reducers";
-import {Dispatch} from "redux";
 import {connectAndStyle} from "../util";
-import * as ConfigCreators from '../creators/config';
+import {State} from "../redux/reducers";
+import * as Creators from "../redux/actions";
 
 const styles = (theme: Theme) => createStyles({
     app: {
@@ -29,18 +28,20 @@ const styles = (theme: Theme) => createStyles({
     }
 });
 
-interface StateProps {
-    nickname: string;
-    gameAlreadyStarted: boolean;
-    nicknameSubmitted: boolean;
-}
+const mapStateToProps = (state: State) => ({
+    nickname: state.nickname,
+    gameAlreadyStarted: state.state === 'already started',
+    nicknameSubmitted: state.nicknameSubmitted
+});
 
-interface DispatchProps {
-    submitNickname: () => ConfigCreators.submitNickname,
-    setNickname: (nickname: String) => ConfigCreators.setNickname
-}
+const mapDispatchToProps = {
+    submitNickname: Creators.submitNickname,
+    setNickname: (nickname: String) => Creators.setNickname(nickname)
+};
 
-class LoadingScreen extends Component<WithStyles<typeof styles> & StateProps & DispatchProps> {
+type LoadingScreenProps = WithStyles<typeof styles> & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
+
+class LoadingScreen extends Component<LoadingScreenProps> {
     logo = <img src="/logo.png" alt="Telestrations logo" className={this.props.classes.img} />;
 
     submitNickname = () => <div className={this.props.classes.app}>
@@ -72,16 +73,5 @@ class LoadingScreen extends Component<WithStyles<typeof styles> & StateProps & D
         else return this.submitNickname();
     }
 }
-
-const mapStateToProps = (state: State): StateProps => ({
-    nickname: state.config.nickname,
-    gameAlreadyStarted: state.config.state === 'already started',
-    nicknameSubmitted: state.config.nicknameSubmitted
-});
-
-const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
-    submitNickname: () => dispatch(ConfigCreators.submitNickname()),
-    setNickname: (nickname: String) => dispatch(ConfigCreators.setNickname(nickname))
-});
 
 export default connectAndStyle(LoadingScreen, mapStateToProps, mapDispatchToProps, styles);

@@ -52,12 +52,29 @@ export function finishTurn(personId: UUID, content: string): finishTurn {
     };
 }
 
-export type Action = FINISH_TURN | SET_GAME_STATE | SET_NICKNAME | SUBMIT_NICKNAME;
-export const Action = {
-    FINISH_TURN, SET_GAME_STATE, SET_NICKNAME, SUBMIT_NICKNAME
-};
+export type SET_GUESS = 'SET_GUESS';
+export const SET_GUESS: SET_GUESS = 'SET_GUESS';
+export interface setGuess {
+    type: SET_GUESS;
+    guess: string
+}
+export function setGuess(guess: string): setGuess {
+    return {
+        type: SET_GUESS,
+        guess
+    };
+}
 
-export type Creator = finishTurn | setGameState | setNickname | submitNickname;
-export const Creator = {
-    finishTurn, setGameState, setNickname, submitNickname
-};
+export type SUBMIT_GUESS = 'SUBMIT_GUESS';
+export const SUBMIT_GUESS: SUBMIT_GUESS = 'SUBMIT_GUESS';
+export interface submitGuess {
+    type: SUBMIT_GUESS
+}
+export function submitGuess(): submitGuess {
+    return {
+        type: SUBMIT_GUESS
+    }
+}
+
+export type Creator = finishTurn | setGameState | setNickname | submitNickname | setGuess
+    | submitGuess;
