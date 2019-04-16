@@ -1,5 +1,5 @@
 import socketIo from 'socket.io-client';
-import store from './store';
+import store from './redux/store';
 import * as ConfigCreators from './creators/config';
 import {GameState} from "../types";
 
@@ -11,6 +11,6 @@ io.on('start game', () => {
 
 io.on('game already started', () => {
     store.dispatch(ConfigCreators.setGameState(GameState.ALREADY_STARTED));
-})
+});
 
 export default io;
