@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import LoadingScreen from "./components/LoadingScreen";
-import {State} from "./reducers";
+import {State} from "./redux/reducers";
 import {GameState} from "../../types";
 import {connect} from "react-redux";
 
@@ -18,7 +18,7 @@ class App extends Component<StateProps> {
 }
 
 const mapStateToProps = (state: State) => ({
-    gameState: state.config.state
+    gameState: state.state
 });
 
 export default connect(mapStateToProps)(App);

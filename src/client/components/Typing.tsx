@@ -1,22 +1,49 @@
-import React, {ChangeEvent, Component} from 'react';
-import {Button, TextField, WithStyles} from "@material-ui/core";
+import React, {Component} from 'react';
+import {Button, TextField, Theme, WithStyles} from "@material-ui/core";
 import {createStyles} from '@material-ui/core/styles';
 import {connectAndStyle} from "../util";
 import {State} from "../redux/reducers";
 import * as Creators from "../redux/actions";
+import {Event} from "../../types";
 
-const styles = createStyles({
+const styles = (theme: Theme) => createStyles({
     app: {
-
+        width: '100vw',
+        height: '100vh',
+        overflow: 'auto',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'flex-end',
+    },
+    appWithQuestionBackground: {
+        width: '100vw',
+        height: '100vh',
+        overflow: 'auto',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'flex-end',
+        backgroundImage: 'url(/question-marks.jpg)',
+        backgroundRepeat: 'repeat',
     },
     input: {
-
+        background: '#FFFFFF',
+        borderRadius: theme.shape.borderRadius,
+        flex: 1,
+        margin: '1em'
+    },
+    button: {
+        flexShrink: 0,
+        margin: '1em',
+        height: '4em'
+    },
+    picture: {
+        position: 'absolute'
     }
 });
 
 const mapStateToProps = (state: State) => ({
     picture: "",
-    guess: ""
+    guess: state.guess
 });
 
 const mapDispatchToProps = {
@@ -28,13 +55,17 @@ type TypingProps = WithStyles<typeof styles> & typeof mapDispatchToProps & Retur
 
 class Typing extends Component<TypingProps> {
     render() {
-        return <div>
-            <img src={this.props.picture} alt="Previous submission" />
-            <TextField value={this.props.guess}
+        const {picture, guess, classes} = this.props;
+        return <div className={picture === "" ? classes.appWithQuestionBackground : classes.app}>
+            {picture !== "" ? <img src={picture} alt="Previous submission" className={classes.picture} /> : null}
+            <TextField value={guess}
                        variant="outlined"
-                       className={this.props.classes.input}
-                       onChange={(e: ChangeEvent<HTMLInputElement>) => this.props.setGuess(e.target.value)} />
-            <Button onClick={this.props.submitGuess} variant="contained" color="primary">Submit</Button>
+                       className={classes.input}
+                       placeholder={picture === "" ? "Describe a scene" : "What is in this picture?"}
+                       onChange={(e: Event) => this.props.setGuess(e.target.value)} />
+            <Button onClick={this.props.submitGuess} variant="contained"
+                    color="primary"
+                    className={classes.button}>Submit</Button>
         </div>;
     }
 }

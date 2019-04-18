@@ -2,7 +2,7 @@ import {ComponentClass, ComponentType} from "react";
 import {Dispatch} from "redux";
 import {StyleRulesCallback, withStyles} from "@material-ui/core";
 import {connect} from "react-redux";
-import {State} from "./reducers";
+import {State} from "./redux/reducers";
 
 export function connectAndStyle(component: ComponentClass<any, any>,
                                 mapStateToProps: (state: State) => Object,

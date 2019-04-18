@@ -1,4 +1,5 @@
 import {Socket} from "socket.io";
+import {ChangeEvent} from "react";
 
 export enum GameState {
     LOADING = 'loading',
@@ -23,6 +24,8 @@ export interface GameItem {
     // Even indices (including 0) are sentences, odd indices are base64 sources of images
     content: Array<String>;
 }
+
+export type Event = ChangeEvent<HTMLInputElement>;
 
 declare global {
     interface Window {

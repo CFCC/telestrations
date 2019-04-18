@@ -9,7 +9,7 @@ const defaultState: State = {
     state: GameState.LOADING,
 };
 
-export default function configReducer(state: State = defaultState, action: Actions.Creator): State {
+export default function reducer(state: State = defaultState, action: Actions.Creator): State {
     switch (action.type) {
         case Actions.SET_GAME_STATE:
             return Object.assign({}, state, {

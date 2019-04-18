@@ -32,17 +32,13 @@ export default function reducer(state: State = defaultState, action: Actions.Cre
                 nicknameSubmitted: true
             });
         case Actions.FINISH_TURN:
-            return Object.assign({}, state, {
-
-            });
+            return state;
         case Actions.SET_GUESS:
             return Object.assign({}, state, {
                 guess: action.guess
             });
         case Actions.SUBMIT_GUESS:
-            return Object.assign({}, state, {
-
-            });
+            return state;
         default:
             return state;
     }
