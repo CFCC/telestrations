@@ -1,29 +1,31 @@
 import React, {Component} from 'react';
 import LoadingScreen from "./components/LoadingScreen";
 import {State} from "./redux/reducers";
-import {GameState} from "../types";
+import {ClientGameState} from "../types";
 import Drawing from "./components/Drawing";
 import Typing from "./components/Typing";
 import Finished from "./components/Finished";
 import {connect} from "react-redux";
+import Waiting from "./components/Waiting";
 
 interface StateProps {
-    gameState: GameState
+    gameState: ClientGameState
 }
 
 class App extends Component<StateProps> {
     render() {
         // switch (this.props.gameState) {
-        //     case GameState.ALREADY_STARTED:
-        //     case GameState.LOADING:
+        //     case ClientGameState.ALREADY_STARTED:
+        //     case ClientGameState.LOADING:
         //         return <LoadingScreen />;
-        //     case GameState.DRAWING:
-                 return <Drawing/>;
-        //     case GameState.TYPING:
+        //     case ClientGameState.DRAWING:
+        //          return <Drawing/>;
+        //     case ClientGameState.TYPING:
         //         return <Typing/>;
-            // case GameState.FINISHED:
+            // case ClientGameState.FINISHED:
             //     return <Finished/>;
             // default: return <div />;
+        return <Waiting />
         // }
     }
 }

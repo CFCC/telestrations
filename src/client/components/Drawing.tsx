@@ -29,7 +29,8 @@ const styles = (theme: Theme) => createStyles({
         height: '100% !important'
     },
     list: {
-        width: 'auto'
+        width: 'auto',
+        overflowX: 'hidden'
     },
     fab: {
         margin: 2 * theme.spacing.unit,
@@ -72,7 +73,7 @@ class Drawing extends Component<DrawingProps, DrawingState> {
         toolPickerOpen: false,
         colorPickerOpen: false,
         bgColorPickerOpen: false,
-        menuOpen: true
+        menuOpen: false
     };
 
     changeLineWeight = (e: any, lineWeight: number) => this.setState({lineWeight});
@@ -113,12 +114,25 @@ class Drawing extends Component<DrawingProps, DrawingState> {
                     </ListItem>
                 </List>
                 <Divider />
-                <Slider min={1}
-                        max={100}
-                        step={1}
-                        value={this.state.lineWeight}
-                        className={this.props.classes.slider}
-                        onChange={this.changeLineWeight} />
+                <List>
+                    <ListItem>
+                        <ListItemText primary="Line Weight" />
+                    </ListItem>
+                    <ListItem>
+                        <Slider min={1}
+                                max={100}
+                                step={1}
+                                value={this.state.lineWeight}
+                                className={this.props.classes.slider}
+                                onChange={this.changeLineWeight} />
+                    </ListItem>
+                </List>
+                <Divider />
+                <List>
+                    <ListItem button>
+                        <ListItemText primary="Submit" />
+                    </ListItem>
+                </List>
             </div>
         </div>
     </Drawer>;
@@ -139,7 +153,7 @@ class Drawing extends Component<DrawingProps, DrawingState> {
 
     toolPicker = () => <Dialog open={this.state.toolPickerOpen} onClose={this.closeToolPicker}>
         <List>
-            {['Pencil', 'Line', 'Rectangle', 'Circle', 'Select'].map(tool =>
+            {Object.keys(Tools).map(tool =>
                 <ListItem button onClick={() => this.changeTool(tool.toLowerCase())} key={tool}>
                     <ListItemText primary={tool} />
                 </ListItem>
@@ -152,10 +166,11 @@ class Drawing extends Component<DrawingProps, DrawingState> {
         return <div className={classes.app}>
             <SketchField tool={this.state.tool}
                          lineColor={this.state.color}
+                         backgroundColor={this.state.bgColor}
                          lineWidth={this.state.lineWeight}
                          className={classes.canvas} />
             <Fab color="secondary" aria-label="Edit" className={classes.fab} onClick={this.openMenu}>
-                <Icon>edit_icon</Icon>
+                <Icon>menu</Icon>
             </Fab>
             {this.drawer()}
             {this.colorPicker()}

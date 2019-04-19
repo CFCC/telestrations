@@ -1,17 +1,17 @@
 import React, {Component} from 'react';
 import LoadingScreen from "./components/LoadingScreen";
 import {State} from "./redux/reducers";
-import {GameState} from "../../types";
+import {ClientGameState} from "../../types";
 import {connect} from "react-redux";
 
 interface StateProps {
-    gameState: GameState
+    gameState: ClientGameState
 }
 
 class App extends Component<StateProps> {
     render() {
         switch (this.props.gameState) {
-            case GameState.LOADING: return <LoadingScreen />;
+            case ClientGameState.LOADING: return <LoadingScreen />;
             default: return <div />;
         }
     }

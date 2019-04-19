@@ -1,17 +1,17 @@
 import * as Actions from './actions';
-import {GameState} from "../../types";
+import {ClientGameState} from "../../types";
 import io from '../socket-io';
 
 export interface State {
     nicknameSubmitted: boolean;
-    state: GameState;
+    state: ClientGameState;
     nickname: string;
     guess: string;
 }
 
 const defaultState: State = {
     nicknameSubmitted: false,
-    state: GameState.LOADING,
+    state: ClientGameState.LOADING,
     nickname: '',
     guess: ''
 };

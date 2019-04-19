@@ -1,12 +1,12 @@
-import {GameState, UUID} from '../../types';
+import {ClientGameState, UUID} from '../../types';
 
 export type SET_GAME_STATE = 'SET_GAME_STATE';
 export const SET_GAME_STATE: SET_GAME_STATE = 'SET_GAME_STATE';
 export interface setGameState {
     type: SET_GAME_STATE;
-    state: GameState;
+    state: ClientGameState;
 }
-export function setGameState(state: GameState): setGameState {
+export function setGameState(state: ClientGameState): setGameState {
     return {
         type: SET_GAME_STATE,
         state
