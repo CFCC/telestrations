@@ -1,0 +1,7 @@
+.swatches-picker > div > :first-child {
+    display: none;
+}
+
+.swatches-picker {
+    height: auto !important;
+}

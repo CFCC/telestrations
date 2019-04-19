@@ -82,11 +82,11 @@ class Drawing extends Component<DrawingProps, DrawingState> {
 
     openColorPicker = () => this.setState({colorPickerOpen: true});
     closeColorPicker = () => this.setState({colorPickerOpen: false});
-    changeColor = (color: ColorResult) => this.setState({color: color.hex});
+    changeColor = (color: ColorResult) => this.setState({color: color.hex, colorPickerOpen: false});
 
     openBgColorPicker = () => this.setState({bgColorPickerOpen: true});
     closeBgColorPicker = () => this.setState({bgColorPickerOpen: false});
-    changeBgColor = (color: ColorResult) => this.setState({bgColor: color.hex});
+    changeBgColor = (color: ColorResult) => this.setState({bgColor: color.hex, bgColorPickerOpen: false});
 
     openToolPicker = () => this.setState({toolPickerOpen: true});
     closeToolPicker = () => this.setState({toolPickerOpen: false});
@@ -124,14 +124,14 @@ class Drawing extends Component<DrawingProps, DrawingState> {
     </Drawer>;
 
     colorPicker = () => <Dialog open={this.state.colorPickerOpen} onClose={this.closeColorPicker}>
-        <SwatchesPicker colors={Object.values(colors).map(color => Object.values(color))}
+        <SwatchesPicker colors={Object.values(colors).map(color => Object.values(color).slice(0, 10))}
                         onChangeComplete={this.changeColor}
                         width={400}
                         color={this.state.color} />
     </Dialog>;
 
     bgColorPicker = () => <Dialog open={this.state.bgColorPickerOpen} onClose={this.closeBgColorPicker}>
-        <SwatchesPicker colors={Object.values(colors).map(color => Object.values(color))}
+        <SwatchesPicker colors={Object.values(colors).map(color => Object.values(color).slice(0, 10))}
                         onChangeComplete={this.changeBgColor}
                         width={400}
                         color={this.state.bgColor} />
