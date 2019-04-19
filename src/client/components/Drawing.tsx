@@ -8,13 +8,13 @@ import {
     Dialog,
     Divider,
     Drawer,
+    Fab,
+    Icon,
     List,
     ListItem,
     ListItemText,
-    WithStyles,
-    Fab,
-    Icon,
-    Theme
+    Theme,
+    WithStyles
 } from "@material-ui/core";
 import {connectAndStyle} from "../util";
 import {State} from "../redux/reducers";
@@ -32,8 +32,18 @@ const styles = (theme: Theme) => createStyles({
         width: 'auto'
     },
     fab: {
-        margin: theme.spacing.unit,
+        margin: 2 * theme.spacing.unit,
+        position: 'absolute',
+        right: 0,
+        bottom: 0
     },
+    slider: {
+        margin: 2 * theme.spacing.unit
+    },
+    colorPicker: {
+        width: '100%',
+        height: '100%'
+    }
 });
 
 const mapStateToProps = (state: State) => ({});
@@ -80,9 +90,10 @@ class Drawing extends Component<DrawingProps, DrawingState> {
 
     openToolPicker = () => this.setState({toolPickerOpen: true});
     closeToolPicker = () => this.setState({toolPickerOpen: false});
-    changeTool = (tool: string) => this.setState({tool});
+    changeTool = (tool: string) => this.setState({tool, toolPickerOpen: false});
 
-    drawer = <Drawer open={this.state.menuOpen}>
+    // Should these be variables? yeah, but the state wasn't binding correctly
+    drawer = () => <Drawer open={this.state.menuOpen} onClose={this.closeMenu}>
         <div
             tabIndex={0}
             role="button"
@@ -106,15 +117,34 @@ class Drawing extends Component<DrawingProps, DrawingState> {
                         max={100}
                         step={1}
                         value={this.state.lineWeight}
+                        className={this.props.classes.slider}
                         onChange={this.changeLineWeight} />
             </div>
         </div>
     </Drawer>;
 
-    colorPicker = <Dialog open={false}>
+    colorPicker = () => <Dialog open={this.state.colorPickerOpen} onClose={this.closeColorPicker}>
         <SwatchesPicker colors={Object.values(colors).map(color => Object.values(color))}
                         onChangeComplete={this.changeColor}
+                        width={400}
                         color={this.state.color} />
+    </Dialog>;
+
+    bgColorPicker = () => <Dialog open={this.state.bgColorPickerOpen} onClose={this.closeBgColorPicker}>
+        <SwatchesPicker colors={Object.values(colors).map(color => Object.values(color))}
+                        onChangeComplete={this.changeBgColor}
+                        width={400}
+                        color={this.state.bgColor} />
+    </Dialog>;
+
+    toolPicker = () => <Dialog open={this.state.toolPickerOpen} onClose={this.closeToolPicker}>
+        <List>
+            {['Pencil', 'Line', 'Rectangle', 'Circle', 'Select'].map(tool =>
+                <ListItem button onClick={() => this.changeTool(tool.toLowerCase())} key={tool}>
+                    <ListItemText primary={tool} />
+                </ListItem>
+            )}
+        </List>
     </Dialog>;
 
     render() {
@@ -124,10 +154,13 @@ class Drawing extends Component<DrawingProps, DrawingState> {
                          lineColor={this.state.color}
                          lineWidth={this.state.lineWeight}
                          className={classes.canvas} />
-            <Fab color="secondary" aria-label="Edit" className={classes.fab}>
+            <Fab color="secondary" aria-label="Edit" className={classes.fab} onClick={this.openMenu}>
                 <Icon>edit_icon</Icon>
             </Fab>
-            {this.colorPicker}
+            {this.drawer()}
+            {this.colorPicker()}
+            {this.bgColorPicker()}
+            {this.toolPicker()}
         </div>;
     }
 }
