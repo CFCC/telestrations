@@ -56,7 +56,7 @@ export type SET_GUESS = 'SET_GUESS';
 export const SET_GUESS: SET_GUESS = 'SET_GUESS';
 export interface setGuess {
     type: SET_GUESS;
-    guess: string
+    guess: string;
 }
 export function setGuess(guess: string): setGuess {
     return {
@@ -68,7 +68,7 @@ export function setGuess(guess: string): setGuess {
 export type SUBMIT_GUESS = 'SUBMIT_GUESS';
 export const SUBMIT_GUESS: SUBMIT_GUESS = 'SUBMIT_GUESS';
 export interface submitGuess {
-    type: SUBMIT_GUESS
+    type: SUBMIT_GUESS;
 }
 export function submitGuess(): submitGuess {
     return {

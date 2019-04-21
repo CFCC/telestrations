@@ -1,15 +1,15 @@
 import socketIo from 'socket.io-client';
 import store from './redux/store';
 import * as Creators from './redux/actions';
-import {ClientGameState} from "../types";
+import {ClientGameState, IOEvent} from "../types";
 
 const io: SocketIOClient.Socket = socketIo('localhost:8081');
 
-io.on('start game', () => {
+io.on(IOEvent.START_GAME, () => {
     store.dispatch(Creators.setGameState(ClientGameState.TYPING));
 });
 
-io.on('game already started', () => {
+io.on(IOEvent.GAME_ALREADY_STARTED, () => {
     store.dispatch(Creators.setGameState(ClientGameState.ALREADY_STARTED));
 });
 
