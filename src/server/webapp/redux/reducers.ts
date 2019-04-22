@@ -1,12 +1,12 @@
 import * as Actions from './actions';
-import {ClientGameState} from "../../../types";
+import {ServerWebAppGameState} from "../../../types";
 
 export interface State {
-    state: ClientGameState;
+    state: ServerWebAppGameState;
 }
 
 const defaultState: State = {
-    state: ClientGameState.LOADING,
+    state: ServerWebAppGameState.LOADING,
 };
 
 export default function reducer(state: State = defaultState, action: Actions.Creator): State {

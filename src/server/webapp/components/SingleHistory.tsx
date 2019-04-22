@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 
-class Lobby extends Component {
+class SingleHistory extends Component {
     render(): React.ReactNode {
         return <div />;
     }
 }
 
-export default Lobby;
+export default SingleHistory;

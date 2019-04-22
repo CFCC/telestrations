@@ -1,5 +1,5 @@
 import * as Actions from './actions';
-import {ClientGameState} from "../../types";
+import {ClientGameState, IOEvent} from "../../types";
 import io from '../socket-io';
 
 export interface State {
@@ -27,12 +27,10 @@ export default function reducer(state: State = defaultState, action: Actions.Cre
                 nickname: action.nickname
             });
         case Actions.SUBMIT_NICKNAME:
-            io.emit('submit nick', state.nickname);
+            io.emit(IOEvent.SUBMIT_NICK, state.nickname);
             return Object.assign({}, state, {
                 nicknameSubmitted: true
             });
-        case Actions.FINISH_TURN:
-            return state;
         case Actions.SET_GUESS:
             return Object.assign({}, state, {
                 guess: action.guess

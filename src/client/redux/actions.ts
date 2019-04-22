@@ -1,4 +1,4 @@
-import {ClientGameState, UUID} from '../../types';
+import {ClientGameState} from '../../types';
 
 export type SET_GAME_STATE = 'SET_GAME_STATE';
 export const SET_GAME_STATE: SET_GAME_STATE = 'SET_GAME_STATE';
@@ -37,21 +37,6 @@ export function submitNickname(): submitNickname {
     };
 }
 
-export type FINISH_TURN = 'FINISH_TURN';
-export const FINISH_TURN: FINISH_TURN = 'FINISH_TURN';
-export interface finishTurn {
-    type: FINISH_TURN;
-    personId: UUID;
-    content: string;
-}
-export function finishTurn(personId: UUID, content: string): finishTurn {
-    return {
-        type: FINISH_TURN,
-        personId,
-        content
-    };
-}
-
 export type SET_GUESS = 'SET_GUESS';
 export const SET_GUESS: SET_GUESS = 'SET_GUESS';
 export interface setGuess {
@@ -76,5 +61,4 @@ export function submitGuess(): submitGuess {
     }
 }
 
-export type Creator = finishTurn | setGameState | setNickname | submitNickname | setGuess
-    | submitGuess;
+export type Creator = setGameState | setNickname | submitNickname | setGuess | submitGuess;

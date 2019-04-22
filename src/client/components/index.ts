@@ -1,9 +1,8 @@
 import Drawing from './Drawing';
-import Finished from './Finished';
-import LoadingScreen from './LoadingScreen';
+import TitleScreen from './TitleScreen';
 import Typing from './Typing';
 import Waiting from './Waiting';
 
 export {
-    Drawing, Finished, LoadingScreen, Typing, Waiting
+    Drawing, TitleScreen, Typing, Waiting
 };

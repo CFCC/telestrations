@@ -1,17 +1,20 @@
 import React, {Component} from 'react';
-import LoadingScreen from "./components/LoadingScreen";
 import {State} from "./redux/reducers";
-import {ClientGameState} from "../../types";
+import {ServerWebAppGameState} from "../../types";
 import {connect} from "react-redux";
+import {BirdsEye, LoadingScreen, SinglePlayer, SingleHistory} from "./components";
 
 interface StateProps {
-    gameState: ClientGameState
+    gameState: ServerWebAppGameState
 }
 
 class App extends Component<StateProps> {
     render() {
         switch (this.props.gameState) {
-            case ClientGameState.LOADING: return <LoadingScreen />;
+            case ServerWebAppGameState.LOADING: return <LoadingScreen />;
+            case ServerWebAppGameState.BIRDS_EYE: return <BirdsEye />;
+            case ServerWebAppGameState.SINGLE_HISTORY: return <SingleHistory />;
+            case ServerWebAppGameState.SINGLE_PLAYER: return <SinglePlayer />;
             default: return <div />;
         }
     }

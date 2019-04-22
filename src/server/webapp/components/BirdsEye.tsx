@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 
-class SingleMonitor extends Component {
+class BirdsEye extends Component {
     render(): React.ReactNode {
         return <div />;
     }
 }
 
-export default SingleMonitor;
+export default BirdsEye;

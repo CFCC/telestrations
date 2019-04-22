@@ -3,6 +3,7 @@ import {Button, CircularProgress, createStyles, TextField, Theme, WithStyles} fr
 import {connectAndStyle} from "../util";
 import {State} from "../redux/reducers";
 import * as Creators from "../redux/actions";
+import {ClientGameState} from "../../types";
 
 const styles = (theme: Theme) => createStyles({
     app: {
@@ -31,7 +32,7 @@ const styles = (theme: Theme) => createStyles({
 
 const mapStateToProps = (state: State) => ({
     nickname: state.nickname,
-    gameAlreadyStarted: state.state === 'already started',
+    state: state.state,
     nicknameSubmitted: state.nicknameSubmitted
 });
 
@@ -42,37 +43,52 @@ const mapDispatchToProps = {
 
 type LoadingScreenProps = WithStyles<typeof styles> & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
-class LoadingScreen extends Component<LoadingScreenProps> {
+class TitleScreen extends Component<LoadingScreenProps> {
     logo = <img src="/logo.png" alt="Telestrations logo" className={this.props.classes.img} />;
 
-    submitNickname = () => <div className={this.props.classes.app}>
-        {this.logo}
-        <h1 className={this.props.classes.header}>What is your name?</h1>
+    submitNickname = () => [
+        <h1 className={this.props.classes.header}>What is your name?</h1>,
         <TextField value={this.props.nickname}
                    variant="outlined"
                    className={this.props.classes.input}
-                   onChange={(e: ChangeEvent<HTMLInputElement>) => this.props.setNickname(e.target.value)} />
+                   onChange={(e: ChangeEvent<HTMLInputElement>) => this.props.setNickname(e.target.value)} />,
         <Button onClick={this.props.submitNickname} variant="contained" color="primary">Join Game</Button>
-    </div>;
+    ];
 
-    waitForGameToStart = () => <div className={this.props.classes.app}>
-        {this.logo}
-        <h1 className={this.props.classes.header}>Waiting for the game to start</h1>
-        <h3>Have your host start the game when everyone's joined!</h3>
+    waitForGameToStart = () => [
+        <h1 className={this.props.classes.header}>Waiting for the game to start</h1>,
+        <h3>Have your host start the game when everyone's joined!</h3>,
         <CircularProgress className={this.props.classes.progress} />
-    </div>;
+    ];
 
-    gameAlreadyStarted = () => <div className={this.props.classes.app}>
-        {this.logo}
-        <h1 className={this.props.classes.header}>This game's already started!</h1>
+    gameAlreadyStarted = () => [
+        <h1 className={this.props.classes.header}>This game's already started!</h1>,
         <h3>Wait for it to finish before joining.</h3>
-    </div>;
+    ];
+
+    gameFinished = () => [
+        <h1 className={this.props.classes.header}>The game is finished!</h1>,
+        <h3>Please ask your host to see the results.</h3>
+    ];
+
+    getContent = () => {
+        switch(this.props.state) {
+            case ClientGameState.LOADING:
+                return this.props.nicknameSubmitted ? this.waitForGameToStart() : this.submitNickname();
+            case ClientGameState.FINISHED:
+                return this.gameFinished();
+            case ClientGameState.ALREADY_STARTED:
+            default:
+                return this.gameAlreadyStarted();
+        }
+    };
 
     render() {
-        if (this.props.gameAlreadyStarted) return this.gameAlreadyStarted();
-        else if (this.props.nicknameSubmitted) return this.waitForGameToStart();
-        else return this.submitNickname();
+        return <div className={this.props.classes.app}>
+            {this.logo}
+            {this.getContent()}
+        </div>;
     }
 }
 
-export default connectAndStyle(LoadingScreen, mapStateToProps, mapDispatchToProps, styles);
+export default connectAndStyle(TitleScreen, mapStateToProps, mapDispatchToProps, styles);

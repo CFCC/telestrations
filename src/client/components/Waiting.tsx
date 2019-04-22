@@ -34,12 +34,12 @@ class Waiting extends Component<WithStyles<typeof styles>, WaitingState> {
     };
 
     newDog = async () => {
-        let dog = JSON.parse(await fetch('https://random.dog/woof.json').then(a => a.text())).url;
+        const dog = JSON.parse(await fetch('https://random.dog/woof.json').then(a => a.text())).url;
         this.setState({dog})
     };
 
     componentDidMount() {
-        this.newDog();
+        this.newDog().then(/* Do nothing - this is to ignore IDE warnings about ignored promises */);
     }
 
     render() {
