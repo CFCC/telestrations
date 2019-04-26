@@ -16,7 +16,7 @@ import {
     Theme, Typography,
     WithStyles
 } from "@material-ui/core";
-import {connectAndStyle} from "../util";
+import {connectAndStyle} from "../../util";
 import {State} from "../redux/reducers";
 import * as Actions from '../redux/actions';
 import {Slider} from "@material-ui/lab";

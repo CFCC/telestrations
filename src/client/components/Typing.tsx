@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Button, TextField, Theme, WithStyles} from "@material-ui/core";
 import {createStyles} from '@material-ui/core/styles';
-import {connectAndStyle} from "../util";
+import {connectAndStyle} from "../../util";
 import {State} from "../redux/reducers";
 import * as Creators from "../redux/actions";
 import {Event} from "../../types";

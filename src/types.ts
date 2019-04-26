@@ -17,20 +17,40 @@ export enum ServerWebAppGameState {
     SINGLE_HISTORY = 'single history'
 }
 
-export type UUID = String;
+export type UUID = string;
 
 export interface Client {
     id: UUID;
-    nickname: String;
+    nickname: string;
     socket: Socket;
 }
 
-export interface GameItem {
+export interface Notepad {
     owner: UUID;
-    next: UUID;
 
     // Even indices (including 0) are sentences, odd indices are base64 sources of images
-    content: Array<String>;
+    content: Array<string>;
+}
+
+export interface NotepadPage {
+    text: string;
+    picture: string;
+    turnState: ClientGameState;
+}
+
+export interface Player {
+    client: Client;
+    queue: Array<Notepad>;
+}
+
+export enum ContentType {
+    Picture = 'picture',
+    Text = 'text'
+}
+
+export interface NewContentDTO {
+    content: string;
+    type: ContentType;
 }
 
 export type Event = ChangeEvent<HTMLInputElement>;
@@ -42,8 +62,11 @@ export enum IOEvent {
     I_AM_A_CLIENT = 'i am a client',
     SUBMIT_NICK = 'submit nick',
     FINISHED_GAME_TURN = 'finished game turn',
-    PLAYER_ADDED = 'player added',
     NEW_CONTENT = 'new content',
+    WAIT = 'wait',
+    NO_MORE_CONTENT = 'no more content',
+    PLAYER_ADDED = 'player added',
+    PLAYER_REMOVED = 'player removed',
     DISCONNECT = 'disconnect',
     NEW_CLIENT = 'connection'
 }

@@ -1,4 +1,12 @@
-import {ClientGameState} from '../../types';
+import {ClientGameState, ContentType} from '../../types';
+
+export type NEW_CONTENT = 'NEW_CONTENT';
+export const NEW_CONTENT: NEW_CONTENT = 'NEW_CONTENT';
+export interface newContent {
+    type: NEW_CONTENT;
+    content: string;
+    contentType: ContentType;
+}
 
 export type SET_GAME_STATE = 'SET_GAME_STATE';
 export const SET_GAME_STATE: SET_GAME_STATE = 'SET_GAME_STATE';
@@ -61,4 +69,4 @@ export function submitGuess(): submitGuess {
     }
 }
 
-export type Creator = setGameState | setNickname | submitNickname | setGuess | submitGuess;
+export type Creator = setGameState | setNickname | submitNickname | setGuess | submitGuess | newContent;

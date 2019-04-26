@@ -2,13 +2,12 @@ import socketIo from 'socket.io';
 import http from 'http';
 import game from './controller';
 import uuid from 'uuid/v4';
-import {Client, IOEvent} from "../types";
+import {Client, IOEvent, NewContentDTO} from "../types";
 
 const server = http.createServer();
 const io = socketIo(server);
 let serverWebapp;
 let clients: Array<Client> = [];
-let gameStarted: boolean = false;
 
 io.on(IOEvent.NEW_CLIENT, client => {
     client.on(IOEvent.I_AM_A_SERVER, () => {
@@ -16,16 +15,15 @@ io.on(IOEvent.NEW_CLIENT, client => {
 
         client.on(IOEvent.START_GAME, () => {
             io.emit(IOEvent.START_GAME);
-            gameStarted = true;
-            // Maybe set up?
+            game.startGame();
         });
     });
 
     client.on(IOEvent.I_AM_A_CLIENT, () => {
-        if (gameStarted) {
+        if (game.isStarted()) {
             client.emit(IOEvent.GAME_ALREADY_STARTED)
         } else {
-            client.on(IOEvent.SUBMIT_NICK, (nickname: String) => {
+            client.on(IOEvent.SUBMIT_NICK, (nickname: string) => {
                 const c = {
                     id: uuid(),
                     nickname,
@@ -33,20 +31,28 @@ io.on(IOEvent.NEW_CLIENT, client => {
                 };
 
                 clients.push(c);
-                game.addPlayerToGame(c);
-                io.emit(IOEvent.PLAYER_ADDED, game.getPlayers().map(p => p.nickname));
+                game.addPlayer(c);
+                io.emit(IOEvent.PLAYER_ADDED, game.getPlayers().map(p => p.client.nickname));
 
-                client.on(IOEvent.FINISHED_GAME_TURN, packet => {
-
+                client.on(IOEvent.FINISHED_GAME_TURN, (packet: string) => {
+                    const newContent: NewContentDTO = game.finishedTurn(c.id, packet);
+                    switch(newContent.content) {
+                        case IOEvent.NO_MORE_CONTENT:
+                            client.emit(IOEvent.NO_MORE_CONTENT);
+                            break;
+                        case IOEvent.WAIT:
+                            client.emit(IOEvent.WAIT);
+                            break;
+                        default:
+                            client.emit(IOEvent.NEW_CONTENT, newContent);
+                    }
                 });
 
                 client.on(IOEvent.DISCONNECT, () => {
+                    game.removePlayer(c);
+
                     if (!game.isStarted()) {
-                        game.removePlayer(c);
-                        io.emit(IOEvent.PLAYER_ADDED, game.getPlayers());
-                    } else {
-                        // Update the loop to skip the player, but still keep their data
-                        // to present at the end
+                        io.emit(IOEvent.PLAYER_REMOVED, c.id);
                     }
                 });
             });

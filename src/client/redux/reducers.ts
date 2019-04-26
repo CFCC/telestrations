@@ -1,19 +1,21 @@
 import * as Actions from './actions';
-import {ClientGameState, IOEvent} from "../../types";
-import io from '../socket-io';
+import {ClientGameState, ContentType} from "../../types";
+import {submitNick, finishTurn} from '../socket-io';
 
 export interface State {
     nicknameSubmitted: boolean;
     state: ClientGameState;
     nickname: string;
     guess: string;
+    content: string;
 }
 
 const defaultState: State = {
     nicknameSubmitted: false,
     state: ClientGameState.LOADING,
     nickname: '',
-    guess: ''
+    guess: '',
+    content: ''
 };
 
 export default function reducer(state: State = defaultState, action: Actions.Creator): State {
@@ -27,7 +29,7 @@ export default function reducer(state: State = defaultState, action: Actions.Cre
                 nickname: action.nickname
             });
         case Actions.SUBMIT_NICKNAME:
-            io.emit(IOEvent.SUBMIT_NICK, state.nickname);
+            submitNick(state.nickname);
             return Object.assign({}, state, {
                 nicknameSubmitted: true
             });
@@ -36,7 +38,13 @@ export default function reducer(state: State = defaultState, action: Actions.Cre
                 guess: action.guess
             });
         case Actions.SUBMIT_GUESS:
+            finishTurn(state.content);
             return state;
+        case Actions.NEW_CONTENT:
+            return Object.assign({}, state, {
+                state: action.contentType === ContentType.Text ? ClientGameState.DRAWING : ClientGameState.TYPING,
+                content: action.content
+            });
         default:
             return state;
     }

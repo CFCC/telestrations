@@ -1,8 +1,8 @@
 import BirdsEye from './BirdsEye';
 import LoadingScreen from './LoadingScreen';
-import SingleHistory from './SingleHistory';
-import SinglePlayer from './SinglePlayer';
+import History from './History';
+import PlayerStream from './PlayerStream';
 
 export {
-    BirdsEye, LoadingScreen, SinglePlayer, SingleHistory
+    BirdsEye, LoadingScreen, PlayerStream, History
 }
