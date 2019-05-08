@@ -14,7 +14,8 @@ export enum ServerWebAppGameState {
     LOADING = 'loading',
     BIRDS_EYE = 'bird\'s eye',
     SINGLE_PLAYER = 'single player',
-    SINGLE_HISTORY = 'single history'
+    PLAYER_HISTORY = 'player history',
+    NOTEPAD_HISTORY = 'notepad history'
 }
 
 export type UUID = string;

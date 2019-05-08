@@ -4,11 +4,15 @@ import {ServerWebAppGameState, UUID} from "../../../types";
 export interface State {
     state: ServerWebAppGameState;
     players: Array<UUID>;
+    activePlayerId: UUID;
+    activeNotepadId: UUID;
 }
 
 const defaultState: State = {
     state: ServerWebAppGameState.LOADING,
-    players: []
+    players: [],
+    activePlayerId: '',
+    activeNotepadId: ''
 };
 
 export default function reducer(state: State = defaultState, action: Actions.Action): State {

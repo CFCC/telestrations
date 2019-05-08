@@ -86,7 +86,7 @@ class TitleScreen extends Component<LoadingScreenProps> {
     render() {
         return <div className={this.props.classes.app}>
             {this.logo}
-            {this.getContent()}
+            {this.getContent().map((x, i) => ({...x, key: i}))}
         </div>;
     }
 }

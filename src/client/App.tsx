@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {State} from "./redux/reducers";
 import {ClientGameState} from "../types";
-import {Drawing, Typing, TitleScreen, Waiting} from './components';
+import {Drawing, TitleScreen, Typing, Waiting} from './components';
 import {connect} from "react-redux";
 
 const mapStateToProps = (state: State) => ({
@@ -15,14 +15,16 @@ class App extends Component<AppProps> {
         switch (this.props.gameState) {
             case ClientGameState.ALREADY_STARTED:
             case ClientGameState.LOADING:
+            case ClientGameState.FINISHED:
                 return <TitleScreen />;
             case ClientGameState.DRAWING:
-                 return <Drawing/>;
+                return <Drawing />;
             case ClientGameState.TYPING:
-                return <Typing/>;
+                return <Typing />;
             case ClientGameState.WAITING:
                 return <Waiting />;
-            default: return <div />;
+            default:
+                return <div />;
         }
     }
 }

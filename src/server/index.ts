@@ -2,7 +2,8 @@ import socketIo from 'socket.io';
 import http from 'http';
 import game from './controller';
 import uuid from 'uuid/v4';
-import {Client, IOEvent, NewContentDTO} from "../types";
+import {Client, ContentType, IOEvent, NewContentDTO} from "../types";
+import {sleep} from "../util";
 
 const server = http.createServer();
 const io = socketIo(server);
@@ -41,6 +42,9 @@ io.on(IOEvent.NEW_CLIENT, client => {
                             client.emit(IOEvent.NO_MORE_CONTENT);
                             break;
                         case IOEvent.WAIT:
+                            game.getNewContent(c.id).then((content: NewContentDTO) => {
+                                client.emit(IOEvent.NEW_CONTENT, content);
+                            });
                             client.emit(IOEvent.WAIT);
                             break;
                         default:

@@ -1,9 +1,9 @@
 import {Client, ContentType, IOEvent, NewContentDTO, Notepad, Player, UUID} from "../types";
 import {remove} from 'lodash';
+import {sleep} from "../util";
 
 const players: Array<Player> = [];
 let gameStarted = false;
-let notepads: Array<Notepad> = [];
 
 function getNextPlayer(id: UUID): UUID {
     let index = players.findIndex(p => p.client.id === id);
@@ -11,25 +11,51 @@ function getNextPlayer(id: UUID): UUID {
 }
 
 function finishedTurn(id: UUID, content: string): NewContentDTO {
-    let gameItem = notepads.find(gi => gi.owner === id);
-    if (gameItem) gameItem.content.push(content);
+    const player = players.find(p => p.client.id === id);
+    if (!player) throw new Error('Player ID not found');
 
-    gameItem = notepads.find(gi => gi.owner === getNextPlayer(id));
-    if (!gameItem) {
+    const notepad = player.queue.shift();
+    if (!notepad) throw new Error('Notepad not found!');
+    notepad.content.push(content);
+
+    const nextPlayer = players.find(p => p.client.id === getNextPlayer(id));
+    if (!nextPlayer) throw new Error('Next player loop broken!');
+    nextPlayer.queue.push(notepad);
+
+    const newNotepad = player.queue[0];
+    if (!newNotepad) {
         return {
-            content: "",
+            content: IOEvent.WAIT,
             type: ContentType.Text
         };
     }
 
-    // TODO: Definitely incorrect logic
-    return gameItem.owner === id ? {
-        content: gameItem.content[gameItem.content.length],
-        type: gameItem.content.length % 2 === 0 ? ContentType.Picture : ContentType.Text
-    } : {
+    return newNotepad.owner === id ? {
         content: IOEvent.NO_MORE_CONTENT,
         type: ContentType.Text
-    };
+    } : {
+        content: newNotepad.content[newNotepad.content.length - 1],
+        type: newNotepad.content.length - 1 % 2 === 0 ? ContentType.Text : ContentType.Picture
+    }
+}
+
+async function getNewContent(id: UUID): Promise<NewContentDTO> {
+    const player = players.find(p => p.client.id === id);
+    if (!player) throw new Error('Player ID not found');
+
+    let newNotepad: Notepad | null = null;
+    while (!newNotepad) {
+        await sleep(1000);
+        newNotepad = player.queue[0];
+    }
+
+    return newNotepad.owner === id ? {
+        content: IOEvent.NO_MORE_CONTENT,
+        type: ContentType.Text
+    } : {
+        content: newNotepad.content[newNotepad.content.length - 1],
+        type: newNotepad.content.length - 1 % 2 === 0 ? ContentType.Text : ContentType.Picture
+    }
 }
 
 function addPlayer(client: Client) {
@@ -49,7 +75,7 @@ function removePlayer(player: Client) {
 
 function startGame() {
     gameStarted = true;
-    notepads = players.map(player => ({
+    players.forEach(player => player.queue.push({
         owner: player.client.id,
         content: []
     } as Notepad));
@@ -60,5 +86,5 @@ function isStarted(): boolean {
 }
 
 export default {
-    addPlayer, getPlayers, removePlayer, startGame, isStarted, finishedTurn
+    addPlayer, getPlayers, removePlayer, startGame, isStarted, finishedTurn, getNewContent
 };

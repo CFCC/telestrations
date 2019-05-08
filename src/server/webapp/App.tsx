@@ -4,24 +4,24 @@ import {ServerWebAppGameState} from "../../types";
 import {connect} from "react-redux";
 import {BirdsEye, LoadingScreen, PlayerStream, History} from "./components";
 
-interface StateProps {
-    gameState: ServerWebAppGameState
-}
+const mapStateToProps = (state: State) => ({
+    gameState: state.state,
+    playerId: state.activePlayerId
+});
+
+type StateProps = ReturnType<typeof mapStateToProps>;
 
 class App extends Component<StateProps> {
     render() {
         switch (this.props.gameState) {
             case ServerWebAppGameState.LOADING: return <LoadingScreen />;
             case ServerWebAppGameState.BIRDS_EYE: return <BirdsEye />;
-            case ServerWebAppGameState.SINGLE_HISTORY: return <History />;
-            case ServerWebAppGameState.SINGLE_PLAYER: return <PlayerStream />;
+            case ServerWebAppGameState.NOTEPAD_HISTORY: return <History notepadOwnerId={this.props.playerId} />;
+            case ServerWebAppGameState.PLAYER_HISTORY: return <History playerId={this.props.playerId} />;
+            case ServerWebAppGameState.SINGLE_PLAYER: return <PlayerStream playerId={this.props.playerId} />;
             default: return <div />;
         }
     }
 }
-
-const mapStateToProps = (state: State) => ({
-    gameState: state.state
-});
 
 export default connect(mapStateToProps)(App);
