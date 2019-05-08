@@ -11,18 +11,18 @@ function getNextPlayer(id: UUID): UUID {
 }
 
 function finishedTurn(id: UUID, content: string): NewContentDTO {
-    const player = players.find(p => p.client.id === id);
-    if (!player) throw new Error('Player ID not found');
+    const index = players.findIndex(p => p.client.id === id);
+    if (index === -1) throw new Error('Player ID not found');
 
-    const notepad = player.queue.shift();
+    const notepad = players[index].queue.shift();
     if (!notepad) throw new Error('Notepad not found!');
     notepad.content.push(content);
 
-    const nextPlayer = players.find(p => p.client.id === getNextPlayer(id));
-    if (!nextPlayer) throw new Error('Next player loop broken!');
-    nextPlayer.queue.push(notepad);
+    const nextIndex = players.findIndex(p => p.client.id === getNextPlayer(id));
+    if (nextIndex === -1) throw new Error('Next player loop broken!');
+    players[nextIndex].queue.push(notepad);
 
-    const newNotepad = player.queue[0];
+    const newNotepad = players[index].queue[0];
     if (!newNotepad) {
         return {
             content: IOEvent.WAIT,
@@ -40,13 +40,13 @@ function finishedTurn(id: UUID, content: string): NewContentDTO {
 }
 
 async function getNewContent(id: UUID): Promise<NewContentDTO> {
-    const player = players.find(p => p.client.id === id);
-    if (!player) throw new Error('Player ID not found');
+    const index = players.findIndex(p => p.client.id === id);
+    if (index === -1) throw new Error('Player ID not found');
 
     let newNotepad: Notepad | null = null;
     while (!newNotepad) {
         await sleep(1000);
-        newNotepad = player.queue[0];
+        newNotepad = players[index].queue[0];
     }
 
     return newNotepad.owner === id ? {
@@ -83,6 +83,10 @@ function startGame() {
 
 function isStarted(): boolean {
     return gameStarted;
+}
+
+function isFinished(): boolean {
+    return players.every((player: Player) => player.queue[0].owner === player.client.id);
 }
 
 export default {

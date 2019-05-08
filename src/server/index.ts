@@ -43,7 +43,11 @@ io.on(IOEvent.NEW_CLIENT, client => {
                             break;
                         case IOEvent.WAIT:
                             game.getNewContent(c.id).then((content: NewContentDTO) => {
-                                client.emit(IOEvent.NEW_CONTENT, content);
+                                if (content.content === IOEvent.NO_MORE_CONTENT) {
+                                    client.emit(IOEvent.NO_MORE_CONTENT);
+                                } else {
+                                    client.emit(IOEvent.NEW_CONTENT, content);
+                                }
                             });
                             client.emit(IOEvent.WAIT);
                             break;

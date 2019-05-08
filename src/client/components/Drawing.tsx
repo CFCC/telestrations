@@ -59,7 +59,7 @@ const styles = (theme: Theme) => createStyles({
 });
 
 const mapStateToProps = (state: State) => ({
-    thingToDraw: 'hello world!'
+    thingToDraw: state.content
 });
 
 const mapDispatchToProps = {
@@ -191,7 +191,7 @@ class Drawing extends Component<DrawingProps, DrawingState> {
                 </List>
                 <Divider />
                 <List>
-                    <ListItem button>
+                    <ListItem button onClick={this.props.submit}>
                         <ListItemText primary="Submit" />
                     </ListItem>
                 </List>

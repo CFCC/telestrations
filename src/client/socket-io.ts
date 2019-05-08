@@ -1,7 +1,7 @@
 import socketIo from 'socket.io-client';
 import store from './redux/store';
 import * as Creators from './redux/actions';
-import {ClientGameState, ContentType, IOEvent, NewContentDTO} from "../types";
+import {ClientGameState, IOEvent, NewContentDTO} from "../types";
 
 const io: SocketIOClient.Socket = socketIo('localhost:8081');
 
@@ -18,7 +18,7 @@ io.on(IOEvent.WAIT, () => {
 });
 
 io.on(IOEvent.NEW_CONTENT, (content: NewContentDTO) => {
-    store.dispatch(Creators.setGameState(content.type === ContentType.Text ? ClientGameState.DRAWING : ClientGameState.TYPING))
+    store.dispatch(Creators.newContent(content));
 });
 
 io.on(IOEvent.NO_MORE_CONTENT, () => {

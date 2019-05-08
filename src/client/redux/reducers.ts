@@ -38,12 +38,13 @@ export default function reducer(state: State = defaultState, action: Actions.Cre
                 guess: action.guess
             });
         case Actions.SUBMIT_GUESS:
-            finishTurn(state.content);
+            finishTurn(state.guess);
             return state;
         case Actions.NEW_CONTENT:
             return Object.assign({}, state, {
-                state: action.contentType === ContentType.Text ? ClientGameState.DRAWING : ClientGameState.TYPING,
-                content: action.content
+                state: action.content.type === ContentType.Text ? ClientGameState.DRAWING : ClientGameState.TYPING,
+                content: action.content.content,
+                guess: ''
             });
         default:
             return state;
