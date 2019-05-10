@@ -1,4 +1,4 @@
-import {ServerWebAppGameState, UUID} from "../../../types";
+import {Player, PlayerDTO, ServerWebAppGameState, UUID} from "../../../types";
 
 export type SET_GAME_STATE = 'CONFIG_SET_GAME_STATE';
 export const SET_GAME_STATE: SET_GAME_STATE = 'CONFIG_SET_GAME_STATE';
@@ -39,4 +39,39 @@ export function viewNotepadHistory(ownerId: UUID): viewNotepadHistory {
     };
 }
 
-export type Action = setGameState | viewPlayerHistory | viewNotepadHistory;
+export type INIT = 'INIT';
+export const INIT: INIT = 'INIT';
+export interface init {
+    type: INIT;
+}
+export function init(): init {
+    return {
+        type: INIT
+    };
+}
+
+export type START_GAME = 'START_GAME';
+export const START_GAME: START_GAME = 'START_GAME';
+export interface startGame {
+    type: START_GAME;
+}
+export function startGame(): startGame {
+    return {
+        type: START_GAME
+    };
+}
+
+export type PLAYER_ADDED = 'PLAYER_ADDED';
+export const PLAYER_ADDED: PLAYER_ADDED = 'PLAYER_ADDED';
+export interface addPlayer {
+    type: PLAYER_ADDED;
+    player: PlayerDTO;
+}
+export function addPlayer(player: PlayerDTO): addPlayer {
+    return {
+        type: PLAYER_ADDED,
+        player
+    };
+}
+
+export type Action = setGameState | viewPlayerHistory | viewNotepadHistory | init | startGame | addPlayer;

@@ -44,9 +44,9 @@ class BirdsEye extends Component<BirdsEyeProps, BirdsEyeState> {
                 {
                     this.props.players.map(player => <Grid item xs={12} sm={6} lg={4} xl={3}
                                                                     onClick={this.props.watchStreamFullScreen}
-                                                                    key={player}>
-                        <PlayerStream playerId={player} />
-                        <IconButton onClick={e => this.openMenu(player, e)}
+                                                                    key={player.id}>
+                        <PlayerStream playerId={player.id} />
+                        <IconButton onClick={e => this.openMenu(player.id, e)}
                                     aria-owns={this.state.menuPlayerId === player ? 'menu' : undefined}
                                     aria-haspopup="true">
                             <Icon>more_vert</Icon>

@@ -54,6 +54,11 @@ export interface NewContentDTO {
     type: ContentType;
 }
 
+export interface PlayerDTO {
+    id: UUID;
+    nickname: string;
+}
+
 export type Event = ChangeEvent<HTMLInputElement>;
 
 export enum IOEvent {
