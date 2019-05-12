@@ -1,4 +1,3 @@
-import {Socket} from "socket.io";
 import {ChangeEvent} from "react";
 
 export enum ClientGameState {
@@ -20,12 +19,6 @@ export enum ServerWebAppGameState {
 
 export type UUID = string;
 
-export interface Client {
-    id: UUID;
-    nickname: string;
-    socket: Socket;
-}
-
 export interface Notepad {
     owner: UUID;
 
@@ -39,8 +32,15 @@ export interface NotepadPage {
     turnState: ClientGameState;
 }
 
+export interface Guess {
+    content: string;
+    type: ContentType;
+}
+
 export interface Player {
-    client: Client;
+    id: UUID;
+    nickname: string;
+    guess: Guess;
     queue: Array<Notepad>;
 }
 
@@ -59,6 +59,23 @@ export interface PlayerDTO {
     nickname: string;
 }
 
+export interface ServerPlayer {
+    id: UUID;
+    nickname: string;
+    ownerOfCurrentNotepad: UUID;
+    notepadIndex: number;
+}
+
+export interface NotepadPageDTO {
+    playerId: UUID;
+    content: string;
+}
+
+export interface FinishedGameTurnDTO {
+    playerId: UUID;
+    newNotepadOwnerId: UUID;
+}
+
 export type Event = ChangeEvent<HTMLInputElement>;
 
 export enum IOEvent {
@@ -67,10 +84,12 @@ export enum IOEvent {
     I_AM_A_SERVER = 'i am a server',
     I_AM_A_CLIENT = 'i am a client',
     SUBMIT_NICK = 'submit nick',
+    UPDATE_GUESS = 'update guess',
     FINISHED_GAME_TURN = 'finished game turn',
     NEW_CONTENT = 'new content',
     WAIT = 'wait',
     NO_MORE_CONTENT = 'no more content',
+    GAME_FINISHED = 'game finished',
     PLAYER_ADDED = 'player added',
     PLAYER_REMOVED = 'player removed',
     DISCONNECT = 'disconnect',

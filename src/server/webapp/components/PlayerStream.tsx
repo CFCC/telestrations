@@ -20,8 +20,6 @@ interface Props {
 type PlayerStreamProps = Props & Partial<WithStyles<typeof styles>>;
 
 class PlayerStream extends Component<PlayerStreamProps> {
-    pc: RTCPeerConnection = new RTCPeerConnection();
-
     render() {
         return <div>
 

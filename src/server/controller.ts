@@ -1,24 +1,28 @@
-import {Client, ContentType, IOEvent, NewContentDTO, Notepad, Player, UUID} from "../types";
+import {ContentType, IOEvent, NewContentDTO, Notepad, Player, UUID} from "../types";
 import {remove} from 'lodash';
 import {sleep} from "../util";
 
 const players: Array<Player> = [];
 let gameStarted = false;
 
-function getNextPlayer(id: UUID): UUID {
-    let index = players.findIndex(p => p.client.id === id);
-    return players[index + 1 === players.length ? 0 : index + 1].client.id;
+export function getNextPlayer(id: UUID): UUID {
+    let index = players.findIndex(p => p.id === id);
+    return players[index + 1 === players.length ? 0 : index + 1].id;
 }
 
-function finishedTurn(id: UUID, content: string): NewContentDTO {
-    const index = players.findIndex(p => p.client.id === id);
+export function updateGuess(id: UUID, content: string) {
+    
+}
+
+export function finishedTurn(id: UUID): NewContentDTO {
+    const index = players.findIndex(p => p.id === id);
     if (index === -1) throw new Error('Player ID not found');
 
     const notepad = players[index].queue.shift();
     if (!notepad) throw new Error('Notepad not found!');
-    notepad.content.push(content);
+    notepad.content.push(players[index].guess.content);
 
-    const nextIndex = players.findIndex(p => p.client.id === getNextPlayer(id));
+    const nextIndex = players.findIndex(p => p.id === getNextPlayer(id));
     if (nextIndex === -1) throw new Error('Next player loop broken!');
     players[nextIndex].queue.push(notepad);
 
@@ -39,8 +43,8 @@ function finishedTurn(id: UUID, content: string): NewContentDTO {
     }
 }
 
-async function getNewContent(id: UUID): Promise<NewContentDTO> {
-    const index = players.findIndex(p => p.client.id === id);
+export async function getNewContent(id: UUID): Promise<NewContentDTO> {
+    const index = players.findIndex(p => p.id === id);
     if (index === -1) throw new Error('Player ID not found');
 
     let newNotepad: Notepad | null = null;
@@ -58,37 +62,35 @@ async function getNewContent(id: UUID): Promise<NewContentDTO> {
     }
 }
 
-function addPlayer(client: Client) {
+export function addPlayer(id: UUID, nickname: string) {
     players.push({
-        client,
+        id,
+        nickname,
+        guess: {content: '', type: ContentType.Text},
         queue: []
     });
 }
 
-function getPlayers(): Array<Player> {
+export function getPlayers(): Array<Player> {
     return players;
 }
 
-function removePlayer(player: Client) {
-    remove(players, p => p.client.id === player.id);
+export function removePlayer(id: UUID) {
+    remove(players, p => p.id === id);
 }
 
-function startGame() {
+export function startGame() {
     gameStarted = true;
     players.forEach(player => player.queue.push({
-        owner: player.client.id,
+        owner: player.id,
         content: []
     } as Notepad));
 }
 
-function isStarted(): boolean {
+export function isStarted(): boolean {
     return gameStarted;
 }
 
-function isFinished(): boolean {
-    return players.every((player: Player) => player.queue[0].owner === player.client.id);
+export function isFinished(): boolean {
+    return players.every((player: Player) => player.queue[0].owner === player.id);
 }
-
-export default {
-    addPlayer, getPlayers, removePlayer, startGame, isStarted, finishedTurn, getNewContent
-};

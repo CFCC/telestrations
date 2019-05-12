@@ -38,7 +38,7 @@ export default function reducer(state: State = defaultState, action: Actions.Cre
                 guess: action.guess
             });
         case Actions.SUBMIT_GUESS:
-            finishTurn(state.guess);
+            finishTurn();
             return state;
         case Actions.NEW_CONTENT:
             return Object.assign({}, state, {

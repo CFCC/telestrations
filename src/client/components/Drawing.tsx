@@ -141,7 +141,7 @@ class Drawing extends Component<DrawingProps, DrawingState> {
         });
     };
 
-    updateGuess = () => this.props.setGuess(this.sketch ? this.sketch.toDataURL() : '');
+    updateGuess = () => this.props.setGuess(this.sketch.toDataURL());
 
     // Should these be variables? yeah, but the state wasn't binding correctly
     drawer = () => <Drawer open={this.state.menuOpen} onClose={this.closeMenu}>

@@ -1,5 +1,5 @@
 import socketIo from "socket.io-client";
-import {IOEvent, PlayerDTO} from "../../types";
+import {FinishedGameTurnDTO, IOEvent, NotepadPageDTO, PlayerDTO} from "../../types";
 import * as Actions from './redux/actions';
 import store from "./redux/store";
 
@@ -7,6 +7,18 @@ const io: SocketIOClient.Socket = socketIo('localhost:8081');
 
 io.on(IOEvent.PLAYER_ADDED, (player: PlayerDTO) => {
     store.dispatch(Actions.addPlayer(player));
+});
+
+io.on(IOEvent.UPDATE_GUESS, (content: NotepadPageDTO) => {
+    store.dispatch(Actions.updateGuess(content.playerId, content.content));
+});
+
+io.on(IOEvent.FINISHED_GAME_TURN, (content: FinishedGameTurnDTO) => {
+    store.dispatch(Actions.finishedGameTurn(content.playerId, content.newNotepadOwnerId));
+});
+
+io.on(IOEvent.GAME_FINISHED, () => {
+    store.dispatch(Actions.gameFinished());
 });
 
 export function init() {

@@ -1,23 +1,27 @@
-import socketIo from 'socket.io';
+import socketIo, {Socket} from 'socket.io';
 import http from 'http';
-import game from './controller';
+import * as game from './controller';
 import uuid from 'uuid/v4';
-import {Client, ContentType, IOEvent, NewContentDTO} from "../types";
-import {sleep} from "../util";
+import {IOEvent, NewContentDTO, UUID} from "../types";
 
 const server = http.createServer();
 const io = socketIo(server);
-let serverWebapp;
-let clients: Array<Client> = [];
+let serverWebapp: null | Socket;
 
 io.on(IOEvent.NEW_CLIENT, client => {
     client.on(IOEvent.I_AM_A_SERVER, () => {
+        if (serverWebapp) return client.disconnect(true);
+
         serverWebapp = client;
 
         client.on(IOEvent.START_GAME, () => {
             io.emit(IOEvent.START_GAME);
             game.startGame();
         });
+
+        client.on(IOEvent.DISCONNECT, () => {
+            serverWebapp = null;
+        })
     });
 
     client.on(IOEvent.I_AM_A_CLIENT, () => {
@@ -25,24 +29,27 @@ io.on(IOEvent.NEW_CLIENT, client => {
             client.emit(IOEvent.GAME_ALREADY_STARTED)
         } else {
             client.on(IOEvent.SUBMIT_NICK, (nickname: string) => {
-                const c = {
-                    id: uuid(),
-                    nickname,
-                    socket: client
-                };
+                const id: UUID = uuid();
+                game.addPlayer(id, nickname);
+                io.emit(IOEvent.PLAYER_ADDED, game.getPlayers().map(p => p.nickname));
 
-                clients.push(c);
-                game.addPlayer(c);
-                io.emit(IOEvent.PLAYER_ADDED, game.getPlayers().map(p => p.client.nickname));
+                client.on(IOEvent.UPDATE_GUESS, (content: string) => {
+                    game.updateGuess(id, content);
+                    if (serverWebapp) serverWebapp.emit(IOEvent.UPDATE_GUESS, {
+                        playerId: id,
+                        content
+                    });
+                });
 
-                client.on(IOEvent.FINISHED_GAME_TURN, (packet: string) => {
-                    const newContent: NewContentDTO = game.finishedTurn(c.id, packet);
+                client.on(IOEvent.FINISHED_GAME_TURN, () => {
+                    const newContent: NewContentDTO = game.finishedTurn(id);
                     switch(newContent.content) {
                         case IOEvent.NO_MORE_CONTENT:
                             client.emit(IOEvent.NO_MORE_CONTENT);
+                            if (game.isFinished() && serverWebapp) serverWebapp.emit(IOEvent.GAME_FINISHED);
                             break;
                         case IOEvent.WAIT:
-                            game.getNewContent(c.id).then((content: NewContentDTO) => {
+                            game.getNewContent(id).then((content: NewContentDTO) => {
                                 if (content.content === IOEvent.NO_MORE_CONTENT) {
                                     client.emit(IOEvent.NO_MORE_CONTENT);
                                 } else {
@@ -57,10 +64,10 @@ io.on(IOEvent.NEW_CLIENT, client => {
                 });
 
                 client.on(IOEvent.DISCONNECT, () => {
-                    game.removePlayer(c);
+                    game.removePlayer(id);
 
                     if (!game.isStarted()) {
-                        io.emit(IOEvent.PLAYER_REMOVED, c.id);
+                        io.emit(IOEvent.PLAYER_REMOVED, id);
                     }
                 });
             });
