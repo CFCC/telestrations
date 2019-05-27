@@ -1,4 +1,4 @@
-import {ChangeEvent} from "react";
+import {ChangeEvent, RefObject} from "react";
 
 export enum ClientGameState {
     LOADING = 'loading',
@@ -62,7 +62,7 @@ export interface PlayerDTO {
 export interface ServerPlayer {
     id: UUID;
     nickname: string;
-    ownerOfCurrentNotepad: UUID;
+    queueOfOwners: Array<UUID>;
     notepadIndex: number;
 }
 
@@ -100,4 +100,8 @@ declare global {
     interface Window {
         __REDUX_DEVTOOLS_EXTENSION__: any
     }
+}
+
+export interface ObjectOfRefs {
+    [s: string]: RefObject<{}>
 }

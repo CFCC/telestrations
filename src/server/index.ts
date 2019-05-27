@@ -2,7 +2,7 @@ import socketIo, {Socket} from 'socket.io';
 import http from 'http';
 import * as game from './controller';
 import uuid from 'uuid/v4';
-import {IOEvent, NewContentDTO, UUID} from "../types";
+import {FinishedGameTurnDTO, IOEvent, NewContentDTO, UUID} from "../types";
 
 const server = http.createServer();
 const io = socketIo(server);
@@ -31,7 +31,7 @@ io.on(IOEvent.NEW_CLIENT, client => {
             client.on(IOEvent.SUBMIT_NICK, (nickname: string) => {
                 const id: UUID = uuid();
                 game.addPlayer(id, nickname);
-                io.emit(IOEvent.PLAYER_ADDED, game.getPlayers().map(p => p.nickname));
+                if (serverWebapp) serverWebapp.emit(IOEvent.PLAYER_ADDED, {id, nickname});
 
                 client.on(IOEvent.UPDATE_GUESS, (content: string) => {
                     game.updateGuess(id, content);
@@ -42,7 +42,9 @@ io.on(IOEvent.NEW_CLIENT, client => {
                 });
 
                 client.on(IOEvent.FINISHED_GAME_TURN, () => {
-                    const newContent: NewContentDTO = game.finishedTurn(id);
+                    const newContent: NewContentDTO = game.finishedTurn(id)
+                    if (serverWebapp) serverWebapp.emit(IOEvent.FINISHED_GAME_TURN, {playerId: id});
+
                     switch(newContent.content) {
                         case IOEvent.NO_MORE_CONTENT:
                             client.emit(IOEvent.NO_MORE_CONTENT);
@@ -54,12 +56,20 @@ io.on(IOEvent.NEW_CLIENT, client => {
                                     client.emit(IOEvent.NO_MORE_CONTENT);
                                 } else {
                                     client.emit(IOEvent.NEW_CONTENT, content);
+                                    if (serverWebapp) serverWebapp.emit(IOEvent.NEW_CONTENT, {
+                                        playerId: id,
+                                        newNotepadOwnerId: game.getNextPlayer(id)
+                                    } as FinishedGameTurnDTO);
                                 }
                             });
                             client.emit(IOEvent.WAIT);
                             break;
                         default:
                             client.emit(IOEvent.NEW_CONTENT, newContent);
+                            if (serverWebapp) serverWebapp.emit(IOEvent.NEW_CONTENT, {
+                                playerId: id,
+                                newNotepadOwnerId: game.getNextPlayer(id)
+                            } as FinishedGameTurnDTO);
                     }
                 });
 

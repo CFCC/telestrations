@@ -26,12 +26,13 @@ export default function reducer(state: State = defaultState, action: Actions.Act
             });
         case Actions.INIT:
             io.init();
-            return Object.assign({}, state, {
-                notepads: state.players.map(p => ({owner: p.id, content: []}))
-            });
+            return state;
         case Actions.START_GAME:
             io.startGame();
-            return Object.assign({}, state, {state: ServerWebAppGameState.BIRDS_EYE});
+            return Object.assign({}, state, {
+                state: ServerWebAppGameState.BIRDS_EYE,
+                notepads: state.players.map(p => ({owner: p.id, content: []}))
+            });
         case Actions.PLAYER_ADDED: {
             const players = state.players.slice(0);
             players.push({ownerOfCurrentNotepad: action.player.id, notepadIndex: 0, ...action.player});
@@ -50,7 +51,7 @@ export default function reducer(state: State = defaultState, action: Actions.Act
             const playerIndex = players.findIndex(p => p.id === action.playerId);
             players[playerIndex].ownerOfCurrentNotepad = action.newNotepadOwnerId;
             const notepadIndex = state.notepads.findIndex(n => n.owner === action.newNotepadOwnerId);
-            players[playerIndex].notepadIndex = state.notepads[notepadIndex].content.length;
+            players[playerIndex].notepadIndex = state.notepads[notepadIndex].content.length; // TODO: Trouble spot
             return Object.assign({}, state, {players});
         }
         case Actions.GAME_FINISHED:

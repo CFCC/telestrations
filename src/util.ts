@@ -1,9 +1,10 @@
 import {ComponentType} from "react";
-import {StyleRulesCallback, WithStyles, withStyles} from "@material-ui/core";
+import {StyleRulesCallback, withStyles} from "@material-ui/core";
 import {connect, ConnectedComponentClass} from "react-redux";
 import {CSSProperties} from "@material-ui/core/styles/withStyles";
 
-export function connectAndStyle<OwnProps = {}>(component: ComponentType<any>,
+// TODO: This needs tightened, but i'm tired of fighting typescript on how
+export function connectAndStyle<OwnProps = {}>(component: any,
                                                mapStateToProps: (state: any) => Object,
                                                mapDispatchToProps: Object,
                                                styles: StyleRulesCallback | Record<string, CSSProperties>

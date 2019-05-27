@@ -1,6 +1,6 @@
 import * as Actions from './actions';
 import {ClientGameState, ContentType} from "../../types";
-import {submitNick, finishTurn} from '../socket-io';
+import {submitNick, finishTurn, updateGuess} from '../socket-io';
 
 export interface State {
     nicknameSubmitted: boolean;
@@ -34,6 +34,7 @@ export default function reducer(state: State = defaultState, action: Actions.Cre
                 nicknameSubmitted: true
             });
         case Actions.SET_GUESS:
+            updateGuess(action.guess);
             return Object.assign({}, state, {
                 guess: action.guess
             });
