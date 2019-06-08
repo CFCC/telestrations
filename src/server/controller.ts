@@ -2,8 +2,20 @@ import {ContentType, IOEvent, NewContentDTO, Notepad, Player, UUID} from "../typ
 import {remove} from 'lodash';
 import {sleep} from "../util";
 
+// region [Variables]
+
 const players: Array<Player> = [];
 let gameStarted = false;
+
+// endregion
+
+// region [Functions of Routes]
+
+// endregion
+
+// region [Game Utilities]
+
+// endregion
 
 export function getNextPlayer(id: UUID): UUID {
     let index = players.findIndex(p => p.id === id);
@@ -11,7 +23,8 @@ export function getNextPlayer(id: UUID): UUID {
 }
 
 export function updateGuess(id: UUID, content: string) {
-    
+    let index = players.findIndex(p => p.id === id);
+    players[index].guess.content = content;
 }
 
 export function finishedTurn(id: UUID): NewContentDTO {
