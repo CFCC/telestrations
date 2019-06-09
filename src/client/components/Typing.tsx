@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, FormEvent} from 'react';
 import {Button, TextField, Theme, WithStyles} from "@material-ui/core";
 import {createStyles} from '@material-ui/core/styles';
 import {connectAndStyle} from "../../util";
@@ -54,19 +54,27 @@ const mapDispatchToProps = {
 type TypingProps = WithStyles<typeof styles> & typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>;
 
 class Typing extends Component<TypingProps> {
+    dontRefresh = (e: FormEvent) => {
+        e.preventDefault();
+        return false;
+    };
+
     render() {
         const {picture, guess, classes} = this.props;
-        return <div className={picture === "" ? classes.appWithQuestionBackground : classes.app}>
-            {picture !== "" ? <img src={picture} alt="Previous submission" className={classes.picture} /> : null}
-            <TextField value={guess}
-                       variant="outlined"
-                       className={classes.input}
-                       placeholder={picture === "" ? "Describe a scene" : "What is in this picture?"}
-                       onChange={(e: Event) => this.props.setGuess(e.target.value)} />
-            <Button onClick={this.props.submitGuess} variant="contained"
-                    color="primary"
-                    className={classes.button}>Submit</Button>
-        </div>;
+        return <form onSubmit={this.dontRefresh}>
+            <div className={picture === "" ? classes.appWithQuestionBackground : classes.app}>
+                {picture !== "" ? <img src={picture} alt="Previous submission" className={classes.picture} /> : null}
+                <TextField value={guess}
+                           variant="outlined"
+                           className={classes.input}
+                           placeholder={picture === "" ? "Describe a scene" : "What is in this picture?"}
+                           onChange={(e: Event) => this.props.setGuess(e.target.value)} />
+                <Button onClick={this.props.submitGuess} variant="contained"
+                        color="primary"
+                        type="submit"
+                        className={classes.button}>Submit</Button>
+            </div>
+        </form>;
     }
 }
 

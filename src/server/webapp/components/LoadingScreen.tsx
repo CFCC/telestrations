@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import io from '../socket-io';
 import {AccountCircle as PersonIcon} from '@material-ui/icons'
 import {
     Button,
@@ -8,14 +7,16 @@ import {
     ListItem,
     ListItemIcon,
     ListItemText,
-    WithStyles,
-    withStyles
+    WithStyles
 } from "@material-ui/core";
 import {
-    blue, cyan, green, indigo, lime, orange, purple, red, teal, yellow
+    blue, cyan, green, indigo, lime, purple, teal
 } from '@material-ui/core/colors';
+import * as Actions from "../redux/actions";
+import {State} from "../redux/reducers";
+import {connectAndStyle} from "../../../util";
 
-const colors = [blue, cyan, green, indigo, lime, orange, purple, red, teal, yellow];
+const colors = [blue, cyan, green, indigo, lime, purple, teal];
 
 const styles = createStyles({
     app: {
@@ -33,27 +34,22 @@ const styles = createStyles({
     }
 });
 
-interface LoadingScreenProps extends WithStyles<typeof styles> {
+const mapStateToProps = (state: State) => ({
+    players: state.players
+});
 
-}
+const mapDispatchToProps = {
+    startGame: Actions.startGame,
+    init: Actions.init
+};
 
-interface LoadingScreenState {
-    players: Array<String>
-}
+type LoadingScreenProps = WithStyles<typeof styles> & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
-class LoadingScreen extends Component<LoadingScreenProps, LoadingScreenState> {
+class LoadingScreen extends Component<LoadingScreenProps> {
     constructor(props: LoadingScreenProps) {
         super(props);
-
-        io.emit('i am a server');
-        io.on('player added', (players: Array<String>) => this.setState({players}));
+        this.props.init();
     }
-
-    state = {
-        players: []
-    };
-
-    startGame = () => io.emit('start game');
 
     render() {
         return (
@@ -62,25 +58,25 @@ class LoadingScreen extends Component<LoadingScreenProps, LoadingScreenState> {
                 <h1 className={this.props.classes.header}>Waiting for clients to connect</h1>
                 <h3>Start the game when everyone's joined!</h3>
                 <List>
-                    {this.state.players.map((player, i) => <ListItem key={i}>
+                    {this.props.players.map((player, i) => <ListItem key={i}>
                             <ListItemIcon>
                                 <PersonIcon style={{
-                                    color: colors[Math.floor(Math.random() * colors.length)][500]
+                                    color: colors[i % colors.length][500]
                                 }} />
                             </ListItemIcon>
                             <ListItemText
-                                primary={player}
+                                primary={player.nickname}
                             />
                         </ListItem>
                     )}
                 </List>
-                <Button onClick={this.startGame}
+                <Button onClick={this.props.startGame}
                         variant="contained"
                         color="primary"
-                        disabled={this.state.players.length < 2}>Start Game</Button>
+                        disabled={this.props.players.length < 2}>Start Game</Button>
             </div>
         );
     }
 }
 
-export default withStyles(styles)(LoadingScreen);
+export default connectAndStyle(LoadingScreen, mapStateToProps, mapDispatchToProps, styles);

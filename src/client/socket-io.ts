@@ -1,7 +1,7 @@
 import socketIo from 'socket.io-client';
 import store from './redux/store';
 import * as Creators from './redux/actions';
-import {ClientGameState, ContentType, IOEvent, NewContentDTO} from "../types";
+import {ClientGameState, IOEvent, NewContentDTO} from "../types";
 
 const io: SocketIOClient.Socket = socketIo('localhost:8081');
 
@@ -18,7 +18,7 @@ io.on(IOEvent.WAIT, () => {
 });
 
 io.on(IOEvent.NEW_CONTENT, (content: NewContentDTO) => {
-    store.dispatch(Creators.setGameState(content.type === ContentType.Text ? ClientGameState.DRAWING : ClientGameState.TYPING))
+    store.dispatch(Creators.newContent(content));
 });
 
 io.on(IOEvent.NO_MORE_CONTENT, () => {
@@ -29,8 +29,12 @@ export function submitNick(nick: string) {
     io.emit(IOEvent.SUBMIT_NICK, nick);
 }
 
-export function finishTurn(content: string) {
-    io.emit(IOEvent.FINISHED_GAME_TURN, content);
+export function updateGuess(content: string) {
+    io.emit(IOEvent.UPDATE_GUESS, content);
+}
+
+export function finishTurn() {
+    io.emit(IOEvent.FINISHED_GAME_TURN);
 }
 
 export default io;

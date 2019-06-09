@@ -1,64 +1,109 @@
-import {Client, ContentType, IOEvent, NewContentDTO, Notepad, Player, UUID} from "../types";
+import {ContentType, IOEvent, NewContentDTO, Notepad, Player, UUID} from "../types";
 import {remove} from 'lodash';
+import {sleep} from "../util";
+
+// region [Variables]
 
 const players: Array<Player> = [];
 let gameStarted = false;
-let notepads: Array<Notepad> = [];
 
-function getNextPlayer(id: UUID): UUID {
-    let index = players.findIndex(p => p.client.id === id);
-    return players[index + 1 === players.length ? 0 : index + 1].client.id;
+// endregion
+
+// region [Functions of Routes]
+
+// endregion
+
+// region [Game Utilities]
+
+// endregion
+
+export function getNextPlayer(id: UUID): UUID {
+    let index = players.findIndex(p => p.id === id);
+    return players[index + 1 === players.length ? 0 : index + 1].id;
 }
 
-function finishedTurn(id: UUID, content: string): NewContentDTO {
-    let gameItem = notepads.find(gi => gi.owner === id);
-    if (gameItem) gameItem.content.push(content);
+export function updateGuess(id: UUID, content: string) {
+    let index = players.findIndex(p => p.id === id);
+    players[index].guess.content = content;
+}
 
-    gameItem = notepads.find(gi => gi.owner === getNextPlayer(id));
-    if (!gameItem) {
+export function finishedTurn(id: UUID): NewContentDTO {
+    const index = players.findIndex(p => p.id === id);
+    if (index === -1) throw new Error('Player ID not found');
+
+    const notepad = players[index].queue.shift();
+    if (!notepad) throw new Error('Notepad not found!');
+    notepad.content.push(players[index].guess.content);
+
+    const nextIndex = players.findIndex(p => p.id === getNextPlayer(id));
+    if (nextIndex === -1) throw new Error('Next player loop broken!');
+    players[nextIndex].queue.push(notepad);
+
+    const newNotepad = players[index].queue[0];
+    if (!newNotepad) {
         return {
-            content: "",
+            content: IOEvent.WAIT,
             type: ContentType.Text
         };
     }
 
-    // TODO: Definitely incorrect logic
-    return gameItem.owner === id ? {
-        content: gameItem.content[gameItem.content.length],
-        type: gameItem.content.length % 2 === 0 ? ContentType.Picture : ContentType.Text
-    } : {
+    return newNotepad.owner === id ? {
         content: IOEvent.NO_MORE_CONTENT,
         type: ContentType.Text
-    };
+    } : {
+        content: newNotepad.content[newNotepad.content.length - 1],
+        type: newNotepad.content.length - 1 % 2 === 0 ? ContentType.Text : ContentType.Picture
+    }
 }
 
-function addPlayer(client: Client) {
+export async function getNewContent(id: UUID): Promise<NewContentDTO> {
+    const index = players.findIndex(p => p.id === id);
+    if (index === -1) throw new Error('Player ID not found');
+
+    let newNotepad: Notepad | null = null;
+    while (!newNotepad) {
+        await sleep(1000);
+        newNotepad = players[index].queue[0];
+    }
+
+    return newNotepad.owner === id ? {
+        content: IOEvent.NO_MORE_CONTENT,
+        type: ContentType.Text
+    } : {
+        content: newNotepad.content[newNotepad.content.length - 1],
+        type: newNotepad.content.length - 1 % 2 === 0 ? ContentType.Text : ContentType.Picture
+    }
+}
+
+export function addPlayer(id: UUID, nickname: string) {
     players.push({
-        client,
+        id,
+        nickname,
+        guess: {content: '', type: ContentType.Text},
         queue: []
     });
 }
 
-function getPlayers(): Array<Player> {
+export function getPlayers(): Array<Player> {
     return players;
 }
 
-function removePlayer(player: Client) {
-    remove(players, p => p.client.id === player.id);
+export function removePlayer(id: UUID) {
+    remove(players, p => p.id === id);
 }
 
-function startGame() {
+export function startGame() {
     gameStarted = true;
-    notepads = players.map(player => ({
-        owner: player.client.id,
+    players.forEach(player => player.queue.push({
+        owner: player.id,
         content: []
     } as Notepad));
 }
 
-function isStarted(): boolean {
+export function isStarted(): boolean {
     return gameStarted;
 }
 
-export default {
-    addPlayer, getPlayers, removePlayer, startGame, isStarted, finishedTurn
-};
+export function isFinished(): boolean {
+    return players.every((player: Player) => player.queue[0].owner === player.id);
+}

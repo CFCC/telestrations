@@ -1,4 +1,4 @@
-import React, {ChangeEvent, Component} from 'react';
+import React, {ChangeEvent, Component, FormEvent} from 'react';
 import {Button, CircularProgress, createStyles, TextField, Theme, WithStyles} from "@material-ui/core";
 import {connectAndStyle} from "../../util";
 import {State} from "../redux/reducers";
@@ -52,7 +52,7 @@ class TitleScreen extends Component<LoadingScreenProps> {
                    variant="outlined"
                    className={this.props.classes.input}
                    onChange={(e: ChangeEvent<HTMLInputElement>) => this.props.setNickname(e.target.value)} />,
-        <Button onClick={this.props.submitNickname} variant="contained" color="primary">Join Game</Button>
+        <Button onClick={this.props.submitNickname} variant="contained" color="primary" type="submit">Join Game</Button>
     ];
 
     waitForGameToStart = () => [
@@ -72,7 +72,7 @@ class TitleScreen extends Component<LoadingScreenProps> {
     ];
 
     getContent = () => {
-        switch(this.props.state) {
+        switch (this.props.state) {
             case ClientGameState.LOADING:
                 return this.props.nicknameSubmitted ? this.waitForGameToStart() : this.submitNickname();
             case ClientGameState.FINISHED:
@@ -83,11 +83,18 @@ class TitleScreen extends Component<LoadingScreenProps> {
         }
     };
 
+    dontRefresh = (e: FormEvent) => {
+        e.preventDefault();
+        return false;
+    };
+
     render() {
-        return <div className={this.props.classes.app}>
-            {this.logo}
-            {this.getContent()}
-        </div>;
+        return <form onSubmit={this.dontRefresh}>
+            <div className={this.props.classes.app}>
+                {this.logo}
+                {this.getContent().map((x, i) => ({...x, key: i}))}
+            </div>
+        </form>;
     }
 }
 

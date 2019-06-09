@@ -59,7 +59,7 @@ const styles = (theme: Theme) => createStyles({
 });
 
 const mapStateToProps = (state: State) => ({
-    thingToDraw: 'hello world!'
+    thingToDraw: state.content
 });
 
 const mapDispatchToProps = {
@@ -141,7 +141,7 @@ class Drawing extends Component<DrawingProps, DrawingState> {
         });
     };
 
-    updateGuess = () => this.props.setGuess(this.sketch ? this.sketch.toDataURL() : '');
+    updateGuess = () => this.props.setGuess(this.sketch.toDataURL());
 
     // Should these be variables? yeah, but the state wasn't binding correctly
     drawer = () => <Drawer open={this.state.menuOpen} onClose={this.closeMenu}>
@@ -191,7 +191,7 @@ class Drawing extends Component<DrawingProps, DrawingState> {
                 </List>
                 <Divider />
                 <List>
-                    <ListItem button>
+                    <ListItem button onClick={this.props.submit}>
                         <ListItemText primary="Submit" />
                     </ListItem>
                 </List>

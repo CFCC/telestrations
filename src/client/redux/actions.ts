@@ -1,11 +1,16 @@
-import {ClientGameState, ContentType} from '../../types';
+import {ClientGameState, ContentType, NewContentDTO} from '../../types';
 
 export type NEW_CONTENT = 'NEW_CONTENT';
 export const NEW_CONTENT: NEW_CONTENT = 'NEW_CONTENT';
 export interface newContent {
     type: NEW_CONTENT;
-    content: string;
-    contentType: ContentType;
+    content: NewContentDTO
+}
+export function newContent(content: NewContentDTO): newContent {
+    return {
+        type: NEW_CONTENT,
+        content
+    }
 }
 
 export type SET_GAME_STATE = 'SET_GAME_STATE';
