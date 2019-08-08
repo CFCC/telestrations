@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {State} from "./redux/reducers";
-import {ServerWebAppGameState} from "../../types";
 import {connect} from "react-redux";
 import {BirdsEye, LoadingScreen, PlayerStream, History} from "./components";
+import {ServerWebAppGameState} from "../../types/server-webapp";
 
 const mapStateToProps = (state: State) => ({
     gameState: state.state,
@@ -11,7 +11,8 @@ const mapStateToProps = (state: State) => ({
 
 type StateProps = ReturnType<typeof mapStateToProps>;
 
-class App extends Component<StateProps> {
+@connect(mapStateToProps)
+export default class App extends Component<StateProps> {
     render() {
         switch (this.props.gameState) {
             case ServerWebAppGameState.LOADING: return <LoadingScreen />;
@@ -23,5 +24,3 @@ class App extends Component<StateProps> {
         }
     }
 }
-
-export default connect(mapStateToProps)(App);

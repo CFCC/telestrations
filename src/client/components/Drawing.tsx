@@ -13,13 +13,13 @@ import {
     List,
     ListItem,
     ListItemText, Paper,
-    Theme, Typography,
+    Theme, Typography, withStyles,
     WithStyles
 } from "@material-ui/core";
-import {connectAndStyle} from "../../util";
 import {State} from "../redux/reducers";
 import * as Actions from '../redux/actions';
 import {Slider} from "@material-ui/lab";
+import {connect} from "react-redux";
 
 const styles = (theme: Theme) => createStyles({
     app: {
@@ -80,9 +80,11 @@ interface DrawingState {
     canRedo: boolean;
 }
 
-type DrawingProps = WithStyles<typeof styles> & typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>;
+type DrawingProps = Partial<WithStyles<typeof styles>> & typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>;
 
-class Drawing extends Component<DrawingProps, DrawingState> {
+@withStyles(styles)
+@connect(mapStateToProps, mapDispatchToProps)
+export default class Drawing extends Component<DrawingProps, DrawingState> {
     state: DrawingState = {
         tool: Tools.Pencil,
         color: '#000000',
@@ -250,5 +252,3 @@ class Drawing extends Component<DrawingProps, DrawingState> {
         </div>;
     }
 }
-
-export default connectAndStyle(Drawing, mapStateToProps, mapDispatchToProps, styles);

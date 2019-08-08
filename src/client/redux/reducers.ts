@@ -1,6 +1,7 @@
 import * as Actions from './actions';
-import {ClientGameState, ContentType} from "../../types";
 import {submitNick, finishTurn, updateGuess} from '../socket-io';
+import {ContentType} from "../../types/shared";
+import {ClientGameState} from "../../types/client";
 
 export interface State {
     nicknameSubmitted: boolean;

@@ -6,7 +6,7 @@ import {
     List,
     ListItem,
     ListItemIcon,
-    ListItemText,
+    ListItemText, withStyles,
     WithStyles
 } from "@material-ui/core";
 import {
@@ -14,7 +14,7 @@ import {
 } from '@material-ui/core/colors';
 import * as Actions from "../redux/actions";
 import {State} from "../redux/reducers";
-import {connectAndStyle} from "../../../util";
+import {connect} from "react-redux";
 
 const colors = [blue, cyan, green, indigo, lime, purple, teal];
 
@@ -45,7 +45,9 @@ const mapDispatchToProps = {
 
 type LoadingScreenProps = WithStyles<typeof styles> & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
-class LoadingScreen extends Component<LoadingScreenProps> {
+@withStyles(styles)
+@connect(mapStateToProps, mapDispatchToProps)
+export default class LoadingScreen extends Component<LoadingScreenProps> {
     constructor(props: LoadingScreenProps) {
         super(props);
         this.props.init();
@@ -78,5 +80,3 @@ class LoadingScreen extends Component<LoadingScreenProps> {
         );
     }
 }
-
-export default connectAndStyle(LoadingScreen, mapStateToProps, mapDispatchToProps, styles);

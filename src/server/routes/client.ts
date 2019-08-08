@@ -1,9 +1,11 @@
-import {Socket} from "socket.io";
 import * as game from "../controller";
-import {IOEvent, UUID} from "../../types";
 import uuid from "uuid/v4";
+import {FinishedGameTurnDTO, NewContentDTO, RoutesConfig} from "../../types/server";
+import {IOEvent, UUID} from "../../types/shared";
 
-export default (client: Socket) => () => {
+export default (config: RoutesConfig) => () => {
+    const {client, io, serverWebapp} = config;
+
     if (game.isStarted()) {
         client.emit(IOEvent.GAME_ALREADY_STARTED)
     } else {

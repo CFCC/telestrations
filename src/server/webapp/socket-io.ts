@@ -1,7 +1,8 @@
 import socketIo from "socket.io-client";
-import {FinishedGameTurnDTO, IOEvent, NotepadPageDTO, PlayerDTO} from "../../types";
 import * as Actions from './redux/actions';
 import store from "./redux/store";
+import {FinishedGameTurnDTO, NotepadPageDTO, PlayerDTO} from "../../types/server";
+import {IOEvent} from "../../types/shared";
 
 const io: SocketIOClient.Socket = socketIo('localhost:8081');
 

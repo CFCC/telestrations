@@ -1,4 +1,5 @@
-import {ClientGameState, ContentType, NewContentDTO} from '../../types';
+import {NewContentDTO} from "../../types/server";
+import {ClientGameState} from "../../types/client";
 
 export type NEW_CONTENT = 'NEW_CONTENT';
 export const NEW_CONTENT: NEW_CONTENT = 'NEW_CONTENT';

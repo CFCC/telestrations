@@ -1,9 +1,8 @@
 import React, {ChangeEvent, Component, FormEvent} from 'react';
-import {Button, CircularProgress, createStyles, TextField, Theme, WithStyles} from "@material-ui/core";
-import {connectAndStyle} from "../../util";
+import {Button, CircularProgress, createStyles, TextField, Theme, withStyles, WithStyles} from "@material-ui/core";
 import {State} from "../redux/reducers";
 import * as Creators from "../redux/actions";
-import {ClientGameState} from "../../types";
+import {connect} from "react-redux";
 
 const styles = (theme: Theme) => createStyles({
     app: {
@@ -43,7 +42,9 @@ const mapDispatchToProps = {
 
 type LoadingScreenProps = WithStyles<typeof styles> & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
-class TitleScreen extends Component<LoadingScreenProps> {
+@withStyles(styles)
+@connect(mapStateToProps, mapDispatchToProps)
+export default class TitleScreen extends Component<LoadingScreenProps> {
     logo = <img src="/logo.png" alt="Telestrations logo" className={this.props.classes.img} />;
 
     submitNickname = () => [

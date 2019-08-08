@@ -1,6 +1,8 @@
-import {ContentType, IOEvent, NewContentDTO, Notepad, Player, UUID} from "../types";
 import {remove} from 'lodash';
 import {sleep} from "../util";
+import {NewContentDTO} from "../types/server";
+import {Notepad, Player} from "../types/client";
+import {ContentType, IOEvent, UUID} from "../types/shared";
 
 // region [Variables]
 

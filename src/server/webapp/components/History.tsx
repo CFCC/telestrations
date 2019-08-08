@@ -3,7 +3,8 @@ import {Button, createStyles, MobileStepper, WithStyles} from "@material-ui/core
 import {KeyboardArrowLeft, KeyboardArrowRight} from "@material-ui/icons";
 import SwipeableViews from 'react-swipeable-views';
 import {State} from "../redux/reducers";
-import {NotepadPage, UUID} from "../../../types";
+import {NotepadPage} from "../../../types/client";
+import {UUID} from "../../../types/shared";
 
 const styles = createStyles({
 

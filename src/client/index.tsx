@@ -4,7 +4,7 @@ import io from './socket-io';
 import App from './App';
 import {Provider} from "react-redux";
 import store from "./redux/store";
-import {IOEvent} from "../types";
+import {IOEvent} from "../types/shared";
 
 ReactDOM.render(<Provider store={store}>
     <App />

@@ -1,6 +1,9 @@
 import * as Actions from './actions';
 import * as io from '../socket-io';
-import {Notepad, ServerPlayer, ServerWebAppGameState, UUID} from "../../../types";
+import {Notepad} from "../../../types/client";
+import {ServerPlayer} from "../../../types/server";
+import {UUID} from "../../../types/shared";
+import {ServerWebAppGameState} from "../../../types/server-webapp";
 
 export interface State {
     state: ServerWebAppGameState;

@@ -1,4 +1,6 @@
-import {PlayerDTO, ServerWebAppGameState, UUID} from "../../../types";
+import {PlayerDTO} from "../../../types/server";
+import {UUID} from "../../../types/shared";
+import {ServerWebAppGameState} from "../../../types/server-webapp";
 
 export type SET_GAME_STATE = 'CONFIG_SET_GAME_STATE';
 export const SET_GAME_STATE: SET_GAME_STATE = 'CONFIG_SET_GAME_STATE';

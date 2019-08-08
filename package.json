@@ -89,6 +89,7 @@
     "@types/socket.io-client": "^1.4.32",
     "@types/uuid": "^3.4.4",
     "@typescript-eslint/eslint-plugin": "^1.9.0",
-    "@typescript-eslint/parser": "^1.9.0"
+    "@typescript-eslint/parser": "^1.9.0",
+    "eslint-plugin-react-hooks": "^1.6.1"
   }
 }

@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import {createStyles, WithStyles} from "@material-ui/core";
-import {UUID} from "../../../types";
+import {createStyles, withStyles, WithStyles} from "@material-ui/core";
 import {State} from "../redux/reducers";
-import {connectAndStyle} from "../../../util";
+import {UUID} from "../../../types/shared";
+import {connect} from "react-redux";
 
 const styles = createStyles({
     app: {
@@ -21,7 +21,9 @@ const mapStateToProps = (state: State) => ({
 
 type PlayerStreamProps = OwnProps & WithStyles<typeof styles> & ReturnType<typeof mapStateToProps>;
 
-class PlayerStream extends Component<PlayerStreamProps> {
+@withStyles(styles)
+@connect(mapStateToProps)
+export default class PlayerStream extends Component<PlayerStreamProps> {
     render() {
         const playerIndex = this.props.players.findIndex(p => p.id === this.props.playerId);
         const notepadIndex = this.props.notepads.findIndex(n => n.owner === this.props.players[playerIndex].ownerOfCurrentNotepad);
@@ -38,5 +40,3 @@ class PlayerStream extends Component<PlayerStreamProps> {
         </div>;
     }
 }
-
-export default connectAndStyle<OwnProps>(PlayerStream, mapStateToProps, {}, styles);

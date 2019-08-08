@@ -1,12 +1,24 @@
 import React, {Component} from 'react';
-import {createStyles, Grid, Icon, IconButton, Menu, MenuItem, Paper, Typography, WithStyles} from "@material-ui/core";
+import {
+    createStyles,
+    Grid,
+    Icon,
+    IconButton,
+    Menu,
+    MenuItem,
+    Paper,
+    Typography,
+    withStyles,
+    WithStyles
+} from "@material-ui/core";
 // @ts-ignore - (TODO) I'm not really sure what's happening here. Maybe there's a different package that plays nicer with TS
 import screenfull from 'screenfull';
 import {State} from "../redux/reducers";
 import PlayerStream from "./PlayerStream";
 import * as Actions from '../redux/actions';
-import {UUID, ObjectOfRefs} from "../../../types";
-import {connectAndStyle} from "../../../util";
+import {ObjectOfRefs} from "../../../types/client";
+import {UUID} from "../../../types/shared";
+import {connect} from "react-redux";
 
 const styles = createStyles({
     app: {
@@ -30,7 +42,9 @@ interface BirdsEyeState {
     menuPlayerId: UUID;
 }
 
-class BirdsEye extends Component<BirdsEyeProps, BirdsEyeState> {
+@withStyles(styles)
+@connect(mapStateToProps, mapDispatchToProps)
+export default class BirdsEye extends Component<BirdsEyeProps, BirdsEyeState> {
     state = {
         menuAnchorElement: null,
         menuPlayerId: ''
@@ -90,5 +104,3 @@ class BirdsEye extends Component<BirdsEyeProps, BirdsEyeState> {
         </div>;
     }
 }
-
-export default connectAndStyle(BirdsEye, mapStateToProps, mapDispatchToProps, styles);
