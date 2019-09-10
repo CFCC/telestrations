@@ -2,7 +2,7 @@
 	"compilerOptions": {
 		"allowSyntheticDefaultImports": true,
 		"jsx": "preserve",
-		"target": "esnext",
+		"target": "es2016",
 		"lib": [
 			"dom",
 			"dom.iterable",
@@ -16,7 +16,8 @@
 		"module": "commonjs",
 		"moduleResolution": "node",
 		"resolveJsonModule": true,
-		"noEmit": true
+		"noEmit": true,
+		"experimentalDecorators": true
 	},
 	"include": [
 		"src/**/*"
