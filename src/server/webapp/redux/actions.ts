@@ -2,8 +2,8 @@ import {PlayerDTO} from "types/server";
 import {UUID} from "types/shared";
 import {ServerWebAppGameState} from "types/server-webapp";
 
-export type SET_GAME_STATE = 'CONFIG_SET_GAME_STATE';
-export const SET_GAME_STATE: SET_GAME_STATE = 'CONFIG_SET_GAME_STATE';
+export type SET_GAME_STATE = "CONFIG_SET_GAME_STATE";
+export const SET_GAME_STATE: SET_GAME_STATE = "CONFIG_SET_GAME_STATE";
 export interface setGameState {
     type: SET_GAME_STATE;
     state: ServerWebAppGameState;
@@ -15,8 +15,8 @@ export function setGameState(state: ServerWebAppGameState): setGameState {
     };
 }
 
-export type VIEW_PLAYER_HISTORY = 'VIEW_PLAYER_HISTORY';
-export const VIEW_PLAYER_HISTORY: VIEW_PLAYER_HISTORY = 'VIEW_PLAYER_HISTORY';
+export type VIEW_PLAYER_HISTORY = "VIEW_PLAYER_HISTORY";
+export const VIEW_PLAYER_HISTORY: VIEW_PLAYER_HISTORY = "VIEW_PLAYER_HISTORY";
 export interface viewPlayerHistory {
     type: VIEW_PLAYER_HISTORY;
     playerId: UUID;
@@ -28,8 +28,8 @@ export function viewPlayerHistory(playerId: UUID): viewPlayerHistory {
     };
 }
 
-export type VIEW_NOTEPAD_HISTORY = 'VIEW_PLAYER_HISTORY';
-export const VIEW_NOTEPAD_HISTORY: VIEW_PLAYER_HISTORY = 'VIEW_PLAYER_HISTORY';
+export type VIEW_NOTEPAD_HISTORY = "VIEW_PLAYER_HISTORY";
+export const VIEW_NOTEPAD_HISTORY: VIEW_PLAYER_HISTORY = "VIEW_PLAYER_HISTORY";
 export interface viewNotepadHistory {
     type: VIEW_NOTEPAD_HISTORY;
     ownerId: UUID;
@@ -41,8 +41,8 @@ export function viewNotepadHistory(ownerId: UUID): viewNotepadHistory {
     };
 }
 
-export type INIT = 'INIT';
-export const INIT: INIT = 'INIT';
+export type INIT = "INIT";
+export const INIT: INIT = "INIT";
 export interface init {
     type: INIT;
 }
@@ -52,8 +52,8 @@ export function init(): init {
     };
 }
 
-export type START_GAME = 'START_GAME';
-export const START_GAME: START_GAME = 'START_GAME';
+export type START_GAME = "START_GAME";
+export const START_GAME: START_GAME = "START_GAME";
 export interface startGame {
     type: START_GAME;
 }
@@ -63,8 +63,8 @@ export function startGame(): startGame {
     };
 }
 
-export type PLAYER_ADDED = 'PLAYER_ADDED';
-export const PLAYER_ADDED: PLAYER_ADDED = 'PLAYER_ADDED';
+export type PLAYER_ADDED = "PLAYER_ADDED";
+export const PLAYER_ADDED: PLAYER_ADDED = "PLAYER_ADDED";
 export interface addPlayer {
     type: PLAYER_ADDED;
     player: PlayerDTO;
@@ -76,8 +76,8 @@ export function addPlayer(player: PlayerDTO): addPlayer {
     };
 }
 
-export type UPDATE_GUESS = 'UPDATE_GUESS';
-export const UPDATE_GUESS: UPDATE_GUESS = 'UPDATE_GUESS';
+export type UPDATE_GUESS = "UPDATE_GUESS";
+export const UPDATE_GUESS: UPDATE_GUESS = "UPDATE_GUESS";
 export interface updateGuess {
     type: UPDATE_GUESS;
     playerId: UUID;
@@ -90,8 +90,8 @@ export function updateGuess(playerId: UUID, content: string): updateGuess {
         content
     };
 }
-export type FINISHED_GAME_TURN = 'FINISHED_GAME_TURN';
-export const FINISHED_GAME_TURN: FINISHED_GAME_TURN = 'FINISHED_GAME_TURN';
+export type FINISHED_GAME_TURN = "FINISHED_GAME_TURN";
+export const FINISHED_GAME_TURN: FINISHED_GAME_TURN = "FINISHED_GAME_TURN";
 export interface finishedGameTurn {
     type: FINISHED_GAME_TURN;
     playerId: UUID;
@@ -105,8 +105,8 @@ export function finishedGameTurn(playerId: UUID, newNotepadOwnerId: UUID): finis
     };
 }
 
-export type GAME_FINISHED = 'GAME_FINISHED';
-export const GAME_FINISHED: GAME_FINISHED = 'GAME_FINISHED';
+export type GAME_FINISHED = "GAME_FINISHED";
+export const GAME_FINISHED: GAME_FINISHED = "GAME_FINISHED";
 export interface gameFinished {
     type: GAME_FINISHED;
 }

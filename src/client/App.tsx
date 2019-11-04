@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React, {Component} from "react";
 import {State} from "client/redux/reducers";
-import {Drawing, TitleScreen, Typing, Waiting} from 'client/components';
+import {Drawing, TitleScreen, Typing, Waiting} from "client/components";
 import {connect} from "react-redux";
 import {ClientGameState} from "types/client";
 

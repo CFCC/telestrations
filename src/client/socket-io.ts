@@ -1,11 +1,11 @@
-import socketIo from 'socket.io-client';
-import store from 'client/redux/store';
-import * as Creators from 'client/redux/actions';
+import socketIo from "socket.io-client";
+import store from "client/redux/store";
+import * as Creators from "client/redux/actions";
 import {NewContentDTO} from "types/server";
 import {ClientGameState} from "types/client";
 import {IOEvent} from "types/shared";
 
-const io: SocketIOClient.Socket = socketIo('localhost:8081');
+const io: SocketIOClient.Socket = socketIo("localhost:8081");
 
 io.on(IOEvent.START_GAME, () => {
     store.dispatch(Creators.setGameState(ClientGameState.TYPING));

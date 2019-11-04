@@ -1,8 +1,8 @@
 import {NewContentDTO} from "types/server";
 import {ClientGameState} from "types/client";
 
-export type NEW_CONTENT = 'NEW_CONTENT';
-export const NEW_CONTENT: NEW_CONTENT = 'NEW_CONTENT';
+export type NEW_CONTENT = "NEW_CONTENT";
+export const NEW_CONTENT: NEW_CONTENT = "NEW_CONTENT";
 export interface newContent {
     type: NEW_CONTENT;
     content: NewContentDTO
@@ -14,8 +14,8 @@ export function newContent(content: NewContentDTO): newContent {
     }
 }
 
-export type SET_GAME_STATE = 'SET_GAME_STATE';
-export const SET_GAME_STATE: SET_GAME_STATE = 'SET_GAME_STATE';
+export type SET_GAME_STATE = "SET_GAME_STATE";
+export const SET_GAME_STATE: SET_GAME_STATE = "SET_GAME_STATE";
 export interface setGameState {
     type: SET_GAME_STATE;
     state: ClientGameState;
@@ -27,8 +27,8 @@ export function setGameState(state: ClientGameState): setGameState {
     };
 }
 
-export type SET_NICKNAME = 'SET_NICKNAME';
-export const SET_NICKNAME: SET_NICKNAME = 'SET_NICKNAME';
+export type SET_NICKNAME = "SET_NICKNAME";
+export const SET_NICKNAME: SET_NICKNAME = "SET_NICKNAME";
 export interface setNickname {
     type: SET_NICKNAME;
     nickname: String;
@@ -40,8 +40,8 @@ export function setNickname(nickname: String): setNickname {
     }
 }
 
-export type SUBMIT_NICKNAME = 'SUBMIT_NICKNAME';
-export const SUBMIT_NICKNAME: SUBMIT_NICKNAME = 'SUBMIT_NICKNAME';
+export type SUBMIT_NICKNAME = "SUBMIT_NICKNAME";
+export const SUBMIT_NICKNAME: SUBMIT_NICKNAME = "SUBMIT_NICKNAME";
 export interface submitNickname {
     type: SUBMIT_NICKNAME;
 }
@@ -51,8 +51,8 @@ export function submitNickname(): submitNickname {
     };
 }
 
-export type SET_GUESS = 'SET_GUESS';
-export const SET_GUESS: SET_GUESS = 'SET_GUESS';
+export type SET_GUESS = "SET_GUESS";
+export const SET_GUESS: SET_GUESS = "SET_GUESS";
 export interface setGuess {
     type: SET_GUESS;
     guess: string;
@@ -64,8 +64,8 @@ export function setGuess(guess: string): setGuess {
     };
 }
 
-export type SUBMIT_GUESS = 'SUBMIT_GUESS';
-export const SUBMIT_GUESS: SUBMIT_GUESS = 'SUBMIT_GUESS';
+export type SUBMIT_GUESS = "SUBMIT_GUESS";
+export const SUBMIT_GUESS: SUBMIT_GUESS = "SUBMIT_GUESS";
 export interface submitGuess {
     type: SUBMIT_GUESS;
 }

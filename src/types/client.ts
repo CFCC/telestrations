@@ -2,12 +2,12 @@ import {RefObject} from "react";
 import {ContentType, UUID} from "types/shared";
 
 export enum ClientGameState {
-    LOADING = 'loading',
-    DRAWING = 'drawing',
-    TYPING = 'typing',
-    FINISHED = 'finished',
-    ALREADY_STARTED = 'already started',
-    WAITING = 'waiting'
+    LOADING = "loading",
+    DRAWING = "drawing",
+    TYPING = "typing",
+    FINISHED = "finished",
+    ALREADY_STARTED = "already started",
+    WAITING = "waiting"
 }
 
 export interface Notepad {

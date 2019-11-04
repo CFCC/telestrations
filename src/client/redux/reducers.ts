@@ -1,5 +1,5 @@
-import * as Actions from 'client/redux/actions';
-import {submitNick, finishTurn, updateGuess} from 'client/socket-io';
+import * as Actions from "client/redux/actions";
+import {submitNick, finishTurn, updateGuess} from "client/socket-io";
 import {ContentType} from "types/shared";
 import {ClientGameState} from "types/client";
 
@@ -14,9 +14,9 @@ export interface State {
 const defaultState: State = {
     nicknameSubmitted: false,
     state: ClientGameState.LOADING,
-    nickname: '',
-    guess: '',
-    content: ''
+    nickname: "",
+    guess: "",
+    content: ""
 };
 
 export default function reducer(state: State = defaultState, action: Actions.Creator): State {
@@ -46,7 +46,7 @@ export default function reducer(state: State = defaultState, action: Actions.Cre
             return Object.assign({}, state, {
                 state: action.content.type === ContentType.Text ? ClientGameState.DRAWING : ClientGameState.TYPING,
                 content: action.content.content,
-                guess: ''
+                guess: ""
             });
         default:
             return state;

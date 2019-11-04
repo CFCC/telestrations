@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import React, {Component} from "react";
 // @ts-ignore (there's a types file, and WebStorm sees it, but for some reason typescript does not)
-import {SketchField, Tools} from 'react-sketch';
-import * as colors from '@material-ui/core/colors'
-import {ColorResult, SwatchesPicker} from 'react-color';
+import {SketchField, Tools} from "react-sketch";
+import * as colors from "@material-ui/core/colors"
+import {ColorResult, SwatchesPicker} from "react-color";
 import {
     createStyles,
     Dialog,
@@ -21,33 +21,33 @@ import {
     WithStyles
 } from "@material-ui/core";
 import {State} from "client/redux/reducers";
-import * as Actions from 'client/redux/actions';
+import * as Actions from "client/redux/actions";
 import {connect} from "react-redux";
 
 const styles = (theme: Theme) => createStyles({
     app: {
-        width: '100vw',
-        height: '100vh'
+        width: "100vw",
+        height: "100vh"
     },
     controls: {
-        position: 'absolute',
+        position: "absolute",
         bottom: 0,
         left: 0,
         right: 0,
-        display: 'flex',
-        flexDirection: 'row'
+        display: "flex",
+        flexDirection: "row"
     },
     paper: {
         flex: 1,
         margin: 2 * theme.spacing.unit,
-        padding: '1em'
+        padding: "1em"
     },
     canvas: {
-        height: '100% !important'
+        height: "100% !important"
     },
     list: {
-        width: 'auto',
-        overflowX: 'hidden'
+        width: "auto",
+        overflowX: "hidden"
     },
     fab: {
         margin: 2 * theme.spacing.unit
@@ -56,8 +56,8 @@ const styles = (theme: Theme) => createStyles({
         margin: 2 * theme.spacing.unit
     },
     colorPicker: {
-        width: '100%',
-        height: '100%'
+        width: "100%",
+        height: "100%"
     }
 });
 
@@ -90,8 +90,8 @@ type DrawingProps = Partial<WithStyles<typeof styles>> & typeof mapDispatchToPro
 export default class Drawing extends Component<DrawingProps, DrawingState> {
     state: DrawingState = {
         tool: Tools.Pencil,
-        color: '#000000',
-        bgColor: '#FFFFFF',
+        color: "#000000",
+        bgColor: "#FFFFFF",
         lineWeight: 1,
         toolPickerOpen: false,
         colorPickerOpen: false,
@@ -138,9 +138,9 @@ export default class Drawing extends Component<DrawingProps, DrawingState> {
 
     clear = () => {
         this.sketch.clear();
-        this.sketch.setBackgroundFromDataUrl('');
+        this.sketch.setBackgroundFromDataUrl("");
         this.setState({
-            bgColor: '#FFFFFF',
+            bgColor: "#FFFFFF",
             canUndo: this.sketch.canUndo(),
             canRedo: this.sketch.canRedo(),
         });

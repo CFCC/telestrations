@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React, {Component} from "react";
 import {Button, createStyles, MobileStepper, WithStyles} from "@material-ui/core";
 import {KeyboardArrowLeft, KeyboardArrowRight} from "@material-ui/icons";
-import SwipeableViews from 'react-swipeable-views';
+import SwipeableViews from "react-swipeable-views";
 import {State} from "server/webapp/redux/reducers";
 import {NotepadPage} from "types/client";
 import {UUID} from "types/shared";

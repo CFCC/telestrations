@@ -1,6 +1,6 @@
-import socketIo, {Socket} from 'socket.io';
-import http from 'http';
-import {serverEvents, clientEvents} from 'server/routes';
+import socketIo, {Socket} from "socket.io";
+import http from "http";
+import {serverEvents, clientEvents} from "server/routes";
 import {RoutesConfig} from "types/server";
 import {IOEvent} from "types/shared";
 

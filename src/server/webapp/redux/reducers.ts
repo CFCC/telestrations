@@ -1,5 +1,5 @@
-import * as Actions from 'server/webapp/redux/actions';
-import * as io from 'server/webapp/socket-io';
+import * as Actions from "server/webapp/redux/actions";
+import * as io from "server/webapp/socket-io";
 import {Notepad} from "types/client";
 import {ServerPlayer} from "types/server";
 import {UUID} from "types/shared";
@@ -17,8 +17,8 @@ const defaultState: State = {
     state: ServerWebAppGameState.LOADING,
     players: [],
     notepads: [],
-    activePlayerId: '',
-    activeNotepadId: ''
+    activePlayerId: "",
+    activeNotepadId: ""
 };
 
 export default function reducer(state: State = defaultState, action: Actions.Action): State {

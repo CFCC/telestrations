@@ -3,6 +3,7 @@ module.exports = {
     extends: ["react-app"],
     plugins: ["@typescript-eslint"],
     rules: {
-        "@typescript-eslint/no-angle-bracket-type-assertion": 0
+        "@typescript-eslint/no-angle-bracket-type-assertion": 0,
+        "quotes": ["error"]
     }
 };

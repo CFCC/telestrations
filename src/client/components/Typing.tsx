@@ -1,42 +1,42 @@
-import React, {Component, FormEvent} from 'react';
+import React, {Component, FormEvent} from "react";
 import {Button, TextField, Theme, withStyles, WithStyles} from "@material-ui/core";
-import {createStyles} from '@material-ui/core/styles';
+import {createStyles} from "@material-ui/core/styles";
 import {State} from "client/redux/reducers";
 import * as Creators from "client/redux/actions";
 import {connect} from "react-redux";
 
 const styles = (theme: Theme) => createStyles({
     app: {
-        width: '100vw',
-        height: '100vh',
-        overflow: 'auto',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'flex-end',
+        width: "100vw",
+        height: "100vh",
+        overflow: "auto",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "flex-end",
     },
     appWithQuestionBackground: {
-        width: '100vw',
-        height: '100vh',
-        overflow: 'auto',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'flex-end',
-        backgroundImage: 'url(/question-marks.jpg)',
-        backgroundRepeat: 'repeat',
+        width: "100vw",
+        height: "100vh",
+        overflow: "auto",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "flex-end",
+        backgroundImage: "url(/question-marks.jpg)",
+        backgroundRepeat: "repeat",
     },
     input: {
-        background: '#FFFFFF',
+        background: "#FFFFFF",
         borderRadius: theme.shape.borderRadius,
         flex: 1,
-        margin: '1em'
+        margin: "1em"
     },
     button: {
         flexShrink: 0,
-        margin: '1em',
-        height: '4em'
+        margin: "1em",
+        height: "4em"
     },
     picture: {
-        position: 'absolute'
+        position: "absolute"
     }
 });
 

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component} from "react";
 import {
     createStyles,
     Grid,
@@ -11,17 +11,17 @@ import {
     withStyles,
     WithStyles
 } from "@material-ui/core";
-import screenfull from 'screenfull';
+import screenfull from "screenfull";
 import {State} from "server/webapp/redux/reducers";
 import PlayerStream from "server/webapp/components/PlayerStream";
-import * as Actions from 'server/webapp/redux/actions';
+import * as Actions from "server/webapp/redux/actions";
 import {ObjectOfRefs} from "types/client";
 import {UUID} from "types/shared";
 import {connect} from "react-redux";
 
 const styles = createStyles({
     app: {
-        padding: '8px'
+        padding: "8px"
     }
 });
 
@@ -46,7 +46,7 @@ interface BirdsEyeState {
 export default class BirdsEye extends Component<BirdsEyeProps, BirdsEyeState> {
     state = {
         menuAnchorElement: null,
-        menuPlayerId: ''
+        menuPlayerId: ""
     };
 
     streamRefs: ObjectOfRefs = {};
@@ -78,7 +78,7 @@ export default class BirdsEye extends Component<BirdsEyeProps, BirdsEyeState> {
                             <Typography variant="h4" gutterBottom>{player.nickname}</Typography>
                             <PlayerStream playerId={player.id} /* ref={this.streamRefs[player.id]} */ />
                             <IconButton onClick={e => this.openMenu(player.id, e)}
-                                        aria-owns={this.state.menuPlayerId === player.id ? 'menu' : undefined}
+                                        aria-owns={this.state.menuPlayerId === player.id ? "menu" : undefined}
                                         aria-haspopup="true">
                                 <Icon>more_vert</Icon>
                             </IconButton>

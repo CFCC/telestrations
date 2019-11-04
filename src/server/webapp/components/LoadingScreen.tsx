@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {AccountCircle as PersonIcon} from '@material-ui/icons'
+import React, {Component} from "react";
+import {AccountCircle as PersonIcon} from "@material-ui/icons"
 import {
     Button,
     createStyles,
@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core";
 import {
     blue, cyan, green, indigo, lime, purple, teal
-} from '@material-ui/core/colors';
+} from "@material-ui/core/colors";
 import * as Actions from "../redux/actions";
 import {State} from "../redux/reducers";
 import {connect} from "react-redux";
@@ -20,17 +20,17 @@ const colors = [blue, cyan, green, indigo, lime, purple, teal];
 
 const styles = createStyles({
     app: {
-        backgroundColor: '#FFC20E',
-        display: 'flex',
-        alignItems: 'center',
-        flexDirection: 'column',
-        height: '100vh'
+        backgroundColor: "#FFC20E",
+        display: "flex",
+        alignItems: "center",
+        flexDirection: "column",
+        height: "100vh"
     },
     img: {
-        maxWidth: '50%'
+        maxWidth: "50%"
     },
     header: {
-        textAlign: 'center'
+        textAlign: "center"
     }
 });
 

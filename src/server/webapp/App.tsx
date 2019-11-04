@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component} from "react";
 import {State} from "server/webapp/redux/reducers";
 import {connect} from "react-redux";
 import {BirdsEye, LoadingScreen, PlayerStream, History} from "server/webapp/components";

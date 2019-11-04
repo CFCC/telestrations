@@ -1,4 +1,4 @@
-import React, {ChangeEvent, Component, FormEvent} from 'react';
+import React, {ChangeEvent, Component, FormEvent} from "react";
 import {Button, CircularProgress, createStyles, TextField, Theme, withStyles, WithStyles} from "@material-ui/core";
 import {State} from "client/redux/reducers";
 import * as Creators from "client/redux/actions";
@@ -7,26 +7,26 @@ import {ClientGameState} from "types/client";
 
 const styles = (theme: Theme) => createStyles({
     app: {
-        backgroundColor: '#FFC20E',
-        display: 'flex',
-        alignItems: 'center',
-        flexDirection: 'column',
-        height: '100vh',
-        overflow: 'auto',
-        padding: '1em',
-        marginBottom: '1em'
+        backgroundColor: "#FFC20E",
+        display: "flex",
+        alignItems: "center",
+        flexDirection: "column",
+        height: "100vh",
+        overflow: "auto",
+        padding: "1em",
+        marginBottom: "1em"
     },
     progress: {
         margin: theme.spacing.unit * 5
     },
     img: {
-        maxWidth: '80%'
+        maxWidth: "80%"
     },
     input: {
-        marginBottom: '1em'
+        marginBottom: "1em"
     },
     header: {
-        textAlign: 'center'
+        textAlign: "center"
     }
 });
 

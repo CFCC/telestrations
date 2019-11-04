@@ -1,26 +1,26 @@
-import React, {Component} from 'react';
+import React, {Component} from "react";
 import {Button, CircularProgress, createStyles, Theme, withStyles, WithStyles} from "@material-ui/core";
 
 const styles = (theme: Theme) => createStyles({
     app: {
-        backgroundColor: '#FFC20E',
-        display: 'flex',
-        alignItems: 'center',
-        flexDirection: 'column',
-        height: '100vh',
-        overflow: 'auto',
-        padding: '1em',
-        marginBottom: '1em'
+        backgroundColor: "#FFC20E",
+        display: "flex",
+        alignItems: "center",
+        flexDirection: "column",
+        height: "100vh",
+        overflow: "auto",
+        padding: "1em",
+        marginBottom: "1em"
     },
     progress: {
         margin: theme.spacing.unit * 5
     },
     img: {
-        maxWidth: '80%',
+        maxWidth: "80%",
         marginBottom: theme.spacing.unit * 5
     },
     header: {
-        textAlign: 'center'
+        textAlign: "center"
     }
 });
 
@@ -30,11 +30,11 @@ interface WaitingState {
 
 class Waiting extends Component<WithStyles<typeof styles>, WaitingState> {
     state: WaitingState = {
-        dog: ''
+        dog: ""
     };
 
     newDog = async () => {
-        const dog = JSON.parse(await fetch('https://random.dog/woof.json').then(a => a.text())).url;
+        const dog = JSON.parse(await fetch("https://random.dog/woof.json").then(a => a.text())).url;
         this.setState({dog})
     };
 

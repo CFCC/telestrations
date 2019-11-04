@@ -1,4 +1,4 @@
-import {remove} from 'lodash';
+import {remove} from "lodash";
 import {sleep} from "utils";
 import {NewContentDTO} from "types/server";
 import {Notepad, Player} from "types/client";
@@ -31,14 +31,14 @@ export function updateGuess(id: UUID, content: string) {
 
 export function finishedTurn(id: UUID): NewContentDTO {
     const index = players.findIndex(p => p.id === id);
-    if (index === -1) throw new Error('Player ID not found');
+    if (index === -1) throw new Error("Player ID not found");
 
     const notepad = players[index].queue.shift();
-    if (!notepad) throw new Error('Notepad not found!');
+    if (!notepad) throw new Error("Notepad not found!");
     notepad.content.push(players[index].guess.content);
 
     const nextIndex = players.findIndex(p => p.id === getNextPlayer(id));
-    if (nextIndex === -1) throw new Error('Next player loop broken!');
+    if (nextIndex === -1) throw new Error("Next player loop broken!");
     players[nextIndex].queue.push(notepad);
 
     const newNotepad = players[index].queue[0];
@@ -60,7 +60,7 @@ export function finishedTurn(id: UUID): NewContentDTO {
 
 export async function getNewContent(id: UUID): Promise<NewContentDTO> {
     const index = players.findIndex(p => p.id === id);
-    if (index === -1) throw new Error('Player ID not found');
+    if (index === -1) throw new Error("Player ID not found");
 
     let newNotepad: Notepad | null = null;
     while (!newNotepad) {
@@ -81,7 +81,7 @@ export function addPlayer(id: UUID, nickname: string) {
     players.push({
         id,
         nickname,
-        guess: {content: '', type: ContentType.Text},
+        guess: {content: "", type: ContentType.Text},
         queue: []
     });
 }

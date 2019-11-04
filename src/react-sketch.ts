@@ -1,5 +1,5 @@
-declare module 'react-sketch' {
-    import * as React from 'react'
+declare module "react-sketch" {
+    import * as React from "react"
 
     export class SketchField extends React.PureComponent<{
         // the color of the line

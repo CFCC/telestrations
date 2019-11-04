@@ -1,10 +1,10 @@
 import socketIo from "socket.io-client";
-import * as Actions from './redux/actions';
-import store from "./redux/store";
+import * as Actions from "server/webapp/redux/actions";
+import store from "server/webapp/redux/store";
 import {FinishedGameTurnDTO, NotepadPageDTO, PlayerDTO} from "types/server";
 import {IOEvent} from "types/shared";
 
-const io: SocketIOClient.Socket = socketIo('localhost:8081');
+const io: SocketIOClient.Socket = socketIo("localhost:8081");
 
 io.on(IOEvent.PLAYER_ADDED, (player: PlayerDTO) => {
     store.dispatch(Actions.addPlayer(player));
