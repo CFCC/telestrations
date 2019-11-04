@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {createStyles, withStyles, WithStyles} from "@material-ui/core";
-import {State} from "../redux/reducers";
-import {UUID} from "../../../types/shared";
+import {State} from "server/webapp/redux/reducers";
+import {UUID} from "types/shared";
 import {connect} from "react-redux";
 
 const styles = createStyles({

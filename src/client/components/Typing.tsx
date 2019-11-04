@@ -1,8 +1,8 @@
 import React, {Component, FormEvent} from 'react';
 import {Button, TextField, Theme, withStyles, WithStyles} from "@material-ui/core";
 import {createStyles} from '@material-ui/core/styles';
-import {State} from "../redux/reducers";
-import * as Creators from "../redux/actions";
+import {State} from "client/redux/reducers";
+import * as Creators from "client/redux/actions";
 import {connect} from "react-redux";
 
 const styles = (theme: Theme) => createStyles({
@@ -52,9 +52,10 @@ const mapDispatchToProps = {
 
 type TypingProps = Partial<WithStyles<typeof styles> & typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>>;
 
+export default
 @withStyles(styles)
 @connect(mapStateToProps, mapDispatchToProps)
-export default class Typing extends Component<TypingProps> {
+class Typing extends Component<TypingProps> {
     dontRefresh = (e: FormEvent) => {
         e.preventDefault();
         return false;

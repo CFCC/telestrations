@@ -1,7 +1,7 @@
-import * as Actions from './actions';
-import {submitNick, finishTurn, updateGuess} from '../socket-io';
-import {ContentType} from "../../types/shared";
-import {ClientGameState} from "../../types/client";
+import * as Actions from 'client/redux/actions';
+import {submitNick, finishTurn, updateGuess} from 'client/socket-io';
+import {ContentType} from "types/shared";
+import {ClientGameState} from "types/client";
 
 export interface State {
     nicknameSubmitted: boolean;

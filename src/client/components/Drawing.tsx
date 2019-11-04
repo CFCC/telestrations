@@ -12,13 +12,16 @@ import {
     Icon,
     List,
     ListItem,
-    ListItemText, Paper,
-    Theme, Typography, withStyles,
+    ListItemText,
+    Paper,
+    Slider,
+    Theme,
+    Typography,
+    withStyles,
     WithStyles
 } from "@material-ui/core";
-import {State} from "../redux/reducers";
-import * as Actions from '../redux/actions';
-import {Slider} from "@material-ui/lab";
+import {State} from "client/redux/reducers";
+import * as Actions from 'client/redux/actions';
 import {connect} from "react-redux";
 
 const styles = (theme: Theme) => createStyles({

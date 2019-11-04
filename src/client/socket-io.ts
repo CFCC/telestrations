@@ -1,9 +1,9 @@
 import socketIo from 'socket.io-client';
-import store from './redux/store';
-import * as Creators from './redux/actions';
-import {NewContentDTO} from "../types/server";
-import {ClientGameState} from "../types/client";
-import {IOEvent} from "../types/shared";
+import store from 'client/redux/store';
+import * as Creators from 'client/redux/actions';
+import {NewContentDTO} from "types/server";
+import {ClientGameState} from "types/client";
+import {IOEvent} from "types/shared";
 
 const io: SocketIOClient.Socket = socketIo('localhost:8081');
 

@@ -73,8 +73,7 @@
   },
   "scripts": {
     "start": "concurrently \"node scripts/start-server.js\" \"node scripts/start-client.js\" \"ts-node src/server/index.ts\"",
-    "build": "concurrently \"node scripts/build-server.js\" \"node scripts/build-client.js\"",
-    "test": "node scripts/test.js"
+    "build": "concurrently \"node scripts/build-server.js\" \"node scripts/build-client.js\""
   },
   "devDependencies": {
     "@types/jest": "^24.0.18",

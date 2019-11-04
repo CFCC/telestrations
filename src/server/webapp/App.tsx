@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import {State} from "./redux/reducers";
+import {State} from "server/webapp/redux/reducers";
 import {connect} from "react-redux";
-import {BirdsEye, LoadingScreen, PlayerStream, History} from "./components";
-import {ServerWebAppGameState} from "../../types/server-webapp";
+import {BirdsEye, LoadingScreen, PlayerStream, History} from "server/webapp/components";
+import {ServerWebAppGameState} from "types/server-webapp";
 
 const mapStateToProps = (state: State) => ({
     gameState: state.state,

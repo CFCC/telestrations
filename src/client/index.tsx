@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import io from './socket-io';
-import App from './App';
+import io from 'client/socket-io';
+import App from 'client/App';
 import {Provider} from "react-redux";
-import store from "./redux/store";
-import {IOEvent} from "../types/shared";
+import store from "client/redux/store";
+import {IOEvent} from "types/shared";
 
 ReactDOM.render(<Provider store={store}>
     <App />

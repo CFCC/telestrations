@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import {State} from "./redux/reducers";
-import {Drawing, TitleScreen, Typing, Waiting} from './components';
+import {State} from "client/redux/reducers";
+import {Drawing, TitleScreen, Typing, Waiting} from 'client/components';
 import {connect} from "react-redux";
-import {ClientGameState} from "../types/client";
+import {ClientGameState} from "types/client";
 
 const mapStateToProps = (state: State) => ({
     gameState: state.state

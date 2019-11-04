@@ -11,13 +11,12 @@ import {
     withStyles,
     WithStyles
 } from "@material-ui/core";
-// @ts-ignore - (TODO) I'm not really sure what's happening here. Maybe there's a different package that plays nicer with TS
 import screenfull from 'screenfull';
-import {State} from "../redux/reducers";
-import PlayerStream from "./PlayerStream";
-import * as Actions from '../redux/actions';
-import {ObjectOfRefs} from "../../../types/client";
-import {UUID} from "../../../types/shared";
+import {State} from "server/webapp/redux/reducers";
+import PlayerStream from "server/webapp/components/PlayerStream";
+import * as Actions from 'server/webapp/redux/actions';
+import {ObjectOfRefs} from "types/client";
+import {UUID} from "types/shared";
 import {connect} from "react-redux";
 
 const styles = createStyles({
