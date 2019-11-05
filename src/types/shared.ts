@@ -22,3 +22,10 @@ export enum ContentType {
     Picture = "picture",
     Text = "text"
 }
+
+interface Classes {
+    [s: string]: string;
+}
+export interface ClassProps {
+    classes: Classes;
+}

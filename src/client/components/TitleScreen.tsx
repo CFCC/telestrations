@@ -43,10 +43,9 @@ const mapDispatchToProps = {
 
 type LoadingScreenProps = WithStyles<typeof styles> & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
-export default
 @withStyles(styles)
 @connect(mapStateToProps, mapDispatchToProps)
-class TitleScreen extends Component<LoadingScreenProps> {
+export default class TitleScreen extends Component<LoadingScreenProps> {
     logo = <img src="/logo.png" alt="Telestrations logo" className={this.props.classes.img} />;
 
     submitNickname = () => [

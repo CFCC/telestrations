@@ -23,6 +23,7 @@ export interface ServerPlayer {
     nickname: string;
     queueOfOwners: Array<UUID>;
     notepadIndex: number;
+    ownerOfCurrentNotepad: UUID;
 }
 
 export interface NotepadPageDTO {

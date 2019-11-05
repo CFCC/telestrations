@@ -4,5 +4,5 @@ import History from "server/webapp/components/History";
 import PlayerStream from "server/webapp/components/PlayerStream";
 
 export {
-    BirdsEye, LoadingScreen, PlayerStream, History
+    BirdsEye, LoadingScreen, PlayerStream, History,
 }

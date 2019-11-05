@@ -34,7 +34,3 @@ export interface Player {
     guess: Guess;
     queue: Array<Notepad>;
 }
-
-export interface ObjectOfRefs {
-    [s: string]: RefObject<{}>
-}

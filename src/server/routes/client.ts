@@ -26,7 +26,7 @@ export default (config: RoutesConfig) => () => {
                 const newContent: NewContentDTO = game.finishedTurn(id);
                 if (serverWebapp) serverWebapp.emit(IOEvent.FINISHED_GAME_TURN, {playerId: id});
 
-                switch(newContent.content) {
+                switch (newContent.content) {
                     case IOEvent.NO_MORE_CONTENT:
                         client.emit(IOEvent.NO_MORE_CONTENT);
                         if (game.isFinished() && serverWebapp) serverWebapp.emit(IOEvent.GAME_FINISHED);

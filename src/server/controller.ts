@@ -45,16 +45,16 @@ export function finishedTurn(id: UUID): NewContentDTO {
     if (!newNotepad) {
         return {
             content: IOEvent.WAIT,
-            type: ContentType.Text
+            type: ContentType.Text,
         };
     }
 
     return newNotepad.owner === id ? {
         content: IOEvent.NO_MORE_CONTENT,
-        type: ContentType.Text
+        type: ContentType.Text,
     } : {
         content: newNotepad.content[newNotepad.content.length - 1],
-        type: newNotepad.content.length - 1 % 2 === 0 ? ContentType.Text : ContentType.Picture
+        type: newNotepad.content.length - 1 % 2 === 0 ? ContentType.Text : ContentType.Picture,
     }
 }
 
@@ -70,10 +70,10 @@ export async function getNewContent(id: UUID): Promise<NewContentDTO> {
 
     return newNotepad.owner === id ? {
         content: IOEvent.NO_MORE_CONTENT,
-        type: ContentType.Text
+        type: ContentType.Text,
     } : {
         content: newNotepad.content[newNotepad.content.length - 1],
-        type: newNotepad.content.length - 1 % 2 === 0 ? ContentType.Text : ContentType.Picture
+        type: newNotepad.content.length - 1 % 2 === 0 ? ContentType.Text : ContentType.Picture,
     }
 }
 
@@ -82,7 +82,7 @@ export function addPlayer(id: UUID, nickname: string) {
         id,
         nickname,
         guess: {content: "", type: ContentType.Text},
-        queue: []
+        queue: [],
     });
 }
 
@@ -98,7 +98,7 @@ export function startGame() {
     gameStarted = true;
     players.forEach(player => player.queue.push({
         owner: player.id,
-        content: []
+        content: [],
     } as Notepad));
 }
 

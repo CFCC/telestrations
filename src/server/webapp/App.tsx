@@ -1,26 +1,23 @@
-import React, {Component} from "react";
-import {State} from "server/webapp/redux/reducers";
-import {connect} from "react-redux";
+import React, {useContext} from "react";
 import {BirdsEye, LoadingScreen, PlayerStream, History} from "server/webapp/components";
 import {ServerWebAppGameState} from "types/server-webapp";
+import Store, {GameContext} from "server/webapp/Store";
 
-const mapStateToProps = (state: State) => ({
-    gameState: state.state,
-    playerId: state.activePlayerId
-});
+export default function App() {
+    const [{state, activePlayerId}] = useContext(GameContext);
 
-type StateProps = ReturnType<typeof mapStateToProps>;
-
-@connect(mapStateToProps)
-export default class App extends Component<StateProps> {
-    render() {
-        switch (this.props.gameState) {
+    const getScreen = () => {
+        switch (state) {
             case ServerWebAppGameState.LOADING: return <LoadingScreen />;
             case ServerWebAppGameState.BIRDS_EYE: return <BirdsEye />;
-            case ServerWebAppGameState.NOTEPAD_HISTORY: return <History notepadOwnerId={this.props.playerId} />;
-            case ServerWebAppGameState.PLAYER_HISTORY: return <History playerId={this.props.playerId} />;
-            case ServerWebAppGameState.SINGLE_PLAYER: return <PlayerStream playerId={this.props.playerId} />;
-            default: return <div />;
+            case ServerWebAppGameState.NOTEPAD_HISTORY: return <History notepadOwnerId={activePlayerId} />;
+            case ServerWebAppGameState.PLAYER_HISTORY: return <History playerId={activePlayerId} />;
+            case ServerWebAppGameState.SINGLE_PLAYER: return <PlayerStream playerId={activePlayerId} />;
+            default:return <div />;
         }
-    }
+    };
+    
+    return (<Store>
+        {getScreen()}
+    </Store>);
 }
