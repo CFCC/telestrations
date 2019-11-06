@@ -1,11 +1,8 @@
 import socketIo from "socket.io-client";
-import {IOEvent} from "types/shared";
+import {Events, IOEvent} from "types/shared";
 
 const io: SocketIOClient.Socket = socketIo("localhost:8081");
 
-interface Events {
-    [s: string]: Function;
-}
 export function attachEvents(events: Events) {
     Object.entries(events).forEach(([e, f]) => io.on(e, f));
 }

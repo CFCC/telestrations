@@ -1,18 +1,13 @@
-import React, {Component} from "react";
-import {State} from "client/redux/reducers";
+import React, {useContext} from "react";
 import {Drawing, TitleScreen, Typing, Waiting} from "client/components";
-import {connect} from "react-redux";
 import {ClientGameState} from "types/client";
+import Store, {GameContext} from "client/Store";
 
-const mapStateToProps = (state: State) => ({
-    gameState: state.state
-});
-
-type AppProps = ReturnType<typeof mapStateToProps>;
-
-class App extends Component<AppProps> {
-    render() {
-        switch (this.props.gameState) {
+export default function App() {
+    const [{state}] = useContext(GameContext);
+    
+    const getScreen = () => {
+        switch (state) {
             case ClientGameState.ALREADY_STARTED:
             case ClientGameState.LOADING:
             case ClientGameState.FINISHED:
@@ -26,7 +21,9 @@ class App extends Component<AppProps> {
             default:
                 return <div />;
         }
-    }
+    };
+    
+    return (<Store>
+        {getScreen()}
+    </Store>)
 }
-
-export default connect(mapStateToProps)(App);

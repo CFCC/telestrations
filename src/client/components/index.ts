@@ -4,5 +4,5 @@ import Typing from "client/components/Typing";
 import Waiting from "client/components/Waiting";
 
 export {
-    Drawing, TitleScreen, Typing, Waiting
+    Drawing, TitleScreen, Typing, Waiting,
 };

@@ -1,11 +1,10 @@
-import React, {ChangeEvent, Component, FormEvent} from "react";
-import {Button, CircularProgress, createStyles, TextField, Theme, withStyles, WithStyles} from "@material-ui/core";
-import {State} from "client/redux/reducers";
-import * as Creators from "client/redux/actions";
-import {connect} from "react-redux";
+import React, {ChangeEvent, FormEvent, useContext} from "react";
+import {Button, CircularProgress, TextField, withStyles} from "@material-ui/core";
 import {ClientGameState} from "types/client";
+import {ClassProps} from "../../types/shared";
+import {GameContext} from "../Store";
 
-const styles = (theme: Theme) => createStyles({
+export default withStyles({
     app: {
         backgroundColor: "#FFC20E",
         display: "flex",
@@ -14,88 +13,71 @@ const styles = (theme: Theme) => createStyles({
         height: "100vh",
         overflow: "auto",
         padding: "1em",
-        marginBottom: "1em"
+        marginBottom: "1em",
     },
     progress: {
-        margin: theme.spacing.unit * 5
+        margin: 5,
     },
     img: {
-        maxWidth: "80%"
+        maxWidth: "80%",
     },
     input: {
-        marginBottom: "1em"
+        marginBottom: "1em",
     },
     header: {
-        textAlign: "center"
-    }
-});
+        textAlign: "center",
+    },
+})(function TitleScreen({classes}: ClassProps) {
+    const [{state, nickname, nicknameSubmitted}, {submitNickname, setNickname}] = useContext(GameContext);
 
-const mapStateToProps = (state: State) => ({
-    nickname: state.nickname,
-    state: state.state,
-    nicknameSubmitted: state.nicknameSubmitted
-});
+    const logo = <img src="/logo.png" alt="Telestrations logo" className={classes.img} />;
 
-const mapDispatchToProps = {
-    submitNickname: Creators.submitNickname,
-    setNickname: (nickname: String) => Creators.setNickname(nickname)
-};
+    const submitNicknameEl = <React.Fragment>
+        <h1 className={classes.header}>What is your name?</h1>
+        <TextField value={nickname}
+            variant="outlined"
+            className={classes.input}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setNickname(e.target.value)} />
+        <Button onClick={submitNickname} variant="contained" color="primary" type="submit">Join Game</Button>
+    </React.Fragment>;
 
-type LoadingScreenProps = WithStyles<typeof styles> & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
+    const waitForGameToStart = <React.Fragment>
+        <h1 className={classes.header}>Waiting for the game to start</h1>
+        <h3>Have your host start the game when everyone's joined!</h3>
+        <CircularProgress className={classes.progress} />
+    </React.Fragment>;
 
-@withStyles(styles)
-@connect(mapStateToProps, mapDispatchToProps)
-export default class TitleScreen extends Component<LoadingScreenProps> {
-    logo = <img src="/logo.png" alt="Telestrations logo" className={this.props.classes.img} />;
-
-    submitNickname = () => [
-        <h1 className={this.props.classes.header}>What is your name?</h1>,
-        <TextField value={this.props.nickname}
-                   variant="outlined"
-                   className={this.props.classes.input}
-                   onChange={(e: ChangeEvent<HTMLInputElement>) => this.props.setNickname(e.target.value)} />,
-        <Button onClick={this.props.submitNickname} variant="contained" color="primary" type="submit">Join Game</Button>
-    ];
-
-    waitForGameToStart = () => [
-        <h1 className={this.props.classes.header}>Waiting for the game to start</h1>,
-        <h3>Have your host start the game when everyone's joined!</h3>,
-        <CircularProgress className={this.props.classes.progress} />
-    ];
-
-    gameAlreadyStarted = () => [
-        <h1 className={this.props.classes.header}>This game's already started!</h1>,
+    const gameAlreadyStarted = <React.Fragment>
+        <h1 className={classes.header}>This game's already started!</h1>
         <h3>Wait for it to finish before joining.</h3>
-    ];
+    </React.Fragment>;
 
-    gameFinished = () => [
-        <h1 className={this.props.classes.header}>The game is finished!</h1>,
+    const gameFinished = <React.Fragment>
+        <h1 className={classes.header}>The game is finished!</h1>
         <h3>Please ask your host to see the results.</h3>
-    ];
+    </React.Fragment>;
 
-    getContent = () => {
-        switch (this.props.state) {
+    const getContent = () => {
+        switch (state) {
             case ClientGameState.LOADING:
-                return this.props.nicknameSubmitted ? this.waitForGameToStart() : this.submitNickname();
+                return nicknameSubmitted ? waitForGameToStart : submitNicknameEl;
             case ClientGameState.FINISHED:
-                return this.gameFinished();
+                return gameFinished;
             case ClientGameState.ALREADY_STARTED:
             default:
-                return this.gameAlreadyStarted();
+                return gameAlreadyStarted;
         }
     };
 
-    dontRefresh = (e: FormEvent) => {
+    const dontRefresh = (e: FormEvent) => {
         e.preventDefault();
         return false;
     };
 
-    render() {
-        return <form onSubmit={this.dontRefresh}>
-            <div className={this.props.classes.app}>
-                {this.logo}
-                {this.getContent().map((x, i) => ({...x, key: i}))}
-            </div>
-        </form>;
-    }
-}
+    return (<form onSubmit={dontRefresh}>
+        <div className={classes.app}>
+            {logo}
+            {getContent()}
+        </div>
+    </form>);
+});

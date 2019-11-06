@@ -1,31 +1,11 @@
 import socketIo from "socket.io-client";
-import store from "client/redux/store";
-import * as Creators from "client/redux/actions";
-import {NewContentDTO} from "types/server";
-import {ClientGameState} from "types/client";
-import {IOEvent} from "types/shared";
+import {Events, IOEvent} from "types/shared";
 
 const io: SocketIOClient.Socket = socketIo("localhost:8081");
 
-io.on(IOEvent.START_GAME, () => {
-    store.dispatch(Creators.setGameState(ClientGameState.TYPING));
-});
-
-io.on(IOEvent.GAME_ALREADY_STARTED, () => {
-    store.dispatch(Creators.setGameState(ClientGameState.ALREADY_STARTED));
-});
-
-io.on(IOEvent.WAIT, () => {
-    store.dispatch(Creators.setGameState(ClientGameState.WAITING));
-});
-
-io.on(IOEvent.NEW_CONTENT, (content: NewContentDTO) => {
-    store.dispatch(Creators.newContent(content));
-});
-
-io.on(IOEvent.NO_MORE_CONTENT, () => {
-    store.dispatch(Creators.setGameState(ClientGameState.FINISHED));
-});
+export function attachEvents(events: Events) {
+    Object.entries(events).forEach(([e, f]) => io.on(e, f));
+}
 
 export function submitNick(nick: string) {
     io.emit(IOEvent.SUBMIT_NICK, nick);

@@ -29,3 +29,7 @@ interface Classes {
 export interface ClassProps {
     classes: Classes;
 }
+
+export interface Events {
+    [s: string]: Function;
+}
