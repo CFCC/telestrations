@@ -1,5 +1,5 @@
 import SocketIO, {Socket} from "socket.io";
-import {ContentType, UUID} from "types/shared";
+import {ContentType, UUID} from "./shared";
 
 export interface RoutesConfig {
     io: SocketIO.Server;

@@ -1,5 +1,4 @@
-import {RefObject} from "react";
-import {ContentType, UUID} from "types/shared";
+import {ContentType, UUID} from "./shared";
 
 export enum ClientGameState {
     LOADING = "loading",

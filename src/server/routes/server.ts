@@ -1,6 +1,6 @@
-import * as game from "server/controller";
-import {RoutesConfig} from "types/server";
-import {IOEvent} from "types/shared";
+import * as game from "../controller";
+import {RoutesConfig} from "../../types/server";
+import {IOEvent} from "../../types/shared";
 
 export default (config: RoutesConfig) => () => {
     const {setServer, client, io, serverWebapp} = config;

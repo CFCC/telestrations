@@ -1,5 +1,5 @@
 import socketIo from "socket.io-client";
-import {Events, IOEvent} from "types/shared";
+import {Events, IOEvent} from "../types/shared";
 
 const io: SocketIOClient.Socket = socketIo("localhost:8081");
 
@@ -19,4 +19,6 @@ export function finishTurn() {
     io.emit(IOEvent.FINISHED_GAME_TURN);
 }
 
-export default io;
+export function init() {
+    io.emit(IOEvent.I_AM_A_CLIENT);
+}

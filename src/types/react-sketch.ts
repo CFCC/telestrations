@@ -179,4 +179,13 @@ declare module "react-sketch" {
         addText(text: string, options?: {}): void
 
     }
+
+    export enum Tools {
+        Pencil = "Pencil",
+        Line = "Line",
+        Rectangle = "Rectangle",
+        Circle = "Circle",
+        Select = "Select",
+        Pan = "Pan"
+    }
 }

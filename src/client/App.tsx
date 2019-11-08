@@ -1,7 +1,7 @@
 import React, {useContext} from "react";
-import {Drawing, TitleScreen, Typing, Waiting} from "client/components";
-import {ClientGameState} from "types/client";
-import Store, {GameContext} from "client/Store";
+import {Drawing, TitleScreen, Typing, Waiting} from "./components";
+import {ClientGameState} from "../types/client";
+import Store, {GameContext} from "./Store";
 
 export default function App() {
     const [{state}] = useContext(GameContext);

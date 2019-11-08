@@ -1,7 +1,7 @@
 import React, {useContext} from "react";
-import {BirdsEye, LoadingScreen, PlayerStream, History} from "server/webapp/components";
-import {ServerWebAppGameState} from "types/server-webapp";
-import Store, {GameContext} from "server/webapp/Store";
+import {BirdsEye, LoadingScreen, PlayerStream, History} from "./components";
+import {ServerWebAppGameState} from "../../types/server-webapp";
+import Store, {GameContext} from "./Store";
 
 export default function App() {
     const [{state, activePlayerId}] = useContext(GameContext);
@@ -13,10 +13,10 @@ export default function App() {
             case ServerWebAppGameState.NOTEPAD_HISTORY: return <History notepadOwnerId={activePlayerId} />;
             case ServerWebAppGameState.PLAYER_HISTORY: return <History playerId={activePlayerId} />;
             case ServerWebAppGameState.SINGLE_PLAYER: return <PlayerStream playerId={activePlayerId} />;
-            default:return <div />;
+            default: return <div />;
         }
     };
-    
+
     return (<Store>
         {getScreen()}
     </Store>);

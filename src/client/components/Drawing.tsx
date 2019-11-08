@@ -1,5 +1,4 @@
 import React, {useState, useRef, useContext, MutableRefObject} from "react";
-// @ts-ignore (there's a types file, and WebStorm sees it, but for some reason typescript does not)
 import {SketchField, Tools} from "react-sketch";
 import * as colors from "@material-ui/core/colors"
 import {ColorResult, SwatchesPicker} from "react-color";
@@ -17,8 +16,8 @@ import {
     Typography,
     withStyles,
 } from "@material-ui/core";
-import {GameContext} from "client/Store";
-import {ClassProps} from "types/shared";
+import {GameContext} from "../Store";
+import {ClassProps} from "../../types/shared";
 
 export default withStyles({
     app: {

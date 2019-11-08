@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import {Button, CircularProgress, withStyles} from "@material-ui/core";
-import {ClassProps} from "types/shared";
+import {ClassProps} from "../../types/shared";
 
 export default withStyles({
     app: {
