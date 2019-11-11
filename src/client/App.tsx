@@ -2,9 +2,11 @@ import React, {useContext} from "react";
 import {Drawing, TitleScreen, Typing, Waiting} from "./components";
 import {ClientGameState} from "../types/client";
 import Store, {GameContext} from "./Store";
+import {init} from "./socket-io";
 
 export default function App() {
     const [{state}] = useContext(GameContext);
+    init();
     
     const getScreen = () => {
         switch (state) {

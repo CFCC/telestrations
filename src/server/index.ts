@@ -19,4 +19,4 @@ io.on(IOEvent.NEW_CLIENT, client => {
     client.on(IOEvent.I_AM_A_CLIENT, clientEvents(config));
 });
 
-server.listen(8081);
+server.listen(8080);
