@@ -10,9 +10,9 @@ import {
     withStyles,
 } from "@material-ui/core";
 import Fullscreen from "react-full-screen";
-import PlayerStream from "./PlayerStream";
-import {ClassProps, UUID} from "../../../types/shared";
-import {GameContext} from "../Store";
+import PlayerStream from "server/webapp/components/PlayerStream";
+import {ClassProps, UUID} from "types/shared";
+import {GameContext} from "server/webapp/Store";
 
 interface BirdsEyeState {
     anchorElement: HTMLElement | null;

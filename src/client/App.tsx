@@ -1,8 +1,8 @@
 import React, {useContext} from "react";
-import {Drawing, TitleScreen, Typing, Waiting} from "./components";
-import {ClientGameState} from "../types/client";
-import Store, {GameContext} from "./Store";
-import {init} from "./socket-io";
+import {Drawing, TitleScreen, Typing, Waiting} from "client/components";
+import {ClientGameState} from "types/client";
+import Store, {GameContext} from "client/Store";
+import {init} from "client/socket-io";
 
 export default function App() {
     const [{state}] = useContext(GameContext);

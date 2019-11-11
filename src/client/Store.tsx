@@ -1,8 +1,8 @@
 import React, {createContext, ReactNode, useReducer} from "react";
-import {ClientGameState} from "../types/client";
-import {finishTurn, submitNick, updateGuess, attachEvents} from "./socket-io";
-import {ContentType, IOEvent} from "../types/shared";
-import {NewContentDTO} from "../types/server";
+import {ClientGameState} from "types/client";
+import {finishTurn, submitNick, updateGuess, attachEvents} from "client/socket-io";
+import {ContentType, IOEvent} from "types/shared";
+import {NewContentDTO} from "types/server";
 
 // region [Types]
 

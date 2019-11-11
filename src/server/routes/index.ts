@@ -1,4 +1,4 @@
-import clientEvents from "./client";
-import serverEvents from "./server";
+import clientEvents from "server/routes/client";
+import serverEvents from "server/routes/server";
 
 export {clientEvents, serverEvents};

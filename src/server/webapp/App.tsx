@@ -1,7 +1,7 @@
 import React, {useContext} from "react";
-import {BirdsEye, LoadingScreen, PlayerStream, History} from "./components";
-import {ServerWebAppGameState} from "../../types/server-webapp";
-import Store, {GameContext} from "./Store";
+import {BirdsEye, LoadingScreen, PlayerStream, History} from "server/webapp/components";
+import {ServerWebAppGameState} from "types/server-webapp";
+import Store, {GameContext} from "server/webapp/Store";
 
 export default function App() {
     const [{state, activePlayerId}] = useContext(GameContext);

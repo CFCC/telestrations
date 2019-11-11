@@ -1,5 +1,5 @@
 import socketIo from "socket.io-client";
-import {Events, IOEvent} from "../../types/shared";
+import {Events, IOEvent} from "types/shared";
 
 const io: SocketIOClient.Socket = socketIo("localhost:8081");
 

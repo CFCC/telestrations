@@ -18,7 +18,8 @@
 		"resolveJsonModule": true,
 		"noEmit": true,
 		"experimentalDecorators": true,
-		"isolatedModules": true
+		"isolatedModules": true,
+		"baseUrl": "./src"
 	},
 	"include": [
 		"src/**/*"

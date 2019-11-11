@@ -1,8 +1,8 @@
 import socketIo, {Socket} from "socket.io";
 import http from "http";
-import {serverEvents, clientEvents} from "./routes";
-import {RoutesConfig} from "../types/server";
-import {IOEvent} from "../types/shared";
+import {serverEvents, clientEvents} from "server/routes";
+import {RoutesConfig} from "types/server";
+import {IOEvent} from "types/shared";
 
 const server = http.createServer();
 const io = socketIo(server);

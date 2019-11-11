@@ -16,8 +16,8 @@ import {
     Typography,
     withStyles,
 } from "@material-ui/core";
-import {GameContext} from "../Store";
-import {ClassProps} from "../../types/shared";
+import {GameContext} from "client/Store";
+import {ClassProps} from "types/shared";
 
 export default withStyles({
     app: {

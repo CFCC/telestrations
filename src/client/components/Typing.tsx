@@ -1,8 +1,8 @@
 import React, {FormEvent, useContext} from "react";
 import {Button, TextField, withStyles} from "@material-ui/core";
-import {GameContext} from "../Store";
-import {ClassProps} from "../../types/shared";
-import {Event} from "../../types/server-webapp";
+import {GameContext} from "client/Store";
+import {ClassProps} from "types/shared";
+import {Event} from "types/server-webapp";
 
 export default withStyles({
     app: {

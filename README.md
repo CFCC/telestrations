@@ -1,6 +1,6 @@
 # Telestrations
 
-This is a web version of the game [telestrations](https://theop.games/products/game/telestrations-12-player-the-party-pack/).
+This is a web version of the game [Telestrations](https://theop.games/products/game/telestrations-12-player-the-party-pack/).
 because it is a web based drawing game, it is best played
 on a tablet, touch screen computer, or a computer with a
 drawing tablet. It is possible to use a phone, but you
@@ -12,8 +12,7 @@ drawing tablet. It is possible to use a phone, but you
 The whole thing can be run in one command:
  
 ```bash
-$ yarn|npm start
+$ yarn start
 ```
 
-Beautiful, isn't it? The whole thing has to be run on one
-computer to work.
+Beautiful, isn't it?

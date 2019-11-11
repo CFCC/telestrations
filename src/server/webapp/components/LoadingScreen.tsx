@@ -11,8 +11,8 @@ import {
 import {
     blue, cyan, green, indigo, lime, purple, teal,
 } from "@material-ui/core/colors";
-import {ClassProps} from "../../../types/shared";
-import {GameContext} from "../Store";
+import {ClassProps} from "types/shared";
+import {GameContext} from "server/webapp/Store";
 
 const colors = [blue, cyan, green, indigo, lime, purple, teal];
 

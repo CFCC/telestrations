@@ -1,8 +1,8 @@
 import React, {ChangeEvent, FormEvent, useContext} from "react";
 import {Button, CircularProgress, TextField, withStyles} from "@material-ui/core";
-import {ClientGameState} from "../../types/client";
-import {ClassProps} from "../../types/shared";
-import {GameContext} from "../Store";
+import {ClientGameState} from "types/client";
+import {ClassProps} from "types/shared";
+import {GameContext} from "client/Store";
 
 export default withStyles({
     app: {

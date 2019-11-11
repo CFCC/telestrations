@@ -1,7 +1,7 @@
 import React, {useContext} from "react";
 import {withStyles} from "@material-ui/core";
-import {ClassProps, UUID} from "../../../types/shared";
-import {GameContext} from "../Store";
+import {ClassProps, UUID} from "types/shared";
+import {GameContext} from "server/webapp/Store";
 
 interface PlayerStreamProps extends ClassProps {
     playerId: UUID;
