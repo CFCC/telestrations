@@ -2,13 +2,13 @@ import React, {useState} from "react";
 import {Button, MobileStepper, withStyles} from "@material-ui/core";
 import {KeyboardArrowLeft, KeyboardArrowRight} from "@material-ui/icons";
 import SwipeableViews from "react-swipeable-views";
-import {ClassProps, UUID} from "types/shared";
+import {ClassProps} from "types/shared";
 
 interface HistoryProps extends ClassProps{
-    ownerId: UUID;
+    // ownerId: UUID;
 }
 
-export default withStyles({})(function History({ownerId}: HistoryProps) {
+export default withStyles({})(function History({classes}: HistoryProps) {
     const [index, setIndex] = useState(0);
     const indexUp = () => setIndex(index + 1);
     const indexDown = () => setIndex(index - 1);

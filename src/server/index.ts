@@ -5,7 +5,7 @@ import {RoutesConfig} from "types/server";
 import {IOEvent} from "types/shared";
 
 const server = http.createServer();
-const io = socketIo(server);
+const io = socketIo.listen(server);
 let serverWebapp: null | Socket;
 
 const setServer = (s: null | Socket) => {

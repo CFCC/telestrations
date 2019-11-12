@@ -48,7 +48,7 @@ module.exports = {
         "space-before-function-paren": "off",
         "space-infix-ops": ["error"],
         "space-in-parens": ["error", "never"],
-        "spaced-comment": ["error", "always", {"exceptions": ["-", "+"]}],
+        "spaced-comment": ["error", "always", {"exceptions": ["-", "+"], "markers": ["/"]}],
         "valid-typeof": [
             "ERROR",
             {"requireStringLiterals": true}
