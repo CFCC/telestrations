@@ -1,8 +1,8 @@
-import SocketIO, {Socket} from "socket.io";
+import {Socket, Server} from "socket.io";
 import {ContentType, UUID} from "types/shared";
 
 export interface RoutesConfig {
-    io: SocketIO.Server;
+    io: Server;
     client: Socket;
     serverWebapp: Socket | null;
     setServer: (s: Socket | null) => void;

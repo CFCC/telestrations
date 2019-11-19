@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "baseUrl": "..",
+    "outDir": "../../dist",
+    "sourceMap": true
+  },
+  "include": [
+    "*",
+    "routes/*",
+    "../types/*",
+    "../utils/*"
+  ],
+  "exclude": [
+    "../../node_modules"
+  ]
+}

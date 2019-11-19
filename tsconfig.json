@@ -1,31 +1,32 @@
 {
-	"compilerOptions": {
-		"allowSyntheticDefaultImports": true,
-		"jsx": "preserve",
-		"target": "es2016",
-		"lib": [
-			"dom",
-			"dom.iterable",
-			"esnext"
-		],
-		"allowJs": true,
-		"skipLibCheck": true,
-		"esModuleInterop": true,
-		"strict": true,
-		"forceConsistentCasingInFileNames": true,
-		"module": "esnext",
-		"moduleResolution": "node",
-		"resolveJsonModule": true,
-		"noEmit": true,
-		"experimentalDecorators": true,
-		"isolatedModules": true,
-		"baseUrl": "./src"
-	},
-	"include": [
-		"src/**/*"
-	],
-	"exclude": [
-		"node_modules",
-		"**/*.spec.ts"
-	]
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "baseUrl": "src",
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react"
+  },
+  "include": [
+    "src/client/**/*",
+    "src/server/webapp/**/*",
+    "src/types/*",
+    "src/utils/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

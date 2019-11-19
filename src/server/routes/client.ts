@@ -1,5 +1,5 @@
 import * as game from "server/controller";
-import uuid from "uuid/v4";
+import * as uuid from "uuid/v4";
 import {FinishedGameTurnDTO, NewContentDTO, RoutesConfig} from "types/server";
 import {IOEvent, UUID} from "types/shared";
 

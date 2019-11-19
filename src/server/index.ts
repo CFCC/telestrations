@@ -1,14 +1,15 @@
-import socketIo, {Socket} from "socket.io";
-import http from "http";
+import {Socket} from "socket.io";
+import * as socketIo from "socket.io";
+import * as http from "http";
 import {serverEvents, clientEvents} from "server/routes";
 import {RoutesConfig} from "types/server";
 import {IOEvent} from "types/shared";
 
 const server = http.createServer();
 const io = socketIo.listen(server);
-let serverWebapp: null | Socket;
+let serverWebapp: Socket | null;
 
-const setServer = (s: null | Socket) => {
+const setServer = (s: Socket | null) => {
     serverWebapp = s;
 };
 

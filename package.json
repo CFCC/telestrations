@@ -18,13 +18,15 @@
     "react-swipeable-views": "^0.13.3",
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
-    "ts-node": "^8.5.0",
     "typescript": "^3.7.2",
     "uuid": "^3.3.3"
   },
   "scripts": {
-    "start": "concurrently \"react-scripts start\" \"ts-node src/server/index.ts\"",
-    "build": "react-scripts build"
+    "start:server": "cross-env NODE_PATH=dist node dist/server/index.js",
+    "start": "yarn run build:server && concurrently \"react-scripts start\" \"cross-env NODE_PATH=dist node dist/server/index.js\"",
+    "build:server": "tsc -p src/server",
+    "build:client": "react-scripts build",
+    "build": "yarn run build:server && yarn run build:client"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.146",
@@ -36,6 +38,7 @@
     "@types/react-swipeable-views": "^0.13.0",
     "@types/socket.io": "^2.1.4",
     "@types/socket.io-client": "^1.4.32",
-    "@types/uuid": "^3.4.6"
+    "@types/uuid": "^3.4.6",
+    "cross-env": "^6.0.3"
   }
 }
