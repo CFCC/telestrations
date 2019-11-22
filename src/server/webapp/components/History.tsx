@@ -15,6 +15,13 @@ export default withStyles({})(function History({classes}: HistoryProps) {
 
     const pages = [] as any[];
 
+    const nextButton = <Button size="small" onClick={indexUp} disabled={index === pages.length - 1}>
+        Next <KeyboardArrowRight />
+    </Button>;
+    const backButton = <Button size="small" onClick={indexDown} disabled={index === 0}>
+        <KeyboardArrowLeft /> Back
+    </Button>;
+
     return (<div>
         <SwipeableViews
             axis="x"
@@ -32,12 +39,8 @@ export default withStyles({})(function History({classes}: HistoryProps) {
             steps={pages.length}
             position="static"
             activeStep={index}
-            nextButton={<Button size="small" onClick={indexUp} disabled={index === pages.length - 1}>
-                Next <KeyboardArrowRight />
-            </Button>}
-            backButton={<Button size="small" onClick={indexDown} disabled={index === 0}>
-                <KeyboardArrowLeft /> Back
-            </Button>}
+            nextButton={nextButton}
+            backButton={backButton}
         />
     </div>);
 });

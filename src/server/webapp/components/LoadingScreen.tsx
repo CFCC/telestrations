@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, {useContext, useEffect} from "react";
 import {AccountCircle as PersonIcon} from "@material-ui/icons"
 import {
     Button,
@@ -32,7 +32,10 @@ export default withStyles({
     },
 })(function LoadingScreen({classes}: ClassProps) {
     const [{players}, {init, startGame}] = useContext(GameContext);
-    init();
+
+    useEffect(() => {
+        init();
+    });
 
     return (<div className={classes.app}>
         <img src="/logo.png" alt="Telestrations logo" className={classes.img} />
