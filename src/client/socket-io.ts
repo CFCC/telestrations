@@ -1,7 +1,7 @@
 import socketIo from "socket.io-client";
 import {Events, IOEvent} from "types/shared";
 
-const io: SocketIOClient.Socket = socketIo("localhost:8081");
+const io: SocketIOClient.Socket = socketIo(`localhost:${process.env.REACT_APP_SERVER_PORT}`);
 
 export function attachEvents(events: Events) {
     Object.entries(events).forEach(([e, f]) => io.on(e, f));

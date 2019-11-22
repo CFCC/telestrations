@@ -3,15 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^4.6.1",
+    "@material-ui/core": "^4.7.0",
     "@material-ui/icons": "^4.5.1",
-    "@material-ui/lab": "^4.0.0-alpha.32",
     "concurrently": "^5.0.0",
+    "cross-env": "^6.0.3",
+    "dotenv": "^8.2.0",
     "lodash": "^4.17.15",
-    "react": "^16.11.0",
-    "react-app-polyfill": "^1.0.4",
+    "open-cli": "^5.0.0",
+    "react": "^16.12.0",
     "react-color": "^2.17.3",
-    "react-dom": "^16.11.0",
+    "react-dom": "^16.12.0",
     "react-full-screen": "^0.2.4",
     "react-scripts": "^3.2.0",
     "react-sketch": "^0.5.1",
@@ -22,23 +23,23 @@
     "uuid": "^3.3.3"
   },
   "scripts": {
-    "start:server": "cross-env NODE_PATH=dist node dist/server/index.js",
-    "start": "yarn run build:server && concurrently \"react-scripts start\" \"cross-env NODE_PATH=dist node dist/server/index.js\"",
+    "start:server": "cross-env NODE_PATH=dist open-cli http://localhost:3000/server && node dist/server/index.js",
+    "start:client": "react-scripts start",
+    "start": "yarn run build:server && concurrently \"yarn run start:client\" \"yarn run start:server\"",
     "build:server": "tsc -p src/server",
     "build:client": "react-scripts build",
     "build": "yarn run build:server && yarn run build:client"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.146",
-    "@types/node": "^12.12.7",
-    "@types/react": "^16.9.11",
+    "@types/lodash": "^4.14.149",
+    "@types/node": "^12.12.11",
+    "@types/react": "^16.9.12",
     "@types/react-color": "^3.0.1",
     "@types/react-dom": "^16.9.4",
     "@types/react-redux": "^7.1.5",
     "@types/react-swipeable-views": "^0.13.0",
     "@types/socket.io": "^2.1.4",
     "@types/socket.io-client": "^1.4.32",
-    "@types/uuid": "^3.4.6",
-    "cross-env": "^6.0.3"
+    "@types/uuid": "^3.4.6"
   }
 }

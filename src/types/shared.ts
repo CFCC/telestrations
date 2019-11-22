@@ -3,6 +3,7 @@ export type UUID = string;
 export enum IOEvent {
     START_GAME = "start game",
     GAME_ALREADY_STARTED = "game already started",
+    SERVER_ALREADY_CONNECTED = "server already connected",
     I_AM_A_SERVER = "i am a server",
     I_AM_A_CLIENT = "i am a client",
     SUBMIT_NICK = "submit nick",

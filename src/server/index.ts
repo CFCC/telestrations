@@ -1,10 +1,12 @@
 import {Socket} from "socket.io";
 import * as socketIo from "socket.io";
 import * as http from "http";
-import {serverEvents, clientEvents} from "server/routes";
-import {RoutesConfig} from "types/server";
-import {IOEvent} from "types/shared";
+import * as dotenv from "dotenv";
+import {serverEvents, clientEvents} from "./routes";
+import {RoutesConfig} from "../types/server";
+import {IOEvent} from "../types/shared";
 
+dotenv.config();
 const server = http.createServer();
 const io = socketIo.listen(server);
 let serverWebapp: Socket | null;
@@ -20,4 +22,4 @@ io.on(IOEvent.NEW_CLIENT, client => {
     client.on(IOEvent.I_AM_A_CLIENT, clientEvents(config));
 });
 
-server.listen(8080);
+server.listen(process.env.REACT_APP_SERVER_PORT);
