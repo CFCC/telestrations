@@ -11,6 +11,7 @@ export default (client: Socket) => () => {
         return;
     } else {
         setServer(client.id);
+        game.getPlayers().forEach(player => client.emit(IOEvent.PLAYER_ADDED, player));
     }
 
     client.on(IOEvent.START_GAME, () => {

@@ -1,4 +1,8 @@
-import {remove} from "lodash";
+import * as fs from "fs";
+import * as os from "os";
+import * as path from "path";
+import {findIndex, first, last, remove} from "lodash";
+import * as uuid from "uuid/v4";
 import {sleep} from "../utils";
 import {NewContentDTO} from "../types/server";
 import {Notepad, Player} from "../types/client";
@@ -8,25 +12,32 @@ import {ContentType, IOEvent, UUID} from "../types/shared";
 
 const players: Array<Player> = [];
 let gameStarted = false;
+const tempFolder = fs.mkdtempSync(path.join(os.tmpdir(), "telestrations-"));
 
 // endregion
 
 // region [Functions of Routes]
 
-// endregion
-
-// region [Game Utilities]
-
-// endregion
-
-export function getNextPlayer(id: UUID): UUID {
-    let index = players.findIndex(p => p.id === id);
-    return players[index + 1 === players.length ? 0 : index + 1].id;
+export function addPlayer(id: UUID, nickname: string) {
+    players.push({
+        id,
+        nickname,
+        guess: {content: "", type: ContentType.Text},
+        queue: [{
+            owner: id,
+            content: [],
+        } as Notepad],
+    });
 }
 
-export function updateGuess(id: UUID, content: string) {
-    let index = players.findIndex(p => p.id === id);
-    players[index].guess.content = content;
+export function removePlayer(id: UUID) {
+    remove(players, p => p.id === id);
+}
+
+export function updateGuess(id: UUID, content: string | Buffer) {
+    if (typeof content === "string") updateTextGuess(id, content);
+    else if (content instanceof Buffer) updatePictureGuess(id, content);
+    else console.error("Wrong content type");
 }
 
 export function finishedTurn(id: UUID): NewContentDTO {
@@ -41,7 +52,7 @@ export function finishedTurn(id: UUID): NewContentDTO {
     if (nextIndex === -1) throw new Error("Next player loop broken!");
     players[nextIndex].queue.push(notepad);
 
-    const newNotepad = players[index].queue[0];
+    const newNotepad = first(players[index].queue);
     if (!newNotepad) {
         return {
             content: IOEvent.WAIT,
@@ -53,54 +64,36 @@ export function finishedTurn(id: UUID): NewContentDTO {
         content: IOEvent.NO_MORE_CONTENT,
         type: ContentType.Text,
     } : {
-        content: newNotepad.content[newNotepad.content.length - 1],
+        content: last(newNotepad.content),
         type: newNotepad.content.length - 1 % 2 === 0 ? ContentType.Text : ContentType.Picture,
     }
 }
 
 export async function getNewContent(id: UUID): Promise<NewContentDTO> {
-    const index = players.findIndex(p => p.id === id);
-    if (index === -1) throw new Error("Player ID not found");
-
+    const index = findIndex(players, {id});
     let newNotepad: Notepad | null = null;
     while (!newNotepad) {
-        await sleep(1000);
-        newNotepad = players[index].queue[0];
+        // We have to wait for a new notepad to come in. We throttle the polling to 0.5s.
+        await sleep(500);
+        newNotepad = first(players[index].queue);
     }
 
     return newNotepad.owner === id ? {
         content: IOEvent.NO_MORE_CONTENT,
         type: ContentType.Text,
     } : {
-        content: newNotepad.content[newNotepad.content.length - 1],
+        content: last(newNotepad.content),
         type: newNotepad.content.length - 1 % 2 === 0 ? ContentType.Text : ContentType.Picture,
     }
 }
 
-export function addPlayer(id: UUID, nickname: string) {
-    players.push({
-        id,
-        nickname,
-        guess: {content: "", type: ContentType.Text},
-        queue: [],
-    });
-}
-
-export function getPlayers(): Array<Player> {
-    return players;
-}
-
-export function removePlayer(id: UUID) {
-    remove(players, p => p.id === id);
-}
-
 export function startGame() {
     gameStarted = true;
-    players.forEach(player => player.queue.push({
-        owner: player.id,
-        content: [],
-    } as Notepad));
 }
+
+// endregion
+
+// region [Game Utilities]
 
 export function isStarted(): boolean {
     return gameStarted;
@@ -109,3 +102,30 @@ export function isStarted(): boolean {
 export function isFinished(): boolean {
     return players.every((player: Player) => player.queue[0].owner === player.id);
 }
+
+export function getNextPlayer(id: UUID): UUID {
+    return players[findIndex(players, {id}) + 1 % players.length].id;
+}
+
+export function getPlayers() {
+    return players;
+}
+
+function updateTextGuess(id: UUID, content: string) {
+    const index = findIndex(players, {id});
+    players[index].guess.content = content;
+}
+
+function updatePictureGuess(id: UUID, content: Buffer) {
+    const index = findIndex(players, {id});
+    let file = players[index].guess.content;
+
+    if (!file) {
+        file = `${uuid()}.png`;
+        players[index].guess.content = file;
+    }
+
+    fs.writeFileSync(path.join(tempFolder, file), content);
+}
+
+// endregion

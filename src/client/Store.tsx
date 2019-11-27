@@ -88,7 +88,7 @@ const actionStubs = {
 
 const defaultState: State = {
     nicknameSubmitted: false,
-    state: ClientGameState.DRAWING,
+    state: ClientGameState.WAITING,
     nickname: "",
     guess: "",
     content: "",

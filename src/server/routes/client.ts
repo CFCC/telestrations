@@ -37,6 +37,7 @@ export default (client: Socket) => () => {
                     if (game.isFinished() && server) client.broadcast.to(server).emit(IOEvent.GAME_FINISHED);
                     break;
                 case IOEvent.WAIT:
+                    client.emit(IOEvent.WAIT);
                     game.getNewContent(id).then((content: NewContentDTO) => {
                         if (content.content === IOEvent.NO_MORE_CONTENT) {
                             client.emit(IOEvent.NO_MORE_CONTENT);
@@ -48,7 +49,6 @@ export default (client: Socket) => () => {
                             } as FinishedGameTurnDTO);
                         }
                     });
-                    client.emit(IOEvent.WAIT);
                     break;
                 default:
                     client.emit(IOEvent.NEW_CONTENT, newContent);
