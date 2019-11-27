@@ -1,12 +1,4 @@
-import {Socket, Server} from "socket.io";
 import {ContentType, UUID} from "types/shared";
-
-export interface RoutesConfig {
-    io: Server;
-    client: Socket;
-    serverWebapp: Socket | null;
-    setServer: (s: Socket | null) => void;
-}
 
 export interface NewContentDTO {
     content: string;

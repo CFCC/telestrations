@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from "react";
 import {Button, CircularProgress, withStyles} from "@material-ui/core";
 import {ClassProps} from "types/shared";
+import {primary} from "utils/theme";
 
 export default withStyles({
     app: {
-        backgroundColor: "#FFC20E",
+        backgroundColor: primary,
         display: "flex",
         alignItems: "center",
         flexDirection: "column",

@@ -180,12 +180,12 @@ declare module "react-sketch" {
 
     }
 
-    export enum Tools {
-        Pencil = "Pencil",
-        Line = "Line",
-        Rectangle = "Rectangle",
-        Circle = "Circle",
-        Select = "Select",
-        Pan = "Pan"
+    export const Tools = {
+        Pencil: "pencil",
+        Line: "line",
+        Rectangle: "rectangle",
+        Circle: "circle",
+        Select: "select",
+        Pan: "pan",
     }
 }

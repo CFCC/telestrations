@@ -6,10 +6,8 @@
     "@material-ui/core": "^4.7.0",
     "@material-ui/icons": "^4.5.1",
     "concurrently": "^5.0.0",
-    "cross-env": "^6.0.3",
     "dotenv": "^8.2.0",
     "lodash": "^4.17.15",
-    "open-cli": "^5.0.0",
     "react": "^16.12.0",
     "react-color": "^2.17.3",
     "react-dom": "^16.12.0",
@@ -23,7 +21,7 @@
     "uuid": "^3.3.3"
   },
   "scripts": {
-    "start:server": "cross-env NODE_PATH=dist open-cli http://localhost:3000/server && node dist/server/index.js",
+    "start:server": "node dist/server/index.js",
     "start:client": "react-scripts start",
     "start": "yarn run build:server && concurrently \"yarn run start:client\" \"yarn run start:server\"",
     "build:server": "tsc -p src/server",

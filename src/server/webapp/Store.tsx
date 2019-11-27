@@ -1,4 +1,4 @@
-import React, {createContext, useReducer, ReactNode} from "react";
+import React, {createContext, useReducer, ReactNode, useEffect} from "react";
 import * as io from "server/webapp/socket-io";
 import {ServerWebAppGameState} from "types/server-webapp";
 import {FinishedGameTurnDTO, NotepadPageDTO, PlayerDTO, ServerPlayer} from "types/server";
@@ -116,52 +116,51 @@ const actionStubs = {
 
 export const GameContext = createContext([defaultState, actionStubs] as Store);
 
-export default function Store({children}: StoreProps) {
-    function reducer(state: State = defaultState, action: Action): State {
-        switch (action.type) {
-            case ActionTypes.SET_GAME_STATE:
-                return Object.assign({}, state, {
-                    state: action.state,
-                });
-            case ActionTypes.INIT:
-                io.init();
-                return state;
-            case ActionTypes.START_GAME:
-                io.startGame();
-                return Object.assign({}, state, {
-                    state: ServerWebAppGameState.BIRDS_EYE,
-                    notepads: state.players.map(p => ({owner: p.id, content: []})),
-                });
-            case ActionTypes.PLAYER_ADDED: {
-                const players = state.players.slice(0);
-                players.push({ownerOfCurrentNotepad: action.player.id, notepadIndex: 0, queueOfOwners: [], ...action.player});
-                return Object.assign({}, state, {players});
-            }
-            case ActionTypes.UPDATE_GUESS: {
-                const notepads = state.notepads.slice(0);
-                const playerIndex = state.players.findIndex(p => p.id === action.playerId);
-                const notepadIndex = notepads
-                    .findIndex(n => n.owner === state.players[playerIndex].ownerOfCurrentNotepad);
-                notepads[notepadIndex].content[state.players[playerIndex].notepadIndex] = action.content;
-                return Object.assign({}, state, {notepads});
-            }
-            case ActionTypes.FINISHED_GAME_TURN: {
-                const players = state.players.slice(0);
-                const playerIndex = players.findIndex(p => p.id === action.playerId);
-                players[playerIndex].ownerOfCurrentNotepad = action.newNotepadOwnerId;
-                const notepadIndex = state.notepads.findIndex(n => n.owner === action.newNotepadOwnerId);
-                players[playerIndex].notepadIndex = state.notepads[notepadIndex].content.length; // TODO: Trouble spot
-                return Object.assign({}, state, {players});
-            }
-            case ActionTypes.GAME_FINISHED:
-                return state;
-            default:
-                return state;
+function reducer(state: State = defaultState, action: Action): State {
+    switch (action.type) {
+        case ActionTypes.SET_GAME_STATE:
+            return Object.assign({}, state, {
+                state: action.state,
+            });
+        case ActionTypes.INIT:
+            io.init();
+            return state;
+        case ActionTypes.START_GAME:
+            io.startGame();
+            return Object.assign({}, state, {
+                state: ServerWebAppGameState.BIRDS_EYE,
+                notepads: state.players.map(p => ({owner: p.id, content: []})),
+            });
+        case ActionTypes.PLAYER_ADDED: {
+            const players = state.players.slice(0);
+            players.push({ownerOfCurrentNotepad: action.player.id, notepadIndex: 0, queueOfOwners: [], ...action.player});
+            return Object.assign({}, state, {players});
         }
+        case ActionTypes.UPDATE_GUESS: {
+            const notepads = state.notepads.slice(0);
+            const playerIndex = state.players.findIndex(p => p.id === action.playerId);
+            const notepadIndex = notepads
+                .findIndex(n => n.owner === state.players[playerIndex].ownerOfCurrentNotepad);
+            notepads[notepadIndex].content[state.players[playerIndex].notepadIndex] = action.content;
+            return Object.assign({}, state, {notepads});
+        }
+        case ActionTypes.FINISHED_GAME_TURN: {
+            const players = state.players.slice(0);
+            const playerIndex = players.findIndex(p => p.id === action.playerId);
+            players[playerIndex].ownerOfCurrentNotepad = action.newNotepadOwnerId;
+            const notepadIndex = state.notepads.findIndex(n => n.owner === action.newNotepadOwnerId);
+            players[playerIndex].notepadIndex = state.notepads[notepadIndex].content.length; // TODO: Trouble spot
+            return Object.assign({}, state, {players});
+        }
+        case ActionTypes.GAME_FINISHED:
+            return state;
+        default:
+            return state;
     }
+}
 
+export default function Store({children}: StoreProps) {
     const [state, dispatch] = useReducer(reducer, defaultState);
-    
     const actions = {
         setGameState: (swgs: ServerWebAppGameState) => dispatch({
             type: ActionTypes.SET_GAME_STATE,
@@ -200,12 +199,15 @@ export default function Store({children}: StoreProps) {
         } as gameFinished),
     };
 
-    io.attachEvents({
-        [IOEvent.PLAYER_ADDED]: actions.addPlayer,
-        [IOEvent.UPDATE_GUESS]: (content: NotepadPageDTO) => actions.updateGuess(content.playerId, content.content),
-        [IOEvent.FINISHED_GAME_TURN]: (content: FinishedGameTurnDTO) => actions.finishedGameTurn(content.playerId, content.newNotepadOwnerId),
-        [IOEvent.GAME_FINISHED]: actions.gameFinished,
-    });
+    useEffect(() => {
+        io.attachEvents({
+            [IOEvent.PLAYER_ADDED]: actions.addPlayer,
+            [IOEvent.UPDATE_GUESS]: (content: NotepadPageDTO) => actions.updateGuess(content.playerId, content.content),
+            [IOEvent.FINISHED_GAME_TURN]: (content: FinishedGameTurnDTO) => actions.finishedGameTurn(content.playerId, content.newNotepadOwnerId),
+            [IOEvent.GAME_FINISHED]: actions.gameFinished,
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (<GameContext.Provider value={[state, actions]}>
         {children}

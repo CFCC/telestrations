@@ -1,25 +1,23 @@
-import {Socket} from "socket.io";
 import * as socketIo from "socket.io";
 import * as http from "http";
 import * as dotenv from "dotenv";
 import {serverEvents, clientEvents} from "./routes";
-import {RoutesConfig} from "../types/server";
 import {IOEvent} from "../types/shared";
 
-dotenv.config();
+dotenv.config({path: "../../.env"});
 const server = http.createServer();
 const io = socketIo.listen(server);
-let serverWebapp: Socket | null;
+let serverWebapp: string = "";
 
-const setServer = (s: Socket | null) => {
+export const setServer = (s: string) => {
     serverWebapp = s;
 };
 
-io.on(IOEvent.NEW_CLIENT, client => {
-    const config: RoutesConfig = {io, client, serverWebapp, setServer};
+export const getServer = (): string => serverWebapp;
 
-    client.on(IOEvent.I_AM_A_SERVER, serverEvents(config));
-    client.on(IOEvent.I_AM_A_CLIENT, clientEvents(config));
+io.on(IOEvent.NEW_CLIENT, client => {
+    client.on(IOEvent.I_AM_A_SERVER, serverEvents(client));
+    client.on(IOEvent.I_AM_A_CLIENT, clientEvents(client));
 });
 
 server.listen(process.env.REACT_APP_SERVER_PORT);

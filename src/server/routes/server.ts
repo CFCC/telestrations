@@ -1,23 +1,24 @@
 import * as game from "../controller";
-import {RoutesConfig} from "../../types/server";
 import {IOEvent} from "../../types/shared";
+import {Socket} from "socket.io";
+import {getServer, setServer} from "..";
 
-export default ({setServer, client, io, serverWebapp}: RoutesConfig) => () => {
-    if (serverWebapp) {
+export default (client: Socket) => () => {
+    const server = getServer();
+    if (server) {
         client.emit(IOEvent.SERVER_ALREADY_CONNECTED);
         client.disconnect(true);
         return;
     } else {
-        setServer(client);
-
+        setServer(client.id);
     }
 
     client.on(IOEvent.START_GAME, () => {
-        io.emit(IOEvent.START_GAME);
+        client.broadcast.emit(IOEvent.START_GAME);
         game.startGame();
     });
 
     client.on(IOEvent.DISCONNECT, () => {
-        setServer(null);
+        setServer("");
     });
 };

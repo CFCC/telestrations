@@ -1,23 +1,18 @@
 import React, {useContext} from "react";
-import {BirdsEye, LoadingScreen, PlayerStream, History} from "server/webapp/components";
-import {ServerWebAppGameState} from "types/server-webapp";
-import Store, {GameContext} from "server/webapp/Store";
+import {GameContext} from "./Store";
+import {ServerWebAppGameState} from "../../types/server-webapp";
+import {BirdsEye, History, LoadingScreen, PlayerStream} from "./components";
 
-export default function App() {
+export default function ServerWebapp() {
     const [{state, activePlayerId}] = useContext(GameContext);
 
-    const getScreen = () => {
-        switch (state) {
-            case ServerWebAppGameState.LOADING: return <LoadingScreen />;
-            case ServerWebAppGameState.BIRDS_EYE: return <BirdsEye />;
-            case ServerWebAppGameState.NOTEPAD_HISTORY: return <History />;
-            case ServerWebAppGameState.PLAYER_HISTORY: return <History />;
-            case ServerWebAppGameState.SINGLE_PLAYER: return <PlayerStream playerId={activePlayerId} />;
-            default: return <div />;
-        }
-    };
+    switch (state) {
+        case ServerWebAppGameState.LOADING: return <LoadingScreen />;
+        case ServerWebAppGameState.BIRDS_EYE: return <BirdsEye />;
+        case ServerWebAppGameState.NOTEPAD_HISTORY: return <History />;
+        case ServerWebAppGameState.PLAYER_HISTORY: return <History />;
+        case ServerWebAppGameState.SINGLE_PLAYER: return <PlayerStream playerId={activePlayerId} />;
+        default: return <div />;
+    }
+};
 
-    return (<Store>
-        {getScreen()}
-    </Store>);
-}
