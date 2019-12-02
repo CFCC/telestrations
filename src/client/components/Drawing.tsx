@@ -91,7 +91,7 @@ export default withStyles({
         setCanRedo(sketch.current.canRedo());
     };
     const updateGuess = () => {
-        setGuess(sketch.current.toDataURL());
+        setGuess(sketch.current.toDataURL().replace(/^data:image\/png;base64,/, ""));
         setCanUndo(sketch.current.canUndo());
         setCanRedo(sketch.current.canRedo());
     };

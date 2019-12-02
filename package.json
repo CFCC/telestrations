@@ -7,6 +7,7 @@
     "@material-ui/icons": "^4.5.1",
     "concurrently": "^5.0.0",
     "dotenv": "^8.2.0",
+    "express": "^4.17.1",
     "lodash": "^4.17.15",
     "react": "^16.12.0",
     "react-color": "^2.17.3",
@@ -29,6 +30,7 @@
     "build": "yarn run build:server && yarn run build:client"
   },
   "devDependencies": {
+    "@types/express": "^4.17.2",
     "@types/lodash": "^4.14.149",
     "@types/node": "^12.12.11",
     "@types/react": "^16.9.12",

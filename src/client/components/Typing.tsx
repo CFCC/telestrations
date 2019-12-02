@@ -46,7 +46,10 @@ export default withStyles({
 
     return (<form onSubmit={dontRefresh}>
         <div className={content === "" ? classes.appWithQuestionBackground : classes.app}>
-            {content !== "" ? <img src={content} alt="Previous submission" className={classes.picture} /> : null}
+            {content !== "" && <img
+                src={`http://localhost:${process.env.REACT_APP_SERVER_PORT}/i/${content}`}
+                alt="Previous submission"
+                className={classes.picture} />}
             <TextField value={guess}
                 variant="outlined"
                 className={classes.input}

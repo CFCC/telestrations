@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Typography, withStyles} from "@material-ui/core";
 import {ClassProps} from "types/shared";
 import {darkPrimary, primary} from "utils/theme";
@@ -35,10 +35,15 @@ export default withStyles({
     },
 })(function Waiting({classes}: ClassProps) {
     const [dog, setDog] = useState("");
+    const mounted = useRef(false);
 
     useEffect(() => {
+        mounted.current = true;
+
         const newDog = async () => {
-            setDog((await fetch("https://random.dog/woof.json").then(a => a.json() as Promise<Dog>)).url);
+            if (mounted.current) {
+                setDog((await fetch("https://random.dog/woof.json").then(a => a.json() as Promise<Dog>)).url);
+            }
         };
 
         (async () => {
@@ -48,6 +53,10 @@ export default withStyles({
                 await sleep(3000);
             }
         })();
+
+        return () => {
+            mounted.current = false;
+        }
     }, []);
 
     return (<div className={classes.app}>

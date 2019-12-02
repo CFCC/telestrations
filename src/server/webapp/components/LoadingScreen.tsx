@@ -14,6 +14,7 @@ export default withStyles({
         alignItems: "center",
         flexDirection: "column",
         height: "100vh",
+        overflow: "auto",
     },
     img: {
         maxWidth: "50%",

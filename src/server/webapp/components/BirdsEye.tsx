@@ -23,6 +23,9 @@ export default withStyles({
     app: {
         padding: "8px",
     },
+    playerName: {
+        textAlign: "center",
+    },
 })(function BirdsEye({classes}: ClassProps) {
     const [{players}, {viewNotepadHistory, viewPlayerHistory}] = useContext(GameContext);
     const [menu, setMenu] = useState({
@@ -44,7 +47,9 @@ export default withStyles({
         <Grid container={true} spacing={8}>
             {players.map(player => (<Grid item={true} xs={12} sm={6} lg={4} xl={3} key={player.id}>
                 <Paper>
-                    <Typography variant="h4" gutterBottom={true}>{player.nickname}</Typography>
+                    <Typography variant="h4" gutterBottom={true} className={classes.playerName}>
+                        {player.nickname}
+                    </Typography>
                     <Fullscreen enabled={fullScreenId === player.id} onChange={changeFullScreen}>
                         <PlayerStream playerId={player.id} />
                     </Fullscreen>

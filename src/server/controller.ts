@@ -1,5 +1,4 @@
 import * as fs from "fs";
-import * as os from "os";
 import * as path from "path";
 import {findIndex, first, last, remove} from "lodash";
 import * as uuid from "uuid/v4";
@@ -7,12 +6,14 @@ import {sleep} from "../utils";
 import {NewContentDTO} from "../types/server";
 import {Notepad, Player} from "../types/client";
 import {ContentType, IOEvent, UUID} from "../types/shared";
+import {imageFolder} from ".";
+import {Simulate} from "react-dom/test-utils";
+import play = Simulate.play;
 
 // region [Variables]
 
 const players: Array<Player> = [];
 let gameStarted = false;
-const tempFolder = fs.mkdtempSync(path.join(os.tmpdir(), "telestrations-"));
 
 // endregion
 
@@ -31,13 +32,23 @@ export function addPlayer(id: UUID, nickname: string) {
 }
 
 export function removePlayer(id: UUID) {
-    remove(players, p => p.id === id);
+    remove(players, {id});
 }
 
-export function updateGuess(id: UUID, content: string | Buffer) {
-    if (typeof content === "string") updateTextGuess(id, content);
-    else if (content instanceof Buffer) updatePictureGuess(id, content);
-    else console.error("Wrong content type");
+export function updateGuess(id: UUID, content: string) {
+    const index = findIndex(players, {id});
+    if (players[index].guess.type === ContentType.Text) {
+        players[index].guess.content = content;
+    } else if (players[index].guess.type === ContentType.Picture) {
+        let file = players[index].guess.content;
+
+        if (!file) {
+            file = `${uuid()}.png`;
+            players[index].guess.content = file;
+        }
+
+        fs.writeFileSync(path.join(imageFolder, file), Buffer.from(content, "base64"));
+    } else console.error("Wrong guess type");
 }
 
 export function finishedTurn(id: UUID): NewContentDTO {
@@ -51,6 +62,11 @@ export function finishedTurn(id: UUID): NewContentDTO {
     const nextIndex = players.findIndex(p => p.id === getNextPlayer(id));
     if (nextIndex === -1) throw new Error("Next player loop broken!");
     players[nextIndex].queue.push(notepad);
+
+    players[index].guess = {
+        type: players[index].guess.type === ContentType.Picture ? ContentType.Text : ContentType.Picture,
+        content: "",
+    };
 
     const newNotepad = first(players[index].queue);
     if (!newNotepad) {
@@ -100,32 +116,15 @@ export function isStarted(): boolean {
 }
 
 export function isFinished(): boolean {
-    return players.every((player: Player) => player.queue[0].owner === player.id);
+    return players.every((player: Player) => player.queue.length && player.queue[0].owner === player.id);
 }
 
 export function getNextPlayer(id: UUID): UUID {
-    return players[findIndex(players, {id}) + 1 % players.length].id;
+    return players[(findIndex(players, {id}) + 1) % players.length].id;
 }
 
 export function getPlayers() {
     return players;
-}
-
-function updateTextGuess(id: UUID, content: string) {
-    const index = findIndex(players, {id});
-    players[index].guess.content = content;
-}
-
-function updatePictureGuess(id: UUID, content: Buffer) {
-    const index = findIndex(players, {id});
-    let file = players[index].guess.content;
-
-    if (!file) {
-        file = `${uuid()}.png`;
-        players[index].guess.content = file;
-    }
-
-    fs.writeFileSync(path.join(tempFolder, file), content);
 }
 
 // endregion

@@ -36,7 +36,7 @@ export default withStyles({
     const [{state, nickname, nicknameSubmitted}, {submitNickname, setNickname, init}] = useContext(GameContext);
 
     useEffect(() => {
-        init();
+        if (state === ClientGameState.LOADING && !nicknameSubmitted) init();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

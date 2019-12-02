@@ -180,12 +180,13 @@ declare module "react-sketch" {
 
     }
 
-    export const Tools = {
-        Pencil: "pencil",
-        Line: "line",
-        Rectangle: "rectangle",
-        Circle: "circle",
-        Select: "select",
-        Pan: "pan",
+    interface Tools {
+        Pencil: string,
+        Line: string,
+        Rectangle: string,
+        Circle: string,
+        Select: string,
+        Pan: string,
     }
+    export const Tools: Tools;
 }

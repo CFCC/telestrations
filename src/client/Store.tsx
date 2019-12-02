@@ -88,7 +88,7 @@ const actionStubs = {
 
 const defaultState: State = {
     nicknameSubmitted: false,
-    state: ClientGameState.WAITING,
+    state: ClientGameState.LOADING,
     nickname: "",
     guess: "",
     content: "",
@@ -140,10 +140,12 @@ export default function Store({children}: StoreProps) {
             type: ActionTypes.NEW_CONTENT,
             content,
         }),
-        setGameState: (cgs: ClientGameState) => dispatch({
-            type: ActionTypes.SET_GAME_STATE,
-            state: cgs,
-        }),
+        setGameState: (cgs: ClientGameState) => {
+            dispatch({
+                type: ActionTypes.SET_GAME_STATE,
+                state: cgs,
+            })
+        },
         setNickname: (nickname: String) => dispatch({
             type: ActionTypes.SET_NICKNAME,
             nickname,
