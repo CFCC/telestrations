@@ -1,14 +1,12 @@
 import * as fs from "fs";
 import * as path from "path";
 import {findIndex, first, last, remove} from "lodash";
-import * as uuid from "uuid/v4";
+import {v4 as uuid} from "uuid";
 import {sleep} from "../utils";
 import {NewContentDTO} from "../types/server";
 import {Notepad, Player} from "../types/client";
 import {ContentType, IOEvent, UUID} from "../types/shared";
 import {imageFolder} from ".";
-import {Simulate} from "react-dom/test-utils";
-import play = Simulate.play;
 
 // region [Variables]
 
@@ -35,10 +33,11 @@ export function removePlayer(id: UUID) {
     remove(players, {id});
 }
 
-export function updateGuess(id: UUID, content: string) {
+export function updateGuess(id: UUID, content: string): string {
     const index = findIndex(players, {id});
     if (players[index].guess.type === ContentType.Text) {
         players[index].guess.content = content;
+        return content;
     } else if (players[index].guess.type === ContentType.Picture) {
         let file = players[index].guess.content;
 
@@ -48,6 +47,7 @@ export function updateGuess(id: UUID, content: string) {
         }
 
         fs.writeFileSync(path.join(imageFolder, file), Buffer.from(content, "base64"));
+        return `/i/${file}?v=${Math.floor(Math.random() * 99999)}`;
     } else console.error("Wrong guess type");
 }
 
@@ -80,14 +80,14 @@ export function finishedTurn(id: UUID): NewContentDTO {
         content: IOEvent.NO_MORE_CONTENT,
         type: ContentType.Text,
     } : {
-        content: last(newNotepad.content),
+        content: last(newNotepad.content) || "",
         type: newNotepad.content.length - 1 % 2 === 0 ? ContentType.Text : ContentType.Picture,
     }
 }
 
 export async function getNewContent(id: UUID): Promise<NewContentDTO> {
     const index = findIndex(players, {id});
-    let newNotepad: Notepad | null = null;
+    let newNotepad: Notepad | undefined = undefined;
     while (!newNotepad) {
         // We have to wait for a new notepad to come in. We throttle the polling to 0.5s.
         await sleep(500);
@@ -98,7 +98,7 @@ export async function getNewContent(id: UUID): Promise<NewContentDTO> {
         content: IOEvent.NO_MORE_CONTENT,
         type: ContentType.Text,
     } : {
-        content: last(newNotepad.content),
+        content: last(newNotepad.content) || "",
         type: newNotepad.content.length - 1 % 2 === 0 ? ContentType.Text : ContentType.Picture,
     }
 }

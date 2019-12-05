@@ -1,5 +1,5 @@
 import * as game from "../controller";
-import * as uuid from "uuid/v4";
+import {v4 as uuid} from "uuid";
 import {FinishedGameTurnDTO, NewContentDTO} from "../../types/server";
 import {IOEvent, UUID} from "../../types/shared";
 import {getServer} from "..";
@@ -17,11 +17,12 @@ export default (client: Socket) => () => {
         const id: UUID = uuid();
 
         game.addPlayer(id, nickname);
-        if (server) client.broadcast.to(server).emit(IOEvent.PLAYER_ADDED, {id, nickname});
+        client.broadcast.to(server).emit(IOEvent.PLAYER_ADDED, {id, nickname});
 
-        client.on(IOEvent.UPDATE_GUESS, (content: string) => {
-            game.updateGuess(id, content);
-            if (server) client.broadcast.to(server).emit(IOEvent.UPDATE_GUESS, {
+        client.on(IOEvent.UPDATE_GUESS, (guess: string) => {
+            const content = game.updateGuess(id, guess);
+            console.log(`Sending out guess ${content} for user ${id}`);
+            client.broadcast.to(server).emit(IOEvent.UPDATE_GUESS, {
                 playerId: id,
                 content,
             });
@@ -29,12 +30,12 @@ export default (client: Socket) => () => {
 
         client.on(IOEvent.FINISHED_GAME_TURN, () => {
             const newContent: NewContentDTO = game.finishedTurn(id);
-            if (server) client.broadcast.to(server).emit(IOEvent.FINISHED_GAME_TURN, {playerId: id});
+            client.broadcast.to(server).emit(IOEvent.FINISHED_GAME_TURN, id);
 
             switch (newContent.content) {
                 case IOEvent.NO_MORE_CONTENT:
                     client.emit(IOEvent.NO_MORE_CONTENT);
-                    if (game.isFinished() && server) client.broadcast.to(server).emit(IOEvent.GAME_FINISHED);
+                    if (game.isFinished()) client.broadcast.to(server).emit(IOEvent.GAME_FINISHED);
                     break;
                 case IOEvent.WAIT:
                     client.emit(IOEvent.WAIT);
@@ -43,7 +44,7 @@ export default (client: Socket) => () => {
                             client.emit(IOEvent.NO_MORE_CONTENT);
                         } else {
                             client.emit(IOEvent.NEW_CONTENT, content);
-                            if (server) client.broadcast.to(server).emit(IOEvent.NEW_CONTENT, {
+                            client.broadcast.to(server).emit(IOEvent.NEW_CONTENT, {
                                 playerId: id,
                                 newNotepadOwnerId: game.getNextPlayer(id),
                             } as FinishedGameTurnDTO);
@@ -52,7 +53,7 @@ export default (client: Socket) => () => {
                     break;
                 default:
                     client.emit(IOEvent.NEW_CONTENT, newContent);
-                    if (server) client.broadcast.to(server).emit(IOEvent.NEW_CONTENT, {
+                    client.broadcast.to(server).emit(IOEvent.NEW_CONTENT, {
                         playerId: id,
                         newNotepadOwnerId: game.getNextPlayer(id),
                     } as FinishedGameTurnDTO);

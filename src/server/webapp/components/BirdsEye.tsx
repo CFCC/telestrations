@@ -1,18 +1,17 @@
 import React, {useState, useContext} from "react";
 import {
+    Card, CardContent, CardHeader,
     Grid,
     Icon,
     IconButton,
     Menu,
     MenuItem,
-    Paper,
-    Typography,
     withStyles,
 } from "@material-ui/core";
-import Fullscreen from "react-full-screen";
 import PlayerStream from "server/webapp/components/PlayerStream";
 import {ClassProps, UUID} from "types/shared";
 import {GameContext} from "server/webapp/Store";
+import {darkPrimary, primary} from "../../../utils/theme";
 
 interface BirdsEyeState {
     anchorElement: HTMLElement | null;
@@ -21,10 +20,10 @@ interface BirdsEyeState {
 
 export default withStyles({
     app: {
-        padding: "8px",
-    },
-    playerName: {
-        textAlign: "center",
+        background: `linear-gradient(180deg, ${primary} 50%, ${darkPrimary} 100%)`,
+        padding: "32px",
+        overflow: "auto",
+        height: "100vh",
     },
 })(function BirdsEye({classes}: ClassProps) {
     const [{players}, {viewNotepadHistory, viewPlayerHistory}] = useContext(GameContext);
@@ -32,36 +31,41 @@ export default withStyles({
         anchorElement: null,
         playerId: "",
     } as BirdsEyeState);
-    const [fullScreenId, setFullScreenId] = useState("");
 
     const openMenu = (id: UUID) => (e: React.MouseEvent<HTMLElement, MouseEvent>) =>
         setMenu({anchorElement: e.currentTarget, playerId: id});
-
     const closeMenu = () => setMenu({anchorElement: null, playerId: ""});
 
-    const makeFullScreen = (id: UUID) => () => setFullScreenId(id);
+    return (<React.Fragment>
+        <Grid container={true} spacing={4} className={classes.app}>
+            {players.map(player => {
+                let playerState = "";
+                if (player.notepadIndex === -1) playerState = "Waiting";
+                else if (player.notepadIndex % 2 === 1) playerState = "Drawing";
+                else /* if (player.notepadIndex % 2 === 0) */ playerState = "Writing";
 
-    const changeFullScreen = (fs: boolean) => !fs && setFullScreenId("");
-
-    return (<div className={classes.app}>
-        <Grid container={true} spacing={8}>
-            {players.map(player => (<Grid item={true} xs={12} sm={6} lg={4} xl={3} key={player.id}>
-                <Paper>
-                    <Typography variant="h4" gutterBottom={true} className={classes.playerName}>
-                        {player.nickname}
-                    </Typography>
-                    <Fullscreen enabled={fullScreenId === player.id} onChange={changeFullScreen}>
-                        <PlayerStream playerId={player.id} />
-                    </Fullscreen>
-                    <IconButton onClick={openMenu(player.id)}
-                        aria-owns={menu.playerId === player.id ? "menu" : undefined}
-                        aria-haspopup="true">
-                        <Icon>more_vert</Icon>
-                    </IconButton>
-                </Paper>
-            </Grid>))}
+                return (<Grid item={true} xs={12} sm={6} lg={4} xl={3} key={player.id}>
+                    <Card>
+                        <CardHeader
+                            title={player.nickname}
+                            subheader={`Currently ${playerState}`}
+                            action={<IconButton
+                                onClick={openMenu(player.id)}
+                                aria-owns={menu.playerId === player.id ? "menu" : undefined}
+                                aria-haspopup="true"
+                            >
+                                <Icon>more_vert</Icon>
+                            </IconButton>}
+                        />
+                        <CardContent>
+                            <PlayerStream playerId={player.id} />
+                        </CardContent>
+                    </Card>
+                </Grid>)
+            })}
         </Grid>
-        <Menu open={Boolean(menu.anchorElement)}
+        <Menu
+            open={Boolean(menu.anchorElement)}
             id="menu"
             onClose={closeMenu}
             anchorEl={menu.anchorElement}>
@@ -71,9 +75,9 @@ export default withStyles({
             <MenuItem onClick={() => viewNotepadHistory(menu.playerId)}>
                 View Notepad History
             </MenuItem>
-            <MenuItem onClick={makeFullScreen(menu.playerId)}>
-                Make Stream Fullscreen
+            <MenuItem>
+                Make Stream Fullscreen (Coming Soon!)
             </MenuItem>
         </Menu>
-    </div>);
+    </React.Fragment>);
 });

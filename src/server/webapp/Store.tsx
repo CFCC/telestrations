@@ -1,4 +1,5 @@
-import React, {createContext, useReducer, ReactNode, useEffect} from "react";
+import React, {createContext, ReactNode, useEffect, useReducer} from "react";
+import _ from "lodash";
 import * as io from "server/webapp/socket-io";
 import {ServerWebAppGameState} from "types/server-webapp";
 import {FinishedGameTurnDTO, NotepadPageDTO, PlayerDTO, ServerPlayer} from "types/server";
@@ -27,6 +28,7 @@ enum ActionTypes {
     START_GAME = "START_GAME",
     PLAYER_ADDED = "PLAYER_ADDED",
     UPDATE_GUESS = "UPDATE_GUESS",
+    NEW_NOTEPAD = "NEW_NOTEPAD",
     FINISHED_GAME_TURN = "FINISHED_GAME_TURN",
     GAME_FINISHED = "GAME_FINISHED",
 }
@@ -68,15 +70,20 @@ interface updateGuess {
 interface finishedGameTurn {
     type: ActionTypes.FINISHED_GAME_TURN;
     playerId: UUID;
-    newNotepadOwnerId: UUID;
 }
 
 interface gameFinished {
     type: ActionTypes.GAME_FINISHED;
 }
 
+interface newNotepad {
+    type: ActionTypes.NEW_NOTEPAD;
+    playerId: UUID;
+    newNotepadOwnerId: UUID;
+}
+
 type Action = setGameState | viewPlayerHistory | viewNotepadHistory | init | startGame | addPlayer | updateGuess
-    | finishedGameTurn | gameFinished;
+    | finishedGameTurn | gameFinished | newNotepad;
 
 interface Actions {
     setGameState: (state: ServerWebAppGameState) => void,
@@ -85,7 +92,7 @@ interface Actions {
     init: () => void,
     startGame: () => void,
     addPlayer: (player: PlayerDTO) => void,
-    updateGuess: (playerId: UUID, content: string) => void,
+    updateGuess: (page: NotepadPageDTO) => void,
     finishedGameTurn: (playerId: UUID, newNotepadOwnerId: UUID) => void,
     gameFinished: () => void,
 }
@@ -116,6 +123,19 @@ const actionStubs = {
 
 export const GameContext = createContext([defaultState, actionStubs] as Store);
 
+const defaultPlayer: ServerPlayer = {
+    id: "",
+    nickname: "",
+    queueOfOwners: [],
+    notepadIndex: 0,
+    ownerOfCurrentNotepad: "",
+};
+
+const defaultNotepad: Notepad = {
+    owner: "",
+    content: [],
+};
+
 function reducer(state: State = defaultState, action: Action): State {
     switch (action.type) {
         case ActionTypes.SET_GAME_STATE:
@@ -138,22 +158,28 @@ function reducer(state: State = defaultState, action: Action): State {
         }
         case ActionTypes.UPDATE_GUESS: {
             const notepads = state.notepads.slice(0);
-            const playerIndex = state.players.findIndex(p => p.id === action.playerId);
-            const notepadIndex = notepads
-                .findIndex(n => n.owner === state.players[playerIndex].ownerOfCurrentNotepad);
-            notepads[notepadIndex].content[state.players[playerIndex].notepadIndex] = action.content;
+            const player = state.players.find(p => p.id === action.playerId) || defaultPlayer;
+            const notepad = notepads.find(n => n.owner === player.ownerOfCurrentNotepad) || defaultNotepad;
+            notepad.content[player.notepadIndex] = action.content;
             return Object.assign({}, state, {notepads});
         }
         case ActionTypes.FINISHED_GAME_TURN: {
             const players = state.players.slice(0);
-            const playerIndex = players.findIndex(p => p.id === action.playerId);
-            players[playerIndex].ownerOfCurrentNotepad = action.newNotepadOwnerId;
-            const notepadIndex = state.notepads.findIndex(n => n.owner === action.newNotepadOwnerId);
-            players[playerIndex].notepadIndex = state.notepads[notepadIndex].content.length; // TODO: Trouble spot
+            Object.assign(players[_.findIndex(players, {id: action.playerId})], {
+                ownerOfCurrentNotepad: "",
+                notepadIndex: -1,
+            });
             return Object.assign({}, state, {players});
         }
-        case ActionTypes.GAME_FINISHED:
-            return state;
+        case ActionTypes.NEW_NOTEPAD: {
+            const players = state.players.slice(0);
+            const newNotepad = _.find(state.notepads, {owner: action.newNotepadOwnerId});
+            Object.assign(players[_.findIndex(players, {id: action.playerId})], {
+                ownerOfCurrentNotepad: action.newNotepadOwnerId,
+                notepadIndex: newNotepad ? newNotepad.content.length : -1,
+            });
+            return Object.assign({}, state, {players});
+        }
         default:
             return state;
     }
@@ -184,27 +210,32 @@ export default function Store({children}: StoreProps) {
             type: ActionTypes.PLAYER_ADDED,
             player,
         } as addPlayer),
-        updateGuess: (playerId: UUID, content: string) => dispatch({
+        updateGuess: ({playerId, content}: NotepadPageDTO) => dispatch({
             type: ActionTypes.UPDATE_GUESS,
             playerId,
             content,
         } as updateGuess),
-        finishedGameTurn: (playerId: UUID, newNotepadOwnerId: UUID) => dispatch({
+        finishedGameTurn: (playerId: UUID) => dispatch({
             type: ActionTypes.FINISHED_GAME_TURN,
             playerId,
-            newNotepadOwnerId,
         } as finishedGameTurn),
         gameFinished: () => dispatch({
             type: ActionTypes.GAME_FINISHED,
         } as gameFinished),
+        newNotepad: ({playerId, newNotepadOwnerId}: FinishedGameTurnDTO) => dispatch({
+            type: ActionTypes.NEW_NOTEPAD,
+            playerId,
+            newNotepadOwnerId,
+        } as newNotepad),
     };
 
     useEffect(() => {
         io.attachEvents({
             [IOEvent.PLAYER_ADDED]: actions.addPlayer,
-            [IOEvent.UPDATE_GUESS]: (content: NotepadPageDTO) => actions.updateGuess(content.playerId, content.content),
-            [IOEvent.FINISHED_GAME_TURN]: (content: FinishedGameTurnDTO) => actions.finishedGameTurn(content.playerId, content.newNotepadOwnerId),
+            [IOEvent.UPDATE_GUESS]: actions.updateGuess,
+            [IOEvent.FINISHED_GAME_TURN]: actions.finishedGameTurn,
             [IOEvent.GAME_FINISHED]: actions.gameFinished,
+            [IOEvent.NEW_CONTENT]: actions.newNotepad,
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

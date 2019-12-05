@@ -9,8 +9,8 @@ export default function ServerWebapp() {
     switch (state) {
         case ServerWebAppGameState.LOADING: return <LoadingScreen />;
         case ServerWebAppGameState.BIRDS_EYE: return <BirdsEye />;
-        case ServerWebAppGameState.NOTEPAD_HISTORY: return <History />;
-        case ServerWebAppGameState.PLAYER_HISTORY: return <History />;
+        case ServerWebAppGameState.NOTEPAD_HISTORY: return <History ownerId={activePlayerId} />;
+        case ServerWebAppGameState.PLAYER_HISTORY: return <History playerId={activePlayerId} />;
         case ServerWebAppGameState.SINGLE_PLAYER: return <PlayerStream playerId={activePlayerId} />;
         default: return <div />;
     }

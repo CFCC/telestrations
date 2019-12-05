@@ -1,4 +1,4 @@
-import {createMuiTheme} from "@material-ui/core/styles";
+import {createMuiTheme, makeStyles} from "@material-ui/core/styles";
 
 // original primary = "hsl(45, 100%, 52%)";
 export const primary = "hsl(50, 100%, 65%)";
@@ -35,5 +35,20 @@ export const theme = createMuiTheme({
         ...headers({
             fontFamily: "Mali",
         }),
+    },
+});
+
+export const globalStyles = makeStyles({
+    "@global": {
+        "body": {
+            margin: 0,
+            overflow: "hidden",
+        },
+        ".swatches-picker > div > :first-child": {
+            display: "none",
+        },
+        ".swatches-picker": {
+            height: "auto !important",
+        },
     },
 });

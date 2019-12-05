@@ -40,8 +40,6 @@ export default withStyles({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const logo = <img src="/logo.png" alt="Telestrations logo" className={classes.img} />;
-
     const submitNicknameEl = <React.Fragment>
         <Typography className={classes.header}>What is your name?</Typography>
         <TextField value={nickname}
@@ -87,7 +85,7 @@ export default withStyles({
 
     return (<form onSubmit={onSubmit}>
         <div className={classes.app}>
-            {logo}
+            <img src="/logo.png" alt="Telestrations logo" className={classes.img} />
             {getContent()}
         </div>
     </form>);

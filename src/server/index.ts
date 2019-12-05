@@ -4,9 +4,9 @@ import * as http from "http";
 import * as dotenv from "dotenv";
 import * as fs from "fs";
 import * as path from "path";
-import * as os from "os";
 import {serverEvents, clientEvents} from "./routes";
 import {IOEvent} from "../types/shared";
+import {getNewTempDir} from "../utils/tempdir";
 
 dotenv.config({path: "../../.env"});
 const app = express();
@@ -14,7 +14,7 @@ const server = http.createServer(app);
 const io = socketIo(server);
 let serverWebapp = "";
 
-export const imageFolder = fs.mkdtempSync(path.join(os.tmpdir(), "telestrations-"));
+export const imageFolder = getNewTempDir();
 
 export const setServer = (s: string) => {
     serverWebapp = s;
