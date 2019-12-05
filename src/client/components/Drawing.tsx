@@ -13,50 +13,51 @@ import {
     Paper,
     Slider,
     Typography,
-    withStyles,
 } from "@material-ui/core";
 import {GameContext} from "client/Store";
-import {ClassProps} from "types/shared";
 import {useBoolean, useEvent} from "utils/hooks";
 import SwatchesDialog from "client/components/SwatchesDialog";
 import ListDialog from "client/components/ListDialog";
+import styled from "styled-components";
 
-export default withStyles({
-    app: {
-        width: "100vw",
-        height: "100vh",
-    },
-    controls: {
-        position: "absolute",
-        bottom: 0,
-        left: 0,
-        right: 0,
-        display: "flex",
-        flexDirection: "row",
-    },
-    paper: {
-        flex: 1,
-        margin: "0.5rem",
-        padding: "1rem",
-    },
-    canvas: {
-        height: "100% !important",
-    },
-    list: {
-        width: "auto",
-        overflowX: "hidden",
-    },
-    fab: {
-        margin: 2,
-    },
-    slider: {
-        margin: 2,
-    },
-    colorPicker: {
-        width: "100%",
-        height: "100%",
-    },
-})(function Drawing({classes}: ClassProps) {
+const Container = styled.div`
+    width: 100vw;
+    height: 100vh;
+`;
+    
+const Controls = styled.div`
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: row;
+`;
+    
+const CaptionContainer = styled(Paper)`
+    flex: 1;
+    margin: 0.5rem;
+    padding: 1rem;
+`;
+    
+const Canvas = styled(SketchField)`
+    height: 100% !important;
+`;
+    
+const ListContainer = styled.div`
+    width: auto;
+    overflow-x: hidden;
+`;
+    
+const FAB = styled(IconButton)`
+    margin: 2px;
+`;
+    
+const StyledSlider = styled(Slider)`
+    margin: 2px;
+`;
+
+export default function Drawing() {
     const [{content}, {submitGuess, setGuess}] = useContext(GameContext);
 
     const [tool, setTool] = useState(Tools.Pencil);
@@ -96,25 +97,22 @@ export default withStyles({
         setCanRedo(sketch.current.canRedo());
     };
 
-    return (<div className={classes.app}>
-        <SketchField
+    return (<Container>
+        <Canvas
             tool={tool}
             lineColor={color}
             backgroundColor={bgColor}
             lineWidth={lineWeight}
-            className={classes.canvas}
             onChange={updateGuess}
             ref={c => (c ? sketch.current = c : 0)} />
-        <div className={classes.controls}>
-            <IconButton className={classes.fab} onClick={openMenu} color="primary">
+        <Controls>
+            <FAB onClick={openMenu} color="primary">
                 <Icon fontSize="large">menu</Icon>
-            </IconButton>
-            <Paper className={classes.paper}>
-                <Typography variant="h5">
-                    {content}
-                </Typography>
-            </Paper>
-        </div>
+            </FAB>
+            <CaptionContainer>
+                <Typography variant="h5">{content}</Typography>
+            </CaptionContainer>
+        </Controls>
         <Drawer open={menuOpen} onClose={closeMenu}>
             <div
                 tabIndex={0}
@@ -122,7 +120,7 @@ export default withStyles({
                 onClick={closeMenu}
                 onKeyDown={closeMenu}
             >
-                <div className={classes.list}>
+                <ListContainer>
                     <List>
                         <ListItem button={true} onClick={openToolPicker}>
                             <ListItemText primary="Tool" />
@@ -140,12 +138,11 @@ export default withStyles({
                             <ListItemText primary="Line Weight" />
                         </ListItem>
                         <ListItem>
-                            <Slider
+                            <StyledSlider
                                 min={1}
                                 max={100}
                                 step={1}
                                 value={lineWeight}
-                                className={classes.slider}
                                 onChange={setLineWeight} />
                         </ListItem>
                     </List>
@@ -167,7 +164,7 @@ export default withStyles({
                             <ListItemText primary="Submit" />
                         </ListItem>
                     </List>
-                </div>
+                </ListContainer>
             </div>
         </Drawer>
         <SwatchesDialog
@@ -187,5 +184,5 @@ export default withStyles({
             close={closeToolPicker}
             items={Object.keys(Tools)}
             onItemSelected={setTool} />
-    </div>);
-});
+    </Container>);
+}

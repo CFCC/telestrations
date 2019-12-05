@@ -1,4 +1,5 @@
 import {createMuiTheme, makeStyles} from "@material-ui/core/styles";
+import {createGlobalStyle} from "styled-components";
 
 // original primary = "hsl(45, 100%, 52%)";
 export const primary = "hsl(50, 100%, 65%)";
@@ -38,17 +39,17 @@ export const theme = createMuiTheme({
     },
 });
 
-export const globalStyles = makeStyles({
-    "@global": {
-        "body": {
-            margin: 0,
-            overflow: "hidden",
-        },
-        ".swatches-picker > div > :first-child": {
-            display: "none",
-        },
-        ".swatches-picker": {
-            height: "auto !important",
-        },
-    },
-});
+export const GlobalStyles = createGlobalStyle`
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        
+        .swatches-picker > div > :first-child {
+            display: none;
+        }
+        
+        .swatches-picker {
+            height: auto !important;
+        }
+`;

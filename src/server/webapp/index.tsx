@@ -1,13 +1,12 @@
 import React from "react";
 import {ThemeProvider} from "@material-ui/core/styles";
 import Store from "server/webapp/Store";
-import {theme, globalStyles} from "utils/theme";
+import {theme, GlobalStyles} from "utils/theme";
 import App from "server/webapp/App";
 
 export default function ServerWebapp() {
-    globalStyles();
-
     return (<ThemeProvider theme={theme}>
+        <GlobalStyles />
         <Store>
             <App />
         </Store>

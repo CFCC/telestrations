@@ -6,26 +6,26 @@ import {
     IconButton,
     Menu,
     MenuItem,
-    withStyles,
 } from "@material-ui/core";
 import PlayerStream from "server/webapp/components/PlayerStream";
-import {ClassProps, UUID} from "types/shared";
+import {UUID} from "types/shared";
 import {GameContext} from "server/webapp/Store";
 import {darkPrimary, primary} from "../../../utils/theme";
+import styled from "styled-components";
 
 interface BirdsEyeState {
     anchorElement: HTMLElement | null;
     playerId: string;
 }
 
-export default withStyles({
-    app: {
-        background: `linear-gradient(180deg, ${primary} 50%, ${darkPrimary} 100%)`,
-        padding: "32px",
-        overflow: "auto",
-        height: "100vh",
-    },
-})(function BirdsEye({classes}: ClassProps) {
+const GridContainer = styled(Grid)`
+    background: linear-gradient(180deg, ${primary} 50%, ${darkPrimary} 100%);
+    padding: 32px;
+    overflow: auto;
+    height: 100vh;
+`;
+
+export default function BirdsEye() {
     const [{players}, {viewNotepadHistory, viewPlayerHistory}] = useContext(GameContext);
     const [menu, setMenu] = useState({
         anchorElement: null,
@@ -37,7 +37,7 @@ export default withStyles({
     const closeMenu = () => setMenu({anchorElement: null, playerId: ""});
 
     return (<React.Fragment>
-        <Grid container={true} spacing={4} className={classes.app}>
+        <GridContainer container={true} spacing={4}>
             {players.map(player => {
                 let playerState = "";
                 if (player.notepadIndex === -1) playerState = "Waiting";
@@ -63,7 +63,7 @@ export default withStyles({
                     </Card>
                 </Grid>)
             })}
-        </Grid>
+        </GridContainer>
         <Menu
             open={Boolean(menu.anchorElement)}
             id="menu"
@@ -80,4 +80,4 @@ export default withStyles({
             </MenuItem>
         </Menu>
     </React.Fragment>);
-});
+}

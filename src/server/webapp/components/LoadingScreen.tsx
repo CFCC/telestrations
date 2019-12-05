@@ -1,48 +1,50 @@
 import React, {useContext, useEffect} from "react";
-import {
-    Button, Typography,
-    withStyles,
-} from "@material-ui/core";
-import {ClassProps} from "types/shared";
+import {Button, Typography} from "@material-ui/core";
+import styled from "styled-components";
 import {GameContext} from "server/webapp/Store";
 import {darkPrimary, primary} from "utils/theme";
 
-export default withStyles({
-    app: {
-        background: `linear-gradient(180deg, ${primary} 50%, ${darkPrimary} 100%)`,
-        display: "flex",
-        alignItems: "center",
-        flexDirection: "column",
-        height: "100vh",
-        overflow: "auto",
-    },
-    img: {
-        maxWidth: "50%",
-        margin: "1rem",
-    },
-    header: {
-        textAlign: "center",
-        fontSize: "2rem",
-        margin: "1rem",
-        fontWeight: "bold",
-    },
-    subHeader: {
-        fontStyle: "italic",
-    },
-    playerList: {
-        display: "flex",
-        justifyContent: "space-around",
-        flexWrap: "wrap",
-        margin: "2rem 1rem",
-        width: "calc(100% - 1rem)",
-    },
-    playerLabel: {
-        flexBasis: "33%",
-        flex: 1,
-        textAlign: "center",
-        marginBottom: "0.75rem",
-    },
-})(function LoadingScreen({classes}: ClassProps) {
+const Container = styled.div`
+    background: linear-gradient(180deg; ${primary} 50%; ${darkPrimary} 100%);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    overflow: auto;
+`;
+
+const Image = styled.img`
+    max-width: 50%;
+    margin: 1rem;
+`;
+
+const Header = styled(Typography)`
+    text-align: center;
+    font-size: 2rem;
+    margin: 1rem;
+    font-weight: bold;
+`;
+
+const SubHeader = styled(Typography)`
+    font-style: italic;   
+`;
+
+const PlayerList = styled.div`
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin: 2rem 1rem;
+    width: calc(100% - 1rem);
+`;
+
+const PlayerLabel = styled(Typography)`
+    flex-basis: 33%;
+    flex-grow: 1;
+    text-align: center;
+    margin-bottom: 0.75rem;
+`;
+
+export default function LoadingScreen() {
     const [{players}, {init, startGame}] = useContext(GameContext);
 
     useEffect(() => {
@@ -50,15 +52,15 @@ export default withStyles({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    return (<div className={classes.app}>
-        <img src="/logo.png" alt="Telestrations logo" className={classes.img} />
-        <Typography className={classes.header}>Waiting for clients to connect</Typography>
-        <Typography className={classes.subHeader}>Start the game when everyone's joined!</Typography>
-        <div className={classes.playerList}>
-            {players.map((player, i) => (<Typography key={i} className={classes.playerLabel}>
+    return (<Container>
+        <Image src="/logo.png" alt="Telestrations logo" />
+        <Header>Waiting for clients to connect</Header>
+        <SubHeader>Start the game when everyone's joined!</SubHeader>
+        <PlayerList>
+            {players.map((player, i) => (<PlayerLabel key={i}>
                 {player.nickname}
-            </Typography>))}
-        </div>
+            </PlayerLabel>))}
+        </PlayerList>
         <Button
             onClick={startGame}
             variant="contained"
@@ -68,6 +70,6 @@ export default withStyles({
         >
             Start Game
         </Button>
-    </div>);
-});
+    </Container>);
+};
 

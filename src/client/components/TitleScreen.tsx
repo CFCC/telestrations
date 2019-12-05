@@ -1,38 +1,42 @@
 import React, {ChangeEvent, FormEvent, useContext, useEffect} from "react";
-import {Button, CircularProgress, TextField, Typography, withStyles} from "@material-ui/core";
+import {Button, CircularProgress, TextField, Typography} from "@material-ui/core";
 import {ClientGameState} from "types/client";
-import {ClassProps} from "types/shared";
 import {GameContext} from "client/Store";
 import {darkPrimary, primary} from "utils/theme";
+import styled from "styled-components";
 
-export default withStyles({
-    app: {
-        background: `linear-gradient(180deg, ${primary} 50%, ${darkPrimary} 100%)`,
-        display: "flex",
-        alignItems: "center",
-        flexDirection: "column",
-        height: "100vh",
-        overflow: "auto",
-    },
-    progress: {
-        margin: "1rem",
-        width: "3rem",
-        height: "3rem",
-    },
-    img: {
-        maxWidth: "50%",
-        margin: "1rem",
-    },
-    input: {
-        marginBottom: "1rem",
-    },
-    header: {
-        textAlign: "center",
-        fontSize: "2rem",
-        margin: "1rem",
-        fontWeight: "bold",
-    },
-})(function TitleScreen({classes}: ClassProps) {
+const Container = styled.div`
+    background: linear-gradient(180deg, ${primary} 50%, ${darkPrimary} 100%);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    overflow: auto;
+`;
+
+const Progress = styled(CircularProgress)`
+    margin: 1rem;
+    width: 3rem;
+    height: 3rem;
+`;
+
+const Image = styled.img`
+    max-width: 50%;
+    margin: 1rem;
+`;
+
+const Input = styled(TextField)`
+    margin-bottom: 1rem;
+`;
+
+const Header = styled(Typography)`
+    text-align: center;
+    font-size: 2rem;
+    margin: 1rem;
+    font-weight: bold;
+`;
+
+export default function TitleScreen() {
     const [{state, nickname, nicknameSubmitted}, {submitNickname, setNickname, init}] = useContext(GameContext);
 
     useEffect(() => {
@@ -41,27 +45,27 @@ export default withStyles({
     }, []);
 
     const submitNicknameEl = <React.Fragment>
-        <Typography className={classes.header}>What is your name?</Typography>
-        <TextField value={nickname}
+        <Header>What is your name?</Header>
+        <Input
+            value={nickname}
             variant="outlined"
-            className={classes.input}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setNickname(e.target.value)} />
         <Button variant="contained" color="primary" type="submit" size="large">Join Game</Button>
     </React.Fragment>;
 
     const waitForGameToStart = <React.Fragment>
-        <Typography className={classes.header}>Waiting for the game to start</Typography>
+        <Header>Waiting for the game to start</Header>
         <Typography>Have your host start the game when everyone's joined!</Typography>
-        <CircularProgress className={classes.progress} />
+        <Progress />
     </React.Fragment>;
 
     const gameAlreadyStarted = <React.Fragment>
-        <Typography className={classes.header}>This game's already started!</Typography>
+        <Header>This game's already started!</Header>
         <Typography>Wait for it to finish before joining.</Typography>
     </React.Fragment>;
 
     const gameFinished = <React.Fragment>
-        <Typography className={classes.header}>The game is finished!</Typography>
+        <Header>The game is finished!</Header>
         <Typography>Please ask your host to see the results.</Typography>
     </React.Fragment>;
 
@@ -84,9 +88,9 @@ export default withStyles({
     };
 
     return (<form onSubmit={onSubmit}>
-        <div className={classes.app}>
-            <img src="/logo.png" alt="Telestrations logo" className={classes.img} />
+        <Container>
+            <Image src="/logo.png" alt="Telestrations logo" />
             {getContent()}
-        </div>
+        </Container>
     </form>);
-});
+}
