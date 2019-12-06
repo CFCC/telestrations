@@ -8,11 +8,25 @@ interface PlayerStreamProps {
     playerId: UUID;
 }
 
+interface PictureContainerProps {
+    picture: string;
+}
+
+const PictureContainer = styled.div`
+    background-image: ${(props: PictureContainerProps) => props.picture === "/question-marks.jpg" ? "url(/question-marks.jpg)" : "none"};
+    background-repeat: repeat;
+    width: 100%;
+    min-height: ${(props: PictureContainerProps) => props.picture === "/question-marks.jpg" ? "300px" : "0"};
+`;
+
 const Picture = styled.img`
     max-width: 100%;
     min-width: 100%;
     height: auto;
-    box-shadow: inset 0 2px 4px 0 hsla(0, 0%, 0%, 0.2);
+`;
+
+const Content = styled(CardContent)`
+    padding-bottom: 0;
 `;
 
 export default function PlayerStream({playerId}: PlayerStreamProps) {
@@ -37,14 +51,16 @@ export default function PlayerStream({playerId}: PlayerStreamProps) {
     else picture = `http://localhost:${process.env.REACT_APP_SERVER_PORT}${content}`;
 
     return (<React.Fragment>
-        <Picture
-            src={picture}
-            alt={playerDrawing || playerWaiting ? content : prevContent}
-        />
-        <CardContent>
+        <PictureContainer picture={picture}>
+            {picture !== "/question-marks.jpg" && <Picture
+                src={picture}
+                alt={playerDrawing || playerWaiting ? content : prevContent}
+            />}
+        </PictureContainer>
+        <Content>
             <Typography align="center">
                 {playerDrawing || playerWaiting ? content : prevContent}
             </Typography>
-        </CardContent>
+        </Content>
     </React.Fragment>);
 }

@@ -4,18 +4,17 @@ import {GameContext} from "client/Store";
 import {Event} from "types/server-webapp";
 import styled from "styled-components";
 
-const PlainContainer = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-`;
+interface FormProps {
+    content?: string;
+}
 
-const ContainerWithQuestionBg = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    background-image: url(/question-marks.jpg);
+const Form = styled.form`
+    width: 100%;
+    height: 100%;
+    background-image: ${(props: FormProps) => props.content === "" ? "url(/question-marks.jpg)" : "none"};
     background-repeat: repeat;
+    display: flex;
+    align-items: flex-end;
 `;
 
 const Input = styled(TextField)`
@@ -42,26 +41,22 @@ export default function Typing() {
         return false;
     };
 
-    const Container = content === "" ? ContainerWithQuestionBg : PlainContainer;
-
-    return (<form onSubmit={dontRefresh}>
-        <Container>
-            {content !== "" && <Image
-                src={`http://localhost:${process.env.REACT_APP_SERVER_PORT}/i/${content}`}
-                alt="Previous submission" />}
-            <Input
-                value={guess}
-                variant="outlined"
-                placeholder={content === "" ? "Describe a scene" : "What is in this picture?"}
-                onChange={(e: Event) => setGuess(e.target.value)} />
-            <StyledButton
-                onClick={submitGuess}
-                variant="contained"
-                color="primary"
-                type="submit"
-            >
-                Submit
-            </StyledButton>
-        </Container>
-    </form>);
+    return (<Form onSubmit={dontRefresh} content={content}>
+        {content !== "" && <Image
+            src={`http://localhost:${process.env.REACT_APP_SERVER_PORT}/i/${content}`}
+            alt="Previous submission" />}
+        <Input
+            value={guess}
+            variant="outlined"
+            placeholder={content === "" ? "Describe a scene" : "What is in this picture?"}
+            onChange={(e: Event) => setGuess(e.target.value)} />
+        <StyledButton
+            onClick={submitGuess}
+            variant="contained"
+            color="primary"
+            type="submit"
+        >
+            Submit
+        </StyledButton>
+    </Form>);
 }

@@ -13,7 +13,6 @@ const Container = styled.div`
     width: 100vw;
     height: 100vh;
     background: linear-gradient(180deg, ${primary} 50%, ${darkPrimary} 100%);
-    padding: 1rem;
     margin: 0;
     overflow-x: hidden;
     overflow-y: auto;

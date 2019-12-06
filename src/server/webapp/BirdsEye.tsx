@@ -21,6 +21,10 @@ const Content = styled(CardContent)`
     padding: 0;
 `;
 
+const StyledGrid = styled(Grid)`
+    padding: 16px;
+`;
+
 export default function BirdsEye() {
     const [{players}, {viewNotepadHistory, viewPlayerHistory}] = useContext(GameContext);
     const [menu, setMenu] = useState({
@@ -33,9 +37,9 @@ export default function BirdsEye() {
     const closeMenu = () => setMenu({anchorElement: null, playerId: ""});
 
     return (<React.Fragment>
-        <Grid container={true} spacing={4}>
+        <StyledGrid container={true} spacing={4}>
             {players.map(player => {
-                let playerState = "";
+                let playerState: string;
                 if (player.notepadIndex === -1) playerState = "Waiting";
                 else if (player.notepadIndex % 2 === 1) playerState = "Drawing";
                 else /* if (player.notepadIndex % 2 === 0) */ playerState = "Writing";
@@ -59,12 +63,13 @@ export default function BirdsEye() {
                     </Card>
                 </Grid>)
             })}
-        </Grid>
+        </StyledGrid>
         <Menu
             open={Boolean(menu.anchorElement)}
             id="menu"
             onClose={closeMenu}
-            anchorEl={menu.anchorElement}>
+            anchorEl={menu.anchorElement}
+        >
             <MenuItem onClick={() => viewPlayerHistory(menu.playerId)}>
                 View Player History (Coming Soon!)
             </MenuItem>

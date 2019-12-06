@@ -62,7 +62,7 @@ export default function Drawing() {
 
     const [tool, setTool] = useState(Tools.Pencil);
     const [color, setColor] = useEvent("#000000", (c: ColorResult) => c.hex);
-    const [bgColor, setBgColor] = useEvent("#FFFFFF", (c: ColorResult) => c.hex);
+    const [bgColor, setBgColor] = useEvent(colors.blueGrey["50"], (c: ColorResult) => c.hex);
     const [lineWeight, setLineWeight] = useEvent(1, (e, lw: number) => lw);
 
     const [toolPickerOpen, openToolPicker, closeToolPicker] = useBoolean(false);
