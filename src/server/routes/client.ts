@@ -21,7 +21,6 @@ export default (client: Socket) => () => {
 
         client.on(IOEvent.UPDATE_GUESS, (guess: string) => {
             const content = game.updateGuess(id, guess);
-            console.log(`Sending out guess ${content} for user ${id}`);
             client.broadcast.to(server).emit(IOEvent.UPDATE_GUESS, {
                 playerId: id,
                 content,

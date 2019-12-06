@@ -1,11 +1,19 @@
 import React, {useContext} from "react";
-import {CardContent, CardMedia, Typography} from "@material-ui/core";
+import {CardContent, Typography} from "@material-ui/core";
+import styled from "styled-components";
 import {UUID} from "types/shared";
 import {GameContext} from "server/webapp/Store";
 
 interface PlayerStreamProps {
     playerId: UUID;
 }
+
+const Picture = styled.img`
+    max-width: 100%;
+    min-width: 100%;
+    height: auto;
+    box-shadow: inset 0 2px 4px 0 hsla(0, 0%, 0%, 0.2);
+`;
 
 export default function PlayerStream({playerId}: PlayerStreamProps) {
     const [{players, notepads}] = useContext(GameContext);
@@ -29,9 +37,9 @@ export default function PlayerStream({playerId}: PlayerStreamProps) {
     else picture = `http://localhost:${process.env.REACT_APP_SERVER_PORT}${content}`;
 
     return (<React.Fragment>
-        <CardMedia
-            image={picture}
-            title={playerDrawing || playerWaiting ? content : prevContent}
+        <Picture
+            src={picture}
+            alt={playerDrawing || playerWaiting ? content : prevContent}
         />
         <CardContent>
             <Typography align="center">

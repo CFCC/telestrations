@@ -7,10 +7,9 @@ import {
     Menu,
     MenuItem,
 } from "@material-ui/core";
-import PlayerStream from "server/webapp/components/PlayerStream";
+import PlayerStream from "server/webapp/PlayerStream";
 import {UUID} from "types/shared";
 import {GameContext} from "server/webapp/Store";
-import {darkPrimary, primary} from "../../../utils/theme";
 import styled from "styled-components";
 
 interface BirdsEyeState {
@@ -18,11 +17,8 @@ interface BirdsEyeState {
     playerId: string;
 }
 
-const GridContainer = styled(Grid)`
-    background: linear-gradient(180deg, ${primary} 50%, ${darkPrimary} 100%);
-    padding: 32px;
-    overflow: auto;
-    height: 100vh;
+const Content = styled(CardContent)`
+    padding: 0;
 `;
 
 export default function BirdsEye() {
@@ -37,7 +33,7 @@ export default function BirdsEye() {
     const closeMenu = () => setMenu({anchorElement: null, playerId: ""});
 
     return (<React.Fragment>
-        <GridContainer container={true} spacing={4}>
+        <Grid container={true} spacing={4}>
             {players.map(player => {
                 let playerState = "";
                 if (player.notepadIndex === -1) playerState = "Waiting";
@@ -57,23 +53,23 @@ export default function BirdsEye() {
                                 <Icon>more_vert</Icon>
                             </IconButton>}
                         />
-                        <CardContent>
+                        <Content>
                             <PlayerStream playerId={player.id} />
-                        </CardContent>
+                        </Content>
                     </Card>
                 </Grid>)
             })}
-        </GridContainer>
+        </Grid>
         <Menu
             open={Boolean(menu.anchorElement)}
             id="menu"
             onClose={closeMenu}
             anchorEl={menu.anchorElement}>
             <MenuItem onClick={() => viewPlayerHistory(menu.playerId)}>
-                View Player History
+                View Player History (Coming Soon!)
             </MenuItem>
             <MenuItem onClick={() => viewNotepadHistory(menu.playerId)}>
-                View Notepad History
+                View Notepad History (Coming Soon!)
             </MenuItem>
             <MenuItem>
                 Make Stream Fullscreen (Coming Soon!)

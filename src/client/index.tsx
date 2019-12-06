@@ -1,14 +1,27 @@
-import React from "react";
-import {ThemeProvider} from "@material-ui/core/styles";
-import Store from "client/Store";
-import {GlobalStyles, theme} from "utils/theme";
-import App from "client/App";
+import * as React from "react";
+import {useContext} from "react";
+import {GameContext} from "./Store";
+import {ClientGameState} from "../types/client";
+import TitleScreen from "./TitleScreen";
+import Drawing from "./Drawing";
+import Typing from "./Typing";
+import Waiting from "./Waiting";
 
 export default function Client() {
-    return (<ThemeProvider theme={theme}>
-        <GlobalStyles />
-        <Store>
-            <App />
-        </Store>
-    </ThemeProvider>);
+    const [{state}] = useContext(GameContext);
+
+    switch (state) {
+        case ClientGameState.ALREADY_STARTED:
+        case ClientGameState.LOADING:
+        case ClientGameState.FINISHED:
+            return <TitleScreen />;
+        case ClientGameState.DRAWING:
+            return <Drawing />;
+        case ClientGameState.TYPING:
+            return <Typing />;
+        case ClientGameState.WAITING:
+            return <Waiting />;
+        default:
+            return <div />;
+    }
 }

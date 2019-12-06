@@ -1,14 +1,21 @@
-import React from "react";
-import {ThemeProvider} from "@material-ui/core/styles";
-import Store from "server/webapp/Store";
-import {theme, GlobalStyles} from "utils/theme";
-import App from "server/webapp/App";
+import React, {useContext} from "react";
+import {GameContext} from "./Store";
+import {ServerWebAppGameState} from "../../types/server-webapp";
+import BirdsEye from "./BirdsEye";
+import LoadingScreen from "./LoadingScreen";
+import History from "./History";
+import PlayerStream from "./PlayerStream";
 
 export default function ServerWebapp() {
-    return (<ThemeProvider theme={theme}>
-        <GlobalStyles />
-        <Store>
-            <App />
-        </Store>
-    </ThemeProvider>);
-}
+    const [{state, activePlayerId}] = useContext(GameContext);
+
+    switch (state) {
+        case ServerWebAppGameState.LOADING: return <LoadingScreen />;
+        case ServerWebAppGameState.BIRDS_EYE: return <BirdsEye />;
+        case ServerWebAppGameState.NOTEPAD_HISTORY: return <History ownerId={activePlayerId} />;
+        case ServerWebAppGameState.PLAYER_HISTORY: return <History playerId={activePlayerId} />;
+        case ServerWebAppGameState.SINGLE_PLAYER: return <PlayerStream playerId={activePlayerId} />;
+        default: return <div />;
+    }
+};
+

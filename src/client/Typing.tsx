@@ -5,18 +5,12 @@ import {Event} from "types/server-webapp";
 import styled from "styled-components";
 
 const PlainContainer = styled.div`
-    width: 100vw;
-    height: 100vh;
-    overflow: auto;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
 `;
 
 const ContainerWithQuestionBg = styled.div`
-    width: 100vw;
-    height: 100vh;
-    overflow: auto;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;

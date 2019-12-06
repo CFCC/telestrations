@@ -16,8 +16,8 @@ import {
 } from "@material-ui/core";
 import {GameContext} from "client/Store";
 import {useBoolean, useEvent} from "utils/hooks";
-import SwatchesDialog from "client/components/SwatchesDialog";
-import ListDialog from "client/components/ListDialog";
+import SwatchesDialog from "client/SwatchesDialog";
+import ListDialog from "client/ListDialog";
 import styled from "styled-components";
 
 const Container = styled.div`

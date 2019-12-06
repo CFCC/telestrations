@@ -2,16 +2,6 @@ import React, {useContext, useEffect} from "react";
 import {Button, Typography} from "@material-ui/core";
 import styled from "styled-components";
 import {GameContext} from "server/webapp/Store";
-import {darkPrimary, primary} from "utils/theme";
-
-const Container = styled.div`
-    background: linear-gradient(180deg; ${primary} 50%; ${darkPrimary} 100%);
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    height: 100vh;
-    overflow: auto;
-`;
 
 const Image = styled.img`
     max-width: 50%;
@@ -52,7 +42,7 @@ export default function LoadingScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    return (<Container>
+    return (<React.Fragment>
         <Image src="/logo.png" alt="Telestrations logo" />
         <Header>Waiting for clients to connect</Header>
         <SubHeader>Start the game when everyone's joined!</SubHeader>
@@ -70,6 +60,6 @@ export default function LoadingScreen() {
         >
             Start Game
         </Button>
-    </Container>);
+    </React.Fragment>);
 };
 

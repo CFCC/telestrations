@@ -2,16 +2,12 @@ import React, {ChangeEvent, FormEvent, useContext, useEffect} from "react";
 import {Button, CircularProgress, TextField, Typography} from "@material-ui/core";
 import {ClientGameState} from "types/client";
 import {GameContext} from "client/Store";
-import {darkPrimary, primary} from "utils/theme";
 import styled from "styled-components";
 
 const Container = styled.div`
-    background: linear-gradient(180deg, ${primary} 50%, ${darkPrimary} 100%);
     display: flex;
     align-items: center;
     flex-direction: column;
-    height: 100vh;
-    overflow: auto;
 `;
 
 const Progress = styled(CircularProgress)`
