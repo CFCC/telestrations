@@ -1,6 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
 import {Typography} from "@material-ui/core";
-import {ClassProps} from "types/shared";
 import {darkPrimary, primary} from "utils/theme";
 import {sleep} from "../../utils";
 import styled from "styled-components";

@@ -1,7 +1,6 @@
 import React, {FormEvent, useContext} from "react";
-import {Button, TextField, withStyles} from "@material-ui/core";
+import {Button, TextField} from "@material-ui/core";
 import {GameContext} from "client/Store";
-import {ClassProps} from "types/shared";
 import {Event} from "types/server-webapp";
 import styled from "styled-components";
 
@@ -41,7 +40,7 @@ const Image = styled.img`
     position: absolute;
 `;
 
-export default function Typing({classes}: ClassProps) {
+export default function Typing() {
     const [{content, guess}, {setGuess, submitGuess}] = useContext(GameContext);
 
     const dontRefresh = (e: FormEvent) => {
