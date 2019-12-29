@@ -27,10 +27,11 @@
   "scripts": {
     "start:server": "node dist/server/index.js",
     "start:client": "react-scripts start",
-    "start": "yarn run build:server && concurrently \"yarn run start:client\" \"yarn run start:server\"",
+    "start": "yarn build:server && concurrently \"yarn start:client\" \"yarn start:server\"",
     "build:server": "tsc -p src/server",
     "build:client": "react-scripts build",
-    "build": "yarn run build:server && yarn run build:client"
+    "build": "yarn build:server && yarn build:client",
+    "deploy": "yarn build:client && firebase deploy"
   },
   "devDependencies": {
     "@types/express": "^4.17.2",
