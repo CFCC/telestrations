@@ -9,17 +9,14 @@ import {IOEvent} from "../types/shared";
 import {getNewTempDir} from "../utils/tempdir";
 
 dotenv.config({path: "../../.env"});
-const app = express();
+
+export const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 let serverWebapp = "";
 
 export const imageFolder = getNewTempDir();
-
-export const setServer = (s: string) => {
-    serverWebapp = s;
-};
-
+export const setServer = (s: string) => serverWebapp = s;
 export const getServer = (): string => serverWebapp;
 
 app.use(function(req, res, next) {
