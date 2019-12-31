@@ -7,9 +7,9 @@ import {
     Menu,
     MenuItem,
 } from "@material-ui/core";
-import PlayerStream from "server/webapp/PlayerStream";
+import PlayerStream from "server/PlayerStream";
 import {UUID} from "types/shared";
-import {GameContext} from "server/webapp/Store";
+import {GameContext} from "server/Store";
 import styled from "styled-components";
 
 interface BirdsEyeState {

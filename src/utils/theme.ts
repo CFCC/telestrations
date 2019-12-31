@@ -30,26 +30,22 @@ function body(styles: object): object {
 
 export const theme = createMuiTheme({
     typography: {
-        ...body({
-            fontFamily: "Fira Sans",
-        }),
-        ...headers({
-            fontFamily: "Mali",
-        }),
+        ...body({fontFamily: "Fira Sans"}),
+        ...headers({fontFamily: "Mali"}),
     },
 });
 
 export const GlobalStyles = createGlobalStyle`
-        body {
-            margin: 0;
-            overflow: hidden;
-        }
-        
-        .swatches-picker > div > :first-child {
-            display: none;
-        }
-        
-        .swatches-picker {
-            height: auto !important;
-        }
+    body {
+        margin: 0;
+        overflow: hidden;
+    }
+    
+    .swatches-picker > div > :first-child {
+        display: none;
+    }
+    
+    .swatches-picker {
+        height: auto !important;
+    }
 `;

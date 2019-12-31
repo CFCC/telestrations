@@ -1,7 +1,7 @@
 import * as game from "../controller";
-import {IOEvent} from "../../types/shared";
+import {IOEvent} from "../../../src/types/shared";
 import {Socket} from "socket.io";
-import {getServer, setServer} from "..";
+import {getServer, setServer} from "../../../src/server";
 
 export default (client: Socket) => () => {
     const server = getServer();

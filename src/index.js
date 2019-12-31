@@ -1,9 +1,9 @@
 import React from "react";
 import * as ReactDOM from "react-dom";
 import ClientApp from "client";
-import ServerApp from "server/webapp";
+import ServerApp from "server";
 import ClientStore from "client/Store";
-import ServerStore from "server/webapp/Store";
+import ServerStore from "server/Store";
 import styled from "styled-components";
 import {darkPrimary, GlobalStyles, primary, theme} from "utils/theme";
 import {StylesProvider, ThemeProvider} from "@material-ui/core/styles";

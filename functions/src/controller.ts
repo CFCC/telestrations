@@ -2,11 +2,11 @@ import * as fs from "fs";
 import * as path from "path";
 import {findIndex, first, last, remove} from "lodash";
 import {v4 as uuid} from "uuid";
-import {sleep} from "../utils";
-import {NewContentDTO} from "../types/server";
-import {Notepad, Player} from "../types/client";
-import {ContentType, IOEvent, UUID} from "../types/shared";
-import {imageFolder} from ".";
+import {sleep} from "../../src/utils";
+import {NewContentDTO} from "../../src/types/server";
+import {Notepad, Player} from "../../src/types/client";
+import {ContentType, IOEvent, UUID} from "../../src/types/shared";
+import {imageFolder} from "./index";
 
 // region [Variables]
 
@@ -48,7 +48,10 @@ export function updateGuess(id: UUID, content: string): string {
 
         fs.writeFileSync(path.join(imageFolder, file), Buffer.from(content, "base64"));
         return `/i/${file}?v=${Math.floor(Math.random() * 99999)}`;
-    } else console.error("Wrong guess type");
+    } else {
+        console.error("Wrong guess type");
+        return "";
+    }
 }
 
 export function finishedTurn(id: UUID): NewContentDTO {

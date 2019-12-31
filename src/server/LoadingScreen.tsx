@@ -1,7 +1,7 @@
 import React, {useContext, useEffect} from "react";
 import {Button, Typography} from "@material-ui/core";
 import styled from "styled-components";
-import {GameContext} from "server/webapp/Store";
+import {GameContext} from "server/Store";
 
 const Image = styled.img`
     max-width: 50%;

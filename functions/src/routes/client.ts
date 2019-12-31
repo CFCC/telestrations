@@ -1,8 +1,8 @@
 import * as game from "../controller";
 import {v4 as uuid} from "uuid";
-import {FinishedGameTurnDTO, NewContentDTO} from "../../types/server";
-import {IOEvent, UUID} from "../../types/shared";
-import {getServer} from "..";
+import {FinishedGameTurnDTO, NewContentDTO} from "../../../src/types/server";
+import {IOEvent, UUID} from "../../../src/types/shared";
+import {getServer} from "../../../src/server";
 import {Socket} from "socket.io";
 
 export default (client: Socket) => () => {

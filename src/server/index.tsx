@@ -1,6 +1,6 @@
 import React, {useContext} from "react";
 import {GameContext} from "./Store";
-import {ServerWebAppGameState} from "../../types/server-webapp";
+import {ServerWebAppGameState} from "../types/server-webapp";
 import BirdsEye from "./BirdsEye";
 import LoadingScreen from "./LoadingScreen";
 import History from "./History";
