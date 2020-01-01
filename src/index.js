@@ -1,12 +1,14 @@
 import React from "react";
 import * as ReactDOM from "react-dom";
+import {StylesProvider, ThemeProvider} from "@material-ui/core/styles";
+import styled from "styled-components";
+
 import ClientApp from "client";
 import ServerApp from "server";
 import ClientStore from "client/Store";
 import ServerStore from "server/Store";
-import styled from "styled-components";
 import {darkPrimary, GlobalStyles, primary, theme} from "utils/theme";
-import {StylesProvider, ThemeProvider} from "@material-ui/core/styles";
+import firebase from "firebase";
 
 const Container = styled.div`
     position: absolute;
@@ -33,3 +35,14 @@ ReactDOM.render(<StylesProvider injectFirst={true}>
         </Store>
     </ThemeProvider>
 </StylesProvider>, document.getElementById("root"));
+
+firebase.initializeApp({
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+    authDomain: "telestrations-3aa19.firebaseapp.com",
+    databaseURL: "https://telestrations-3aa19.firebaseio.com",
+    projectId: "telestrations-3aa19",
+    storageBucket: "telestrations-3aa19.appspot.com",
+    messagingSenderId: "751293854725",
+    appId: "1:751293854725:web:1f057bd8b910b9b6e8d86c",
+    measurementId: "G-GVT95G6SSL"
+});
