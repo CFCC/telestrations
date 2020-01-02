@@ -1,12 +1,13 @@
 import {ContentType, UUID} from "types/shared";
 
 export enum ClientGameState {
-    LOADING = "loading",
+    LOGIN = "login",
+    WAITING_TO_START = "waiting to start",
     DRAWING = "drawing",
     TYPING = "typing",
     FINISHED = "finished",
     ALREADY_STARTED = "already started",
-    WAITING = "waiting"
+    WAITING_FOR_CONTENT = "waiting for content"
 }
 
 export interface Notepad {

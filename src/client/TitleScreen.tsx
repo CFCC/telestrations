@@ -1,7 +1,5 @@
-import React, {ChangeEvent, FormEvent, useContext, useEffect} from "react";
-import {Button, CircularProgress, TextField, Typography} from "@material-ui/core";
-import {ClientGameState} from "types/client";
-import {GameContext} from "client/Store";
+import React from "react";
+import {CircularProgress, Typography} from "@material-ui/core";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -21,10 +19,6 @@ const Image = styled.img`
     margin: 1rem;
 `;
 
-const Input = styled(TextField)`
-    margin-bottom: 1rem;
-`;
-
 const Header = styled(Typography)`
     text-align: center;
     font-size: 2rem;
@@ -32,61 +26,21 @@ const Header = styled(Typography)`
     font-weight: bold;
 `;
 
-export default function TitleScreen() {
-    const [{state, nickname, nicknameSubmitted}, {submitNickname, setNickname, init}] = useContext(GameContext);
+interface TitleScreenProps {
+    title: string;
+    subtitle: string;
+    loading?: boolean;
+    children?: React.ReactNode;
+}
 
-    useEffect(() => {
-        if (state === ClientGameState.LOADING && !nicknameSubmitted) init();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    const submitNicknameEl = <React.Fragment>
-        <Header>What is your name?</Header>
-        <Input
-            value={nickname}
-            variant="outlined"
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setNickname(e.target.value)} />
-        <Button variant="contained" color="primary" type="submit" size="large">Join Game</Button>
-    </React.Fragment>;
-
-    const waitForGameToStart = <React.Fragment>
-        <Header>Waiting for the game to start</Header>
-        <Typography>Have your host start the game when everyone's joined!</Typography>
-        <Progress />
-    </React.Fragment>;
-
-    const gameAlreadyStarted = <React.Fragment>
-        <Header>This game's already started!</Header>
-        <Typography>Wait for it to finish before joining.</Typography>
-    </React.Fragment>;
-
-    const gameFinished = <React.Fragment>
-        <Header>The game is finished!</Header>
-        <Typography>Please ask your host to see the results.</Typography>
-    </React.Fragment>;
-
-    const getContent = () => {
-        switch (state) {
-            case ClientGameState.LOADING:
-                return nicknameSubmitted ? waitForGameToStart : submitNicknameEl;
-            case ClientGameState.FINISHED:
-                return gameFinished;
-            case ClientGameState.ALREADY_STARTED:
-            default:
-                return gameAlreadyStarted;
-        }
-    };
-
-    const onSubmit = (e: FormEvent) => {
-        e.preventDefault();
-        submitNickname();
-        return false;
-    };
-
-    return (<form onSubmit={onSubmit}>
+export default function TitleScreen({title, subtitle, loading = false, children}: TitleScreenProps) {
+    return (
         <Container>
             <Image src="/logo.png" alt="Telestrations logo" />
-            {getContent()}
+            <Header>{title}</Header>
+            <Typography>{subtitle}</Typography>
+            {children}
+            {loading && <Progress />}
         </Container>
-    </form>);
+    );
 }

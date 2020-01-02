@@ -143,10 +143,10 @@ function reducer(state: State = defaultState, action: Action): State {
                 state: action.state,
             });
         case ActionTypes.INIT:
-            io.init();
+            // io.init();
             return state;
         case ActionTypes.START_GAME:
-            io.startGame();
+            // io.startGame();
             return Object.assign({}, state, {
                 state: ServerWebAppGameState.BIRDS_EYE,
                 notepads: state.players.map(p => ({owner: p.id, content: []})),
@@ -229,16 +229,16 @@ export default function Store({children}: StoreProps) {
         } as newNotepad),
     };
 
-    useEffect(() => {
-        io.attachEvents({
-            [IOEvent.PLAYER_ADDED]: actions.addPlayer,
-            [IOEvent.UPDATE_GUESS]: actions.updateGuess,
-            [IOEvent.FINISHED_GAME_TURN]: actions.finishedGameTurn,
-            [IOEvent.GAME_FINISHED]: actions.gameFinished,
-            [IOEvent.NEW_CONTENT]: actions.newNotepad,
-        });
+    // useEffect(() => {
+        // io.attachEvents({
+        //     [IOEvent.PLAYER_ADDED]: actions.addPlayer,
+        //     [IOEvent.UPDATE_GUESS]: actions.updateGuess,
+        //     [IOEvent.FINISHED_GAME_TURN]: actions.finishedGameTurn,
+        //     [IOEvent.GAME_FINISHED]: actions.gameFinished,
+        //     [IOEvent.NEW_CONTENT]: actions.newNotepad,
+        // });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    // }, []);
 
     return (<GameContext.Provider value={[state, actions]}>
         {children}

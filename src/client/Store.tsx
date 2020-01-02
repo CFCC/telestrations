@@ -1,7 +1,7 @@
 import React, {createContext, ReactNode, useEffect, useReducer} from "react";
+
 import {ClientGameState} from "types/client";
-import {finishTurn, submitNick, updateGuess, attachEvents, init} from "client/socket-io";
-import {ContentType, IOEvent} from "types/shared";
+import {ContentType} from "types/shared";
 import {NewContentDTO} from "types/server";
 
 // region [Types]
@@ -21,7 +21,6 @@ interface StoreProps {
 enum ActionTypes {
     NEW_CONTENT = "NEW_CONTENT",
     SET_GAME_STATE = "SET_GAME_STATE",
-    SET_NICKNAME = "SET_NICKNAME",
     SUBMIT_NICKNAME = "SUBMIT_NICKNAME",
     SET_GUESS = "SET_GUESS",
     SUBMIT_GUESS = "SUBMIT_GUESS",
@@ -38,13 +37,9 @@ interface setGameState {
     state: ClientGameState;
 }
 
-interface setNickname {
-    type: ActionTypes.SET_NICKNAME;
-    nickname: String;
-}
-
 interface submitNickname {
     type: ActionTypes.SUBMIT_NICKNAME;
+    nickname: String;
 }
 
 interface setGuess {
@@ -60,13 +55,12 @@ interface init {
     type: ActionTypes.INIT;
 }
 
-type Action = setGameState | setNickname | submitNickname | setGuess | submitGuess | newContent | init;
+type Action = setGameState | submitNickname | setGuess | submitGuess | newContent | init;
 
 interface Actions {
     newContent: (content: NewContentDTO) => void,
     setGameState: (state: ClientGameState) => void,
-    setNickname: (nickname: String) => void,
-    submitNickname: () => void,
+    submitNickname: (nickname: String) => void,
     setGuess: (guess: string) => void,
     submitGuess: () => void,
     init: () => void,
@@ -79,7 +73,6 @@ type Store = [State, Actions];
 const actionStubs = {
     newContent: () => null,
     setGameState: () => null,
-    setNickname: () => null,
     submitNickname: () => null,
     setGuess: () => null,
     submitGuess: () => null,
@@ -88,7 +81,7 @@ const actionStubs = {
 
 const defaultState: State = {
     nicknameSubmitted: false,
-    state: ClientGameState.LOADING,
+    state: ClientGameState.LOGIN,
     nickname: "",
     guess: "",
     content: "",
@@ -102,22 +95,18 @@ function reducer(state: State = defaultState, action: Action): State {
             return Object.assign({}, state, {
                 state: action.state,
             });
-        case ActionTypes.SET_NICKNAME:
-            return Object.assign({}, state, {
-                nickname: action.nickname,
-            });
         case ActionTypes.SUBMIT_NICKNAME:
-            submitNick(state.nickname);
+            // submitNick(action.nickname);
             return Object.assign({}, state, {
                 nicknameSubmitted: true,
             });
         case ActionTypes.SET_GUESS:
-            updateGuess(action.guess);
+            // updateGuess(action.guess);
             return Object.assign({}, state, {
                 guess: action.guess,
             });
         case ActionTypes.SUBMIT_GUESS:
-            finishTurn();
+            // finishTurn();
             return state;
         case ActionTypes.NEW_CONTENT:
             return Object.assign({}, state, {
@@ -126,7 +115,7 @@ function reducer(state: State = defaultState, action: Action): State {
                 guess: "",
             });
         case ActionTypes.INIT:
-            init();
+            // init();
             return state;
         default:
             return state;
@@ -146,12 +135,9 @@ export default function Store({children}: StoreProps) {
                 state: cgs,
             })
         },
-        setNickname: (nickname: String) => dispatch({
-            type: ActionTypes.SET_NICKNAME,
-            nickname,
-        }),
-        submitNickname: () => dispatch({
+        submitNickname: (nickname: String) => dispatch({
             type: ActionTypes.SUBMIT_NICKNAME,
+            nickname,
         }),
         setGuess: (guess: string) => dispatch({
             type: ActionTypes.SET_GUESS,
@@ -166,13 +152,13 @@ export default function Store({children}: StoreProps) {
     };
 
     useEffect(() => {
-        attachEvents({
-            [IOEvent.START_GAME]: () => actions.setGameState(ClientGameState.TYPING),
-            [IOEvent.GAME_ALREADY_STARTED]: () => actions.setGameState(ClientGameState.ALREADY_STARTED),
-            [IOEvent.WAIT]: () => actions.setGameState(ClientGameState.WAITING),
-            [IOEvent.NEW_CONTENT]: actions.newContent,
-            [IOEvent.NO_MORE_CONTENT]: () => actions.setGameState(ClientGameState.FINISHED),
-        });
+        // attachEvents({
+        //     [IOEvent.START_GAME]: () => actions.setGameState(ClientGameState.TYPING),
+        //     [IOEvent.GAME_ALREADY_STARTED]: () => actions.setGameState(ClientGameState.ALREADY_STARTED),
+        //     [IOEvent.WAIT]: () => actions.setGameState(ClientGameState.WAITING_FOR_CONTENT),
+        //     [IOEvent.NEW_CONTENT]: actions.newContent,
+        //     [IOEvent.NO_MORE_CONTENT]: () => actions.setGameState(ClientGameState.FINISHED),
+        // });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

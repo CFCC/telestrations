@@ -24,13 +24,6 @@ export enum ContentType {
     Text = "text"
 }
 
-interface Classes {
-    [s: string]: string;
-}
-export interface ClassProps {
-    classes: Classes;
-}
-
 export interface Events {
     [s: string]: Function;
 }
