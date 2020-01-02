@@ -1,5 +1,7 @@
-import React, {createContext, ReactNode, useReducer} from "react";
+import React, {createContext, ReactNode, useEffect, useReducer} from "react";
 import _ from "lodash";
+import uuid from 'uuid/v4';
+
 import {ServerWebAppGameState} from "types/server-webapp";
 import {FinishedGameTurnDTO, NotepadPageDTO, PlayerDTO, ServerPlayer} from "types/server";
 import {Notepad} from "types/client";
@@ -9,6 +11,7 @@ import {UUID} from "types/shared";
 
 export interface State {
     state: ServerWebAppGameState;
+    serverId: UUID;
     players: Array<ServerPlayer>;
     notepads: Array<Notepad>;
     activePlayerId: UUID;
@@ -20,6 +23,7 @@ interface StoreProps {
 }
 
 enum ActionTypes {
+    SET_SERVER_ID = "SET_SERVER_ID",
     SET_GAME_STATE = "SET_GAME_STATE",
     VIEW_PLAYER_HISTORY = "VIEW_PLAYER_HISTORY",
     VIEW_NOTEPAD_HISTORY = "VIEW_NOTEPAD_HISTORY",
@@ -30,6 +34,11 @@ enum ActionTypes {
     NEW_NOTEPAD = "NEW_NOTEPAD",
     FINISHED_GAME_TURN = "FINISHED_GAME_TURN",
     GAME_FINISHED = "GAME_FINISHED",
+}
+
+interface setServerId {
+    type: ActionTypes.SET_SERVER_ID;
+    serverId: UUID;
 }
 
 interface setGameState {
@@ -82,7 +91,7 @@ interface newNotepad {
 }
 
 type Action = setGameState | viewPlayerHistory | viewNotepadHistory | init | startGame | addPlayer | updateGuess
-    | finishedGameTurn | gameFinished | newNotepad;
+    | finishedGameTurn | gameFinished | newNotepad | setServerId;
 
 interface Actions {
     setGameState: (state: ServerWebAppGameState) => void,
@@ -102,6 +111,7 @@ type Store = [State, Actions];
 
 const defaultState = {
     state: ServerWebAppGameState.LOADING,
+    serverId: "",
     players: [],
     notepads: [],
     activePlayerId: "",
@@ -137,6 +147,8 @@ const defaultNotepad: Notepad = {
 
 function reducer(state: State = defaultState, action: Action): State {
     switch (action.type) {
+        case ActionTypes.SET_SERVER_ID:
+            return {...state, serverId: action.serverId};
         case ActionTypes.SET_GAME_STATE:
             return Object.assign({}, state, {
                 state: action.state,
@@ -227,6 +239,16 @@ export default function Store({children}: StoreProps) {
             newNotepadOwnerId,
         } as newNotepad),
     };
+
+    useEffect(() => {
+        let serverId = localStorage.getItem('serverId');
+        if (!serverId) {
+            serverId = uuid();
+            localStorage.setItem('serverId', serverId);
+        }
+
+        dispatch({type: ActionTypes.SET_SERVER_ID, serverId});
+    }, []);
 
     // useEffect(() => {
         // io.attachEvents({

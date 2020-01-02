@@ -21,7 +21,7 @@ const PlayerLabel = styled(Typography)`
 `;
 
 export default function LoadingScreen() {
-    const [{players}, {startGame}] = useContext(GameContext);
+    const [{players, serverId}, {startGame}] = useContext(GameContext);
 
     return (
         <TitleScreen
@@ -29,9 +29,11 @@ export default function LoadingScreen() {
             subtitle="Start the game when everyone's joined!"
         >
             <PlayerList>
-                {players.map((player, i) => (<PlayerLabel key={i}>
-                    {player.nickname}
-                </PlayerLabel>))}
+                {players.map((player, i) => (
+                    <PlayerLabel key={i}>
+                        {player.nickname}
+                    </PlayerLabel>
+                ))}
             </PlayerList>
             <Button
                 onClick={startGame}
