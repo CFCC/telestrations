@@ -1,12 +1,13 @@
 import * as React from "react";
 import {useContext} from "react";
-import {GameContext} from "./Store";
-import {ClientGameState} from "../types/client";
-import Drawing from "./Drawing";
-import Typing from "./Typing";
-import Waiting from "./Waiting";
-import TitleScreen from "./TitleScreen";
-import LoginScreen from "./LoginScreen";
+
+import {ClientGameState} from "types/client";
+import TitleScreen from "components/TitleScreen";
+import {GameContext} from "client/Store";
+import Drawing from "client/Drawing";
+import Typing from "client/Typing";
+import Waiting from "client/Waiting";
+import LoginScreen from "client/LoginScreen";
 
 export default function Client() {
     const [{state}] = useContext(GameContext);

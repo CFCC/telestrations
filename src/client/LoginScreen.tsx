@@ -4,10 +4,10 @@ import * as firebaseUi from "firebaseui";
 
 import {GameContext} from "client/Store";
 import {useBoolean} from "utils/hooks";
+import TitleScreen from "components/TitleScreen";
+import {ClientGameState} from "types/client";
 
 import "firebaseui/dist/firebaseui.css"
-import TitleScreen from "./TitleScreen";
-import {ClientGameState} from "../types/client";
 
 const firebaseLoginUi = new firebaseUi.auth.AuthUI(firebase.auth());
 
@@ -41,7 +41,7 @@ export default function LoginScreen() {
     });
 
     return (
-        <TitleScreen title="Log In" subtitle="" loading={uiLoading}>
+        <TitleScreen title="Log In" loading={uiLoading}>
             <div id={firebaseLoginUiContainerId} />
         </TitleScreen>
     );

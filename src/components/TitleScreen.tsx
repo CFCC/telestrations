@@ -28,7 +28,7 @@ const Header = styled(Typography)`
 
 interface TitleScreenProps {
     title: string;
-    subtitle: string;
+    subtitle?: string;
     loading?: boolean;
     children?: React.ReactNode;
 }
@@ -38,7 +38,7 @@ export default function TitleScreen({title, subtitle, loading = false, children}
         <Container>
             <Image src="/logo.png" alt="Telestrations logo" />
             <Header>{title}</Header>
-            <Typography>{subtitle}</Typography>
+            {subtitle && <Typography>{subtitle}</Typography>}
             {children}
             {loading && <Progress />}
         </Container>

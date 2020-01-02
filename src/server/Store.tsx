@@ -1,10 +1,9 @@
-import React, {createContext, ReactNode, useEffect, useReducer} from "react";
+import React, {createContext, ReactNode, useReducer} from "react";
 import _ from "lodash";
-import * as io from "server/socket-io";
 import {ServerWebAppGameState} from "types/server-webapp";
 import {FinishedGameTurnDTO, NotepadPageDTO, PlayerDTO, ServerPlayer} from "types/server";
 import {Notepad} from "types/client";
-import {IOEvent, UUID} from "types/shared";
+import {UUID} from "types/shared";
 
 // region [Types]
 

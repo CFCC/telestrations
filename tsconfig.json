@@ -22,10 +22,7 @@
     "sourceMap": true
   },
   "include": [
-    "src/client/**/*",
-    "src/server/webapp/**/*",
-    "src/types/*",
-    "src/utils/*"
+    "src/**/*"
   ],
   "exclude": [
     "node_modules"
