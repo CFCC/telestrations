@@ -21,12 +21,12 @@ const PlayerLabel = styled(Typography)`
 `;
 
 export default function LoadingScreen() {
-    const [{players, serverId}, {startGame}] = useContext(GameContext);
+    const [{players, gameCode}, {startGame}] = useContext(GameContext);
 
     return (
         <TitleScreen
             title="Waiting for clients to connect"
-            subtitle="Start the game when everyone's joined!"
+            subtitle={`Tell people to select game "${gameCode}"`}
         >
             <PlayerList>
                 {players.map((player, i) => (

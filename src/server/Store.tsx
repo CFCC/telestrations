@@ -2,15 +2,17 @@ import React, {createContext, ReactNode, useEffect, useReducer} from "react";
 import _ from "lodash";
 import uuid from 'uuid/v4';
 
-import {ServerWebAppGameState} from "types/server-webapp";
+import {ServerGameState} from "types/server";
 import {FinishedGameTurnDTO, NotepadPageDTO, PlayerDTO, ServerPlayer} from "types/server";
 import {Notepad} from "types/client";
 import {UUID} from "types/shared";
+import * as firebase from 'server/firebase';
 
 // region [Types]
 
 export interface State {
-    state: ServerWebAppGameState;
+    state: ServerGameState;
+    gameCode: string;
     serverId: UUID;
     players: Array<ServerPlayer>;
     notepads: Array<Notepad>;
@@ -23,6 +25,7 @@ interface StoreProps {
 }
 
 enum ActionTypes {
+    SET_GAME_CODE = "SET_GAME_CODE",
     SET_SERVER_ID = "SET_SERVER_ID",
     SET_GAME_STATE = "SET_GAME_STATE",
     VIEW_PLAYER_HISTORY = "VIEW_PLAYER_HISTORY",
@@ -36,6 +39,11 @@ enum ActionTypes {
     GAME_FINISHED = "GAME_FINISHED",
 }
 
+interface setGameCode {
+    type: ActionTypes.SET_GAME_CODE;
+    gameCode: string;
+}
+
 interface setServerId {
     type: ActionTypes.SET_SERVER_ID;
     serverId: UUID;
@@ -43,7 +51,7 @@ interface setServerId {
 
 interface setGameState {
     type: ActionTypes.SET_GAME_STATE;
-    state: ServerWebAppGameState;
+    state: ServerGameState;
 }
 
 interface viewPlayerHistory {
@@ -91,10 +99,11 @@ interface newNotepad {
 }
 
 type Action = setGameState | viewPlayerHistory | viewNotepadHistory | init | startGame | addPlayer | updateGuess
-    | finishedGameTurn | gameFinished | newNotepad | setServerId;
+    | finishedGameTurn | gameFinished | newNotepad | setServerId | setGameCode;
 
 interface Actions {
-    setGameState: (state: ServerWebAppGameState) => void,
+    setGameCode: (gameCode: string) => void;
+    setGameState: (state: ServerGameState) => void,
     viewPlayerHistory: (playerId: UUID) => void,
     viewNotepadHistory: (ownerId: UUID) => void,
     init: () => void,
@@ -110,8 +119,9 @@ type Store = [State, Actions];
 // endregion
 
 const defaultState = {
-    state: ServerWebAppGameState.LOADING,
+    state: ServerGameState.GAME_CODE,
     serverId: "",
+    gameCode: "",
     players: [],
     notepads: [],
     activePlayerId: "",
@@ -119,6 +129,7 @@ const defaultState = {
 };
 
 const actionStubs = {
+    setGameCode: () => null,
     setGameState: () => null,
     viewPlayerHistory: () => null,
     viewNotepadHistory: () => null,
@@ -147,6 +158,9 @@ const defaultNotepad: Notepad = {
 
 function reducer(state: State = defaultState, action: Action): State {
     switch (action.type) {
+        case ActionTypes.SET_GAME_CODE:
+            firebase.addGameToLobby(action.gameCode);
+            return {...state, gameCode: action.gameCode};
         case ActionTypes.SET_SERVER_ID:
             return {...state, serverId: action.serverId};
         case ActionTypes.SET_GAME_STATE:
@@ -159,7 +173,7 @@ function reducer(state: State = defaultState, action: Action): State {
         case ActionTypes.START_GAME:
             // io.startGame();
             return Object.assign({}, state, {
-                state: ServerWebAppGameState.BIRDS_EYE,
+                state: ServerGameState.BIRDS_EYE,
                 notepads: state.players.map(p => ({owner: p.id, content: []})),
             });
         case ActionTypes.PLAYER_ADDED: {
@@ -199,7 +213,8 @@ function reducer(state: State = defaultState, action: Action): State {
 export default function Store({children}: StoreProps) {
     const [state, dispatch] = useReducer(reducer, defaultState);
     const actions = {
-        setGameState: (swgs: ServerWebAppGameState) => dispatch({
+        setGameCode: (gameCode: string) => dispatch({type: ActionTypes.SET_GAME_CODE, gameCode}),
+        setGameState: (swgs: ServerGameState) => dispatch({
             type: ActionTypes.SET_GAME_STATE,
             state: swgs,
         } as setGameState),

@@ -1,4 +1,5 @@
 import React, {createContext, ReactNode, useEffect, useReducer} from "react";
+import firebase from "firebase";
 
 import {ClientGameState} from "types/client";
 import {ContentType} from "types/shared";
@@ -7,6 +8,7 @@ import {NewContentDTO} from "types/server";
 // region [Types]
 
 interface State {
+    user: firebase.User | null;
     nicknameSubmitted: boolean;
     state: ClientGameState;
     nickname: string;
@@ -19,12 +21,18 @@ interface StoreProps {
 }
 
 enum ActionTypes {
+    SET_USER = "SET_USER",
     NEW_CONTENT = "NEW_CONTENT",
     SET_GAME_STATE = "SET_GAME_STATE",
     SUBMIT_NICKNAME = "SUBMIT_NICKNAME",
     SET_GUESS = "SET_GUESS",
     SUBMIT_GUESS = "SUBMIT_GUESS",
     INIT = "INIT",
+}
+
+interface setUser {
+    type: ActionTypes.SET_USER;
+    user: firebase.User | null;
 }
 
 interface newContent {
@@ -55,9 +63,10 @@ interface init {
     type: ActionTypes.INIT;
 }
 
-type Action = setGameState | submitNickname | setGuess | submitGuess | newContent | init;
+type Action = setUser | setGameState | submitNickname | setGuess | submitGuess | newContent | init;
 
 interface Actions {
+    setUser: (user: firebase.User | null) => void,
     newContent: (content: NewContentDTO) => void,
     setGameState: (state: ClientGameState) => void,
     submitNickname: (nickname: String) => void,
@@ -71,6 +80,7 @@ type Store = [State, Actions];
 // endregion
 
 const actionStubs = {
+    setUser: () => null,
     newContent: () => null,
     setGameState: () => null,
     submitNickname: () => null,
@@ -80,6 +90,7 @@ const actionStubs = {
 };
 
 const defaultState: State = {
+    user: null,
     nicknameSubmitted: false,
     state: ClientGameState.LOGIN,
     nickname: "",
@@ -91,29 +102,26 @@ export const GameContext = createContext([defaultState, actionStubs] as Store);
 
 function reducer(state: State = defaultState, action: Action): State {
     switch (action.type) {
+        case ActionTypes.SET_USER:
+            return {...state, user: action.user};
         case ActionTypes.SET_GAME_STATE:
-            return Object.assign({}, state, {
-                state: action.state,
-            });
+            return {...state, state: action.state};
         case ActionTypes.SUBMIT_NICKNAME:
             // submitNick(action.nickname);
-            return Object.assign({}, state, {
-                nicknameSubmitted: true,
-            });
+            return {...state, nicknameSubmitted: true};
         case ActionTypes.SET_GUESS:
             // updateGuess(action.guess);
-            return Object.assign({}, state, {
-                guess: action.guess,
-            });
+            return {...state, guess: action.guess};
         case ActionTypes.SUBMIT_GUESS:
             // finishTurn();
             return state;
         case ActionTypes.NEW_CONTENT:
-            return Object.assign({}, state, {
+            return {
+                ...state,
                 state: action.content.type === ContentType.Text ? ClientGameState.DRAWING : ClientGameState.TYPING,
                 content: action.content.content,
                 guess: "",
-            });
+            };
         case ActionTypes.INIT:
             // init();
             return state;
@@ -125,30 +133,13 @@ function reducer(state: State = defaultState, action: Action): State {
 export default function Store({children}: StoreProps) {
     const [state, dispatch] = useReducer(reducer, defaultState);
     const actions = {
-        newContent: (content: NewContentDTO) => dispatch({
-            type: ActionTypes.NEW_CONTENT,
-            content,
-        }),
-        setGameState: (cgs: ClientGameState) => {
-            dispatch({
-                type: ActionTypes.SET_GAME_STATE,
-                state: cgs,
-            })
-        },
-        submitNickname: (nickname: String) => dispatch({
-            type: ActionTypes.SUBMIT_NICKNAME,
-            nickname,
-        }),
-        setGuess: (guess: string) => dispatch({
-            type: ActionTypes.SET_GUESS,
-            guess,
-        }),
-        submitGuess: () => dispatch({
-            type: ActionTypes.SUBMIT_GUESS,
-        }),
-        init: () => dispatch({
-            type: ActionTypes.INIT,
-        }),
+        setUser: (user: firebase.User | null) => dispatch({type: ActionTypes.SET_USER, user}),
+        newContent: (content: NewContentDTO) => dispatch({type: ActionTypes.NEW_CONTENT, content}),
+        setGameState: (cgs: ClientGameState) => dispatch({type: ActionTypes.SET_GAME_STATE, state: cgs}),
+        submitNickname: (nickname: String) => dispatch({type: ActionTypes.SUBMIT_NICKNAME, nickname}),
+        setGuess: (guess: string) => dispatch({type: ActionTypes.SET_GUESS, guess}),
+        submitGuess: () => dispatch({type: ActionTypes.SUBMIT_GUESS}),
+        init: () => dispatch({type: ActionTypes.INIT}),
     };
 
     useEffect(() => {

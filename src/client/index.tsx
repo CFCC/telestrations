@@ -8,6 +8,7 @@ import Drawing from "client/Drawing";
 import Typing from "client/Typing";
 import Waiting from "client/Waiting";
 import LoginScreen from "client/LoginScreen";
+import GameSelection from "./GameSelection";
 
 export default function Client() {
     const [{state}] = useContext(GameContext);
@@ -15,6 +16,8 @@ export default function Client() {
     switch (state) {
         case ClientGameState.LOGIN:
             return <LoginScreen />;
+        case ClientGameState.GAME_SELECTION:
+            return <GameSelection />;
         case ClientGameState.ALREADY_STARTED:
             return <TitleScreen
                 title="This game's already started!"

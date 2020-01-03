@@ -1,6 +1,7 @@
 import {ContentType, UUID} from "types/shared";
 
 export enum ClientGameState {
+    GAME_SELECTION = "game selection",
     LOGIN = "login",
     WAITING_TO_START = "waiting to start",
     DRAWING = "drawing",

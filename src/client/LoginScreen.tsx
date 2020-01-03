@@ -12,25 +12,13 @@ import "firebaseui/dist/firebaseui.css"
 const firebaseLoginUi = new firebaseUi.auth.AuthUI(firebase.auth());
 
 export default function LoginScreen() {
-    const [, {submitNickname, setGameState}] = useContext(GameContext);
+    const [{user}, {setGameState, setUser}] = useContext(GameContext);
     const [uiLoading,, uiShown] = useBoolean(true);
     const firebaseLoginUiContainerId = "firebaseui-auth-container";
 
     useEffect(() => {
-        firebaseLoginUi.start(`#${firebaseLoginUiContainerId}`, {
+        if (!user) firebaseLoginUi.start(`#${firebaseLoginUiContainerId}`, {
             callbacks: {
-                signInSuccessWithAuthResult: (authResult: any): boolean => {
-                    const {user: {displayName, uid}} = authResult;
-
-                    console.log(uid); // We can use the UID to put the user back in the game if they leave
-                    submitNickname(displayName);
-
-                    setGameState(ClientGameState.WAITING_TO_START);
-
-                    // False means we will handle the rest of the flow - true would
-                    // mean there is another redirect
-                    return false;
-                },
                 uiShown,
             },
             signInFlow: 'popup',
@@ -38,6 +26,13 @@ export default function LoginScreen() {
                 firebase.auth.GoogleAuthProvider.PROVIDER_ID,
             ],
         });
+    });
+
+    firebase.auth().onAuthStateChanged(function(user: firebase.User | null) {
+        if (user) {
+            setUser(user);
+            setGameState(ClientGameState.GAME_SELECTION);
+        }
     });
 
     return (
