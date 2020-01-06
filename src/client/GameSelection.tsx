@@ -1,11 +1,17 @@
 import React, {useContext, useEffect, useRef, useState} from "react";
 import {Button, FormControl, InputLabel, MenuItem, Select} from "@material-ui/core";
 import * as firebase from "firebase/app";
+import styled from "styled-components";
 
 import TitleScreen from "components/TitleScreen";
 import {useEvent} from "utils/hooks";
-import {GameContext} from "./Store";
-import {ClientGameState} from "../types/client";
+import {GameContext} from "client/Store";
+import {ClientGameState} from "types/client";
+
+const SelectWrapper = styled(FormControl)`
+     margin: 2rem 0 1rem;
+     width: 50%;
+`;
 
 export default function GameSelection() {
     const [games, setGames] = useState<string[]>([]);
@@ -17,25 +23,17 @@ export default function GameSelection() {
 
     useEffect(
         () => lobbies.onSnapshot(function(snapshot) {
-                console.log(games);
-                const newGames = [...games];
-                snapshot.docChanges().forEach(function(change) {
-                    console.log(change);
-                    if (change.type === "added") {
-                        if (newGames.indexOf(change.doc.id) === -1) newGames.push(change.doc.id);
-                    }
-                    if (change.type === "modified") {
-                        newGames.splice(change.oldIndex, 1, change.doc.id);
-                    }
-                    if (change.type === "removed") {
-                        newGames.splice(change.oldIndex, 1);
-                    }
-                });
+            let currentGameStillAvailable = false;
+            const newGames: string[] = [];
+            snapshot.forEach(doc => {
+                if (game === doc.id) currentGameStillAvailable = true;
+                newGames.push(doc.id);
+            });
 
-                setGames(newGames);
-                if (!newGames.includes(game)) rawSetGame("");
-            }),
-        [games]
+            setGames(newGames);
+            if (!currentGameStillAvailable) rawSetGame("");
+        }),
+        []
     );
 
     useEffect(() => {
@@ -48,33 +46,31 @@ export default function GameSelection() {
 
     return (
         <TitleScreen title="Please select a game to join">
-            <form>
-                <FormControl variant="outlined">
-                    <InputLabel ref={inputLabel} id="game-label">
-                        Game Code
-                    </InputLabel>
-                    <Select
-                        labelId="game-label"
-                        value={game}
-                        onChange={setGame}
-                        labelWidth={labelWidth}
-                    >
-                        <MenuItem value="">None</MenuItem>
-                        {games.map(gameOption => (
-                            <MenuItem value={gameOption} key={gameOption}>{gameOption}</MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-                <Button
-                    onClick={joinGame}
-                    variant="contained"
-                    color="primary"
-                    disabled={game === ""}
-                    size="large"
+            <SelectWrapper variant="outlined">
+                <InputLabel ref={inputLabel} id="game-label">
+                    Game Code
+                </InputLabel>
+                <Select
+                    labelId="game-label"
+                    value={game}
+                    onChange={setGame}
+                    labelWidth={labelWidth}
                 >
-                    Join Game
-                </Button>
-            </form>
+                    <MenuItem value="">None</MenuItem>
+                    {games.map(gameOption => (
+                        <MenuItem value={gameOption} key={gameOption}>{gameOption}</MenuItem>
+                    ))}
+                </Select>
+            </SelectWrapper>
+            <Button
+                onClick={joinGame}
+                variant="contained"
+                color="primary"
+                disabled={game === ""}
+                size="large"
+            >
+                Join Game
+            </Button>
         </TitleScreen>
     );
 }

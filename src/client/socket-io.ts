@@ -18,7 +18,3 @@ import {Events, IOEvent} from "types/shared";
 // export function finishTurn() {
 //     io.emit(IOEvent.FINISHED_GAME_TURN);
 // }
-//
-// export function init() {
-//     io.emit(IOEvent.I_AM_A_CLIENT);
-// }

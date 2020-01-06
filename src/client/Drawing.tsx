@@ -92,7 +92,7 @@ export default function Drawing() {
         setCanRedo(sketch.current.canRedo());
     };
     const updateGuess = () => {
-        setGuess(sketch.current.toDataURL().replace(/^data:image\/png;base64,/, ""));
+        setGuess(sketch.current.toDataURL());
         setCanUndo(sketch.current.canUndo());
         setCanRedo(sketch.current.canRedo());
     };
@@ -143,7 +143,8 @@ export default function Drawing() {
                                 max={100}
                                 step={1}
                                 value={lineWeight}
-                                onChange={setLineWeight} />
+                                onChange={setLineWeight}
+                            />
                         </ListItem>
                     </List>
                     <Divider />

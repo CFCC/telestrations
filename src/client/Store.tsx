@@ -1,17 +1,18 @@
 import React, {createContext, ReactNode, useEffect, useReducer} from "react";
-import firebase from "firebase";
+import firebase from "firebase/app";
 
 import {ClientGameState} from "types/client";
-import {ContentType} from "types/shared";
+import {ContentType, IOEvent} from "types/shared";
 import {NewContentDTO} from "types/server";
+import {attachEvents, setGuess} from "client/firebase";
 
 // region [Types]
 
 interface State {
     user: firebase.User | null;
-    nicknameSubmitted: boolean;
+    gameCode: string;
+    pictureId: string;
     state: ClientGameState;
-    nickname: string;
     guess: string;
     content: string;
 }
@@ -24,10 +25,8 @@ enum ActionTypes {
     SET_USER = "SET_USER",
     NEW_CONTENT = "NEW_CONTENT",
     SET_GAME_STATE = "SET_GAME_STATE",
-    SUBMIT_NICKNAME = "SUBMIT_NICKNAME",
     SET_GUESS = "SET_GUESS",
     SUBMIT_GUESS = "SUBMIT_GUESS",
-    INIT = "INIT",
 }
 
 interface setUser {
@@ -45,11 +44,6 @@ interface setGameState {
     state: ClientGameState;
 }
 
-interface submitNickname {
-    type: ActionTypes.SUBMIT_NICKNAME;
-    nickname: String;
-}
-
 interface setGuess {
     type: ActionTypes.SET_GUESS;
     guess: string;
@@ -59,20 +53,14 @@ interface submitGuess {
     type: ActionTypes.SUBMIT_GUESS;
 }
 
-interface init {
-    type: ActionTypes.INIT;
-}
-
-type Action = setUser | setGameState | submitNickname | setGuess | submitGuess | newContent | init;
+type Action = setUser | setGameState | setGuess | submitGuess | newContent;
 
 interface Actions {
     setUser: (user: firebase.User | null) => void,
     newContent: (content: NewContentDTO) => void,
     setGameState: (state: ClientGameState) => void,
-    submitNickname: (nickname: String) => void,
     setGuess: (guess: string) => void,
     submitGuess: () => void,
-    init: () => void,
 }
 
 type Store = [State, Actions];
@@ -83,17 +71,15 @@ const actionStubs = {
     setUser: () => null,
     newContent: () => null,
     setGameState: () => null,
-    submitNickname: () => null,
     setGuess: () => null,
     submitGuess: () => null,
-    init: () => null,
 };
 
 const defaultState: State = {
     user: null,
-    nicknameSubmitted: false,
+    gameCode: "",
+    pictureId: "",
     state: ClientGameState.LOGIN,
-    nickname: "",
     guess: "",
     content: "",
 };
@@ -106,12 +92,18 @@ function reducer(state: State = defaultState, action: Action): State {
             return {...state, user: action.user};
         case ActionTypes.SET_GAME_STATE:
             return {...state, state: action.state};
-        case ActionTypes.SUBMIT_NICKNAME:
-            // submitNick(action.nickname);
-            return {...state, nicknameSubmitted: true};
-        case ActionTypes.SET_GUESS:
-            // updateGuess(action.guess);
-            return {...state, guess: action.guess};
+        case ActionTypes.SET_GUESS: {
+            if (!state.user) return {...state, guess: action.guess};
+
+            const pictureId = setGuess(
+                state.user,
+                action.guess,
+                state.gameCode,
+                action.guess.startsWith("data:image/png;base64,") ? state.pictureId : undefined
+            );
+
+            return {...state, guess: action.guess, pictureId: pictureId || ""};
+        }
         case ActionTypes.SUBMIT_GUESS:
             // finishTurn();
             return state;
@@ -122,9 +114,6 @@ function reducer(state: State = defaultState, action: Action): State {
                 content: action.content.content,
                 guess: "",
             };
-        case ActionTypes.INIT:
-            // init();
-            return state;
         default:
             return state;
     }
@@ -136,21 +125,18 @@ export default function Store({children}: StoreProps) {
         setUser: (user: firebase.User | null) => dispatch({type: ActionTypes.SET_USER, user}),
         newContent: (content: NewContentDTO) => dispatch({type: ActionTypes.NEW_CONTENT, content}),
         setGameState: (cgs: ClientGameState) => dispatch({type: ActionTypes.SET_GAME_STATE, state: cgs}),
-        submitNickname: (nickname: String) => dispatch({type: ActionTypes.SUBMIT_NICKNAME, nickname}),
         setGuess: (guess: string) => dispatch({type: ActionTypes.SET_GUESS, guess}),
         submitGuess: () => dispatch({type: ActionTypes.SUBMIT_GUESS}),
-        init: () => dispatch({type: ActionTypes.INIT}),
     };
 
     useEffect(() => {
-        // attachEvents({
-        //     [IOEvent.START_GAME]: () => actions.setGameState(ClientGameState.TYPING),
-        //     [IOEvent.GAME_ALREADY_STARTED]: () => actions.setGameState(ClientGameState.ALREADY_STARTED),
-        //     [IOEvent.WAIT]: () => actions.setGameState(ClientGameState.WAITING_FOR_CONTENT),
-        //     [IOEvent.NEW_CONTENT]: actions.newContent,
-        //     [IOEvent.NO_MORE_CONTENT]: () => actions.setGameState(ClientGameState.FINISHED),
-        // });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        attachEvents({
+            [IOEvent.START_GAME]: () => actions.setGameState(ClientGameState.TYPING),
+            [IOEvent.GAME_ALREADY_STARTED]: () => actions.setGameState(ClientGameState.ALREADY_STARTED),
+            [IOEvent.WAIT]: () => actions.setGameState(ClientGameState.WAITING_FOR_CONTENT),
+            [IOEvent.NEW_CONTENT]: actions.newContent,
+            [IOEvent.NO_MORE_CONTENT]: () => actions.setGameState(ClientGameState.FINISHED),
+        });
     }, []);
 
     return (<GameContext.Provider value={[state, actions]}>

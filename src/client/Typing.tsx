@@ -43,7 +43,7 @@ export default function Typing() {
 
     return (<Form onSubmit={dontRefresh} content={content}>
         {content !== "" && <Image
-            src={`http://localhost:${process.env.REACT_APP_SERVER_PORT}/i/${content}`}
+            src={content}
             alt="Previous submission" />}
         <Input
             value={guess}
