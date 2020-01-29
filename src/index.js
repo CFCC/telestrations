@@ -7,8 +7,9 @@ import styled from "styled-components";
 
 import ClientApp from "client";
 import ServerApp from "server";
-import ClientStore from "client/Store";
-import ServerStore from "server/Store";
+import {GameContext as ClientStore} from "store/client";
+import {GameContext as ServerStore} from "store/server";
+import Store from "components/Store";
 import {darkPrimary, GlobalStyles, primary, theme} from "utils/theme";
 
 const Container = styled.div`
@@ -25,11 +26,12 @@ const Container = styled.div`
 `;
 
 const App = window.location.pathname.match(/^\/server/) ? ServerApp : ClientApp;
-const Store = window.location.pathname.match(/^\/server/) ? ServerStore : ClientStore;
+const store = window.location.pathname.match(/^\/server/) ? ServerStore : ClientStore;
+
 ReactDOM.render(<StylesProvider injectFirst={true}>
     <ThemeProvider theme={theme}>
         <GlobalStyles />
-        <Store>
+        <Store context={store.context} store={store}>
             <Container>
                 <App />
             </Container>

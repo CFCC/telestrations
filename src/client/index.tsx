@@ -1,19 +1,19 @@
-import * as React from "react";
-import {useContext} from "react";
+import React, {useContext} from "react";
+import _ from "lodash";
 
 import {ClientGameState} from "types/client";
 import TitleScreen from "components/TitleScreen";
-import {GameContext} from "client/Store";
+import {GameContext} from "store/client";
 import Drawing from "client/Drawing";
 import Typing from "client/Typing";
 import Waiting from "client/Waiting";
 import LoginScreen from "client/LoginScreen";
-import GameSelection from "./GameSelection";
+import GameSelection from "client/GameSelection";
 
 export default function Client() {
-    const [{state}] = useContext(GameContext);
+    const [{gameState}] = useContext(GameContext);
 
-    switch (state) {
+    switch (gameState) {
         case ClientGameState.LOGIN:
             return <LoginScreen />;
         case ClientGameState.GAME_SELECTION:
@@ -44,3 +44,5 @@ export default function Client() {
             return <div />;
     }
 }
+
+export const init = _.noop;

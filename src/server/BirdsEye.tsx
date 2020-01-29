@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import PlayerStream from "server/PlayerStream";
 import {UUID} from "types/shared";
-import {GameContext} from "server/Store";
+import {GameContext} from "store/server";
 import styled from "styled-components";
 
 interface BirdsEyeState {

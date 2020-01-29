@@ -14,11 +14,12 @@ import {
     Slider,
     Typography,
 } from "@material-ui/core";
-import {GameContext} from "client/Store";
+import styled from "styled-components";
+
+import {GameContext} from "store/client";
 import {useBoolean, useEvent} from "utils/hooks";
 import SwatchesDialog from "client/SwatchesDialog";
 import ListDialog from "client/ListDialog";
-import styled from "styled-components";
 
 const Container = styled.div`
     width: 100vw;

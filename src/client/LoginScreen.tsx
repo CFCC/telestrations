@@ -2,7 +2,7 @@ import React, {useContext, useEffect} from "react";
 import firebase from "firebase/app";
 import * as firebaseUi from "firebaseui";
 
-import {GameContext} from "client/Store";
+import {GameContext} from "store/client";
 import {useBoolean} from "utils/hooks";
 import TitleScreen from "components/TitleScreen";
 import {ClientGameState} from "types/client";

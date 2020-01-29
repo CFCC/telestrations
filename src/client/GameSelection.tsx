@@ -1,11 +1,22 @@
 import React, {useContext, useEffect, useRef, useState} from "react";
-import {Button, FormControl, InputLabel, MenuItem, Select} from "@material-ui/core";
+import {Button as UnstyledButton, FormControl, InputLabel, MenuItem, Select} from "@material-ui/core";
 import * as firebase from "firebase/app";
+import styled from "styled-components";
 
 import TitleScreen from "components/TitleScreen";
 import {useEvent} from "utils/hooks";
-import {GameContext} from "./Store";
-import {ClientGameState} from "../types/client";
+import {GameContext} from "store/client";
+import {ClientGameState} from "types/client";
+
+const Form = styled.form`
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+`;
+
+const Button = styled(UnstyledButton)`
+    margin-top: 1rem;
+`;
 
 export default function GameSelection() {
     const [games, setGames] = useState<string[]>([]);
@@ -13,29 +24,17 @@ export default function GameSelection() {
     const inputLabel = useRef<HTMLLabelElement>(null);
     const [game, setGame, rawSetGame] = useEvent("", ({target: {value}}) => value);
     const [, {setGameState}] = useContext(GameContext);
-    const lobbies = firebase.firestore().collection("lobby");
 
     useEffect(
-        () => lobbies.onSnapshot(function(snapshot) {
-                console.log(games);
-                const newGames = [...games];
-                snapshot.docChanges().forEach(function(change) {
-                    console.log(change);
-                    if (change.type === "added") {
-                        if (newGames.indexOf(change.doc.id) === -1) newGames.push(change.doc.id);
-                    }
-                    if (change.type === "modified") {
-                        newGames.splice(change.oldIndex, 1, change.doc.id);
-                    }
-                    if (change.type === "removed") {
-                        newGames.splice(change.oldIndex, 1);
-                    }
-                });
-
+        () => firebase
+            .firestore()
+            .collection("lobby")
+            .onSnapshot(function(snapshot) {
+                const newGames = snapshot.docs.map(doc => doc.id);
                 setGames(newGames);
                 if (!newGames.includes(game)) rawSetGame("");
             }),
-        [games]
+        [game, rawSetGame]
     );
 
     useEffect(() => {
@@ -44,11 +43,12 @@ export default function GameSelection() {
 
     function joinGame() {
         setGameState(ClientGameState.WAITING_TO_START);
+        
     }
 
     return (
         <TitleScreen title="Please select a game to join">
-            <form>
+            <Form>
                 <FormControl variant="outlined">
                     <InputLabel ref={inputLabel} id="game-label">
                         Game Code
@@ -74,7 +74,7 @@ export default function GameSelection() {
                 >
                     Join Game
                 </Button>
-            </form>
+            </Form>
         </TitleScreen>
     );
 }
