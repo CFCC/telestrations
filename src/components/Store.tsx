@@ -7,8 +7,8 @@ interface Store<State, Action> {
     actionCreators: Record<string, (...args: any) => Action>;
 }
 
-interface StoreProps<State, Action> {
-    context: ContextType<[State, Record<string, (...args: any) => void>]>;
+export interface StoreProps<State, Action> {
+    context: ContextType<[Partial<Object>, Record<string, (...args: any) => void>]>;
     store: Store<State, Action>;
     children: ReactNode;
 }
@@ -21,7 +21,10 @@ export default function Store<State, Action>(props: StoreProps<State, Action>) {
     } = props;
 
     const [state, dispatch] = useReducer(reducer, initialState);
-    const actions = _.mapValues(actionCreators, (creator: (...args: any) => Action) => (...args: any) => dispatch(creator(...args)));
+
+    type actionCreator = (...args: any) => Action;
+    type action = (...args: any) => void;
+    const actions = _.mapValues(actionCreators, (creator: actionCreator): action => (...args: any) => dispatch(creator(...args)));
 
     return (
         <Context.Provider value={[state, actions]}>

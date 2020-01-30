@@ -5,9 +5,9 @@ import * as firebase from "firebase-client/server";
 import { ServerGameState, ServerPlayer, PlayerDTO, NotepadPageDTO, FinishedGameTurnDTO } from "types/server";
 import { Notepad } from "types/client";
 import { UUID } from "types/shared";
-import { State, Action, ActionTypes, setGameState, init, viewPlayerHistory, viewNotepadHistory, startGame, addPlayer, updateGuess, finishedGameTurn, gameFinished, newNotepad, Store } from "./server.types";
+import { State, Action, ActionTypes, setGameState, init, viewPlayerHistory, viewNotepadHistory, startGame, addPlayer, updateGuess, finishedGameTurn, gameFinished, newNotepad, Store, Actions, setGameCode } from "./server.types";
 
-export const defaultState = {
+export const initialState = {
     state: ServerGameState.GAME_CODE,
     serverId: "",
     gameCode: "",
@@ -84,8 +84,8 @@ export function reducer(state: State, action: Action): State {
     }
 }
 
-export const actionCreators = {
-    setGameCode: (gameCode: string) => ({type: ActionTypes.SET_GAME_CODE, gameCode}),
+export const actionCreators: Actions = {
+    setGameCode: (gameCode: string) => ({type: ActionTypes.SET_GAME_CODE, gameCode} as setGameCode),
     setGameState: (swgs: ServerGameState) => ({type: ActionTypes.SET_GAME_STATE, state: swgs} as setGameState),
     viewPlayerHistory: (playerId: UUID) => ({type: ActionTypes.VIEW_PLAYER_HISTORY, playerId} as viewPlayerHistory),
     viewNotepadHistory: (ownerId: UUID) => ({type: ActionTypes.VIEW_NOTEPAD_HISTORY, ownerId} as viewNotepadHistory),
@@ -95,7 +95,7 @@ export const actionCreators = {
     updateGuess: ({playerId, content}: NotepadPageDTO) => ({type: ActionTypes.UPDATE_GUESS, playerId, content} as updateGuess),
     finishedGameTurn: (playerId: UUID) => ({type: ActionTypes.FINISHED_GAME_TURN, playerId} as finishedGameTurn),
     gameFinished: () => ({type: ActionTypes.GAME_FINISHED} as gameFinished),
-    newNotepad: ({playerId, newNotepadOwnerId}: FinishedGameTurnDTO) => ({type: ActionTypes.NEW_NOTEPAD, playerId, newNotepadOwnerId} as newNotepad),
+    // newNotepad: ({playerId, newNotepadOwnerId}: FinishedGameTurnDTO) => ({type: ActionTypes.NEW_NOTEPAD, playerId, newNotepadOwnerId} as newNotepad),
 };
 
-export const GameContext = createContext([defaultState, actionCreators] as Store)
+export const GameContext = createContext([initialState, actionCreators] as Store)

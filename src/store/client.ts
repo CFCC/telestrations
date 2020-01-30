@@ -5,7 +5,7 @@ import { ClientGameState } from "types/client";
 import { NewContentDTO } from "types/server";
 import { ContentType } from "types/shared";
 
-export const defaultState: State = {
+export const initialState: State = {
     user: null,
     gameCode: "",
     gameState: ClientGameState.LOGIN,
@@ -53,4 +53,4 @@ export const actionCreators: Actions = {
     init: () => ({type: ActionTypes.INIT}),
 }
 
-export const GameContext = createContext([defaultState, actionCreators] as Store);
+export const GameContext = createContext([initialState, actionCreators] as Store);

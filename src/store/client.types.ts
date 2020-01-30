@@ -3,16 +3,12 @@ import { ReactNode } from "react";
 import { ClientGameState } from "types/client";
 import { NewContentDTO } from "types/server";
 
-export interface State {
+export interface State extends Record<string, any> {
     user: firebase.User | null;
     gameCode: string;
     gameState: ClientGameState;
     guess: string;
     content: string;
-}
-
-export interface StoreProps {
-    children: ReactNode;
 }
 
 export enum ActionTypes {
@@ -60,14 +56,14 @@ export interface init {
 
 export type Action = setUser | setGameState | submitNickname | setGuess | submitGuess | newContent | init;
 
-export interface Actions {
-    setUser: (user: firebase.User | null) => void,
-    newContent: (content: NewContentDTO) => void,
-    setGameState: (state: ClientGameState) => void,
-    submitNickname: (nickname: String) => void,
-    setGuess: (guess: string) => void,
-    submitGuess: () => void,
-    init: () => void,
+export interface Actions extends Record<string, (...args: any) => Action> {
+    setUser: (user: firebase.User | null) => setUser,
+    newContent: (content: NewContentDTO) => newContent,
+    setGameState: (state: ClientGameState) => setGameState,
+    submitNickname: (nickname: String) => submitNickname,
+    setGuess: (guess: string) => setGuess,
+    submitGuess: () => submitGuess,
+    init: () => init,
 }
 
 export type Store = [State, Actions];

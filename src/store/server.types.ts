@@ -3,7 +3,7 @@ import { ServerGameState, ServerPlayer, PlayerDTO, NotepadPageDTO } from "types/
 import { Notepad } from "types/client";
 import { ReactNode } from "react";
 
-export interface State {
+export interface State extends Record<string, any> {
     state: ServerGameState;
     gameCode: string;
     serverId: UUID;
@@ -11,10 +11,6 @@ export interface State {
     notepads: Array<Notepad>;
     activePlayerId: UUID;
     activeNotepadId: UUID;
-}
-
-export interface StoreProps {
-    children: ReactNode;
 }
 
 export enum ActionTypes {
@@ -94,17 +90,17 @@ export interface newNotepad {
 export type Action = setGameState | viewPlayerHistory | viewNotepadHistory | init | startGame | addPlayer | updateGuess
     | finishedGameTurn | gameFinished | newNotepad | setServerId | setGameCode;
 
-export interface Actions {
-    setGameCode: (gameCode: string) => void;
-    setGameState: (state: ServerGameState) => void,
-    viewPlayerHistory: (playerId: UUID) => void,
-    viewNotepadHistory: (ownerId: UUID) => void,
-    init: () => void,
-    startGame: () => void,
-    addPlayer: (player: PlayerDTO) => void,
-    updateGuess: (page: NotepadPageDTO) => void,
-    finishedGameTurn: (playerId: UUID, newNotepadOwnerId: UUID) => void,
-    gameFinished: () => void,
+export interface Actions extends Record<string, (...args: any) => Action> {
+    setGameCode: (gameCode: string) => setGameCode;
+    setGameState: (state: ServerGameState) => setGameState,
+    viewPlayerHistory: (playerId: UUID) => viewPlayerHistory,
+    viewNotepadHistory: (ownerId: UUID) => viewNotepadHistory,
+    init: () => init,
+    startGame: () => startGame,
+    addPlayer: (player: PlayerDTO) => addPlayer,
+    updateGuess: (page: NotepadPageDTO) => updateGuess,
+    finishedGameTurn: (playerId: UUID, newNotepadOwnerId: UUID) => finishedGameTurn,
+    gameFinished: () => gameFinished,
 }
 
 export type Store = [State, Actions];
