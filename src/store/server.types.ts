@@ -3,7 +3,7 @@ import { ServerGameState, ServerPlayer, PlayerDTO, NotepadPageDTO } from "types/
 import { Notepad } from "types/client";
 
 export interface State extends Record<string, any> {
-    state: ServerGameState;
+    gameState: ServerGameState;
     gameCode: string;
     serverId: UUID;
     players: Array<ServerPlayer>;
@@ -15,10 +15,8 @@ export interface State extends Record<string, any> {
 export enum ActionTypes {
     SET_GAME_CODE = "SET_GAME_CODE",
     SET_SERVER_ID = "SET_SERVER_ID",
-    SET_GAME_STATE = "SET_GAME_STATE",
     VIEW_PLAYER_HISTORY = "VIEW_PLAYER_HISTORY",
     VIEW_NOTEPAD_HISTORY = "VIEW_NOTEPAD_HISTORY",
-    INIT = "INIT",
     START_GAME = "START_GAME",
     PLAYER_ADDED = "PLAYER_ADDED",
     UPDATE_GUESS = "UPDATE_GUESS",
@@ -37,11 +35,6 @@ export interface setServerId {
     serverId: UUID;
 }
 
-export interface setGameState {
-    type: ActionTypes.SET_GAME_STATE;
-    state: ServerGameState;
-}
-
 export interface viewPlayerHistory {
     type: ActionTypes.VIEW_PLAYER_HISTORY;
     playerId: UUID;
@@ -50,10 +43,6 @@ export interface viewPlayerHistory {
 export interface viewNotepadHistory {
     type: ActionTypes.VIEW_NOTEPAD_HISTORY;
     ownerId: UUID;
-}
-
-export interface init {
-    type: ActionTypes.INIT;
 }
 
 export interface startGame {
@@ -86,15 +75,13 @@ export interface newNotepad {
     newNotepadOwnerId: UUID;
 }
 
-export type Action = setGameState | viewPlayerHistory | viewNotepadHistory | init | startGame | addPlayer | updateGuess
+export type Action = viewPlayerHistory | viewNotepadHistory | startGame | addPlayer | updateGuess
     | finishedGameTurn | gameFinished | newNotepad | setServerId | setGameCode;
 
 export interface Actions extends Record<string, (...args: any) => Action> {
     setGameCode: (gameCode: string) => setGameCode;
-    setGameState: (state: ServerGameState) => setGameState,
     viewPlayerHistory: (playerId: UUID) => viewPlayerHistory,
     viewNotepadHistory: (ownerId: UUID) => viewNotepadHistory,
-    init: () => init,
     startGame: () => startGame,
     addPlayer: (player: PlayerDTO) => addPlayer,
     updateGuess: (page: NotepadPageDTO) => updateGuess,

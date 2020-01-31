@@ -19,12 +19,11 @@ const Button = styled(UnstyledButton)`
 `;
 
 export default function LoadingScreen() {
-    const [, {setGameCode, setGameState}] = useContext(GameContext);
+    const [, {setGameCode}] = useContext(GameContext);
     const [gameCode, updateGameCode] = useEvent('', ({target: {value}}) => value);
 
     function submitGameCode() {
         setGameCode(gameCode);
-        setGameState(ServerGameState.LOADING);
     }
 
     return (

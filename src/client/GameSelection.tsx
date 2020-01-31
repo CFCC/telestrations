@@ -23,7 +23,7 @@ export default function GameSelection() {
     const [labelWidth, setLabelWidth] = useState(0);
     const inputLabel = useRef<HTMLLabelElement>(null);
     const [game, setGame, rawSetGame] = useEvent("", ({target: {value}}) => value);
-    const [, {setGameState}] = useContext(GameContext);
+    const [, {joinGame}] = useContext(GameContext);
 
     useEffect(
         () => firebase
@@ -41,14 +41,13 @@ export default function GameSelection() {
         setLabelWidth(inputLabel.current?.offsetWidth || 0);
     }, []);
 
-    function joinGame() {
-        setGameState(ClientGameState.WAITING_TO_START);
-        
+    function onSubmit() {
+        joinGame(game);
     }
 
     return (
         <TitleScreen title="Please select a game to join">
-            <Form>
+            <Form onSubmit={onSubmit}>
                 <FormControl variant="outlined">
                     <InputLabel ref={inputLabel} id="game-label">
                         Game Code
@@ -66,7 +65,7 @@ export default function GameSelection() {
                     </Select>
                 </FormControl>
                 <Button
-                    onClick={joinGame}
+                    onClick={onSubmit}
                     variant="contained"
                     color="primary"
                     disabled={game === ""}
