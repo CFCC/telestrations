@@ -51,6 +51,6 @@ export const actionCreators: Actions = {
     setGuess: (guess: string) => ({type: ActionTypes.SET_GUESS, guess}),
     submitGuess: () => ({type: ActionTypes.SUBMIT_GUESS}),
     init: () => ({type: ActionTypes.INIT}),
-}
+};
 
 export const GameContext = createContext([initialState, actionCreators] as Store);

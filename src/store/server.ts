@@ -2,12 +2,12 @@ import _ from "lodash";
 import { createContext } from "react";
 
 import * as firebase from "firebase-client/server";
-import { ServerGameState, ServerPlayer, PlayerDTO, NotepadPageDTO, FinishedGameTurnDTO } from "types/server";
+import { ServerGameState, ServerPlayer, PlayerDTO, NotepadPageDTO } from "types/server";
 import { Notepad } from "types/client";
 import { UUID } from "types/shared";
-import { State, Action, ActionTypes, setGameState, init, viewPlayerHistory, viewNotepadHistory, startGame, addPlayer, updateGuess, finishedGameTurn, gameFinished, newNotepad, Store, Actions, setGameCode } from "./server.types";
+import { State, Action, ActionTypes, setGameState, init, viewPlayerHistory, viewNotepadHistory, startGame, addPlayer, updateGuess, finishedGameTurn, gameFinished, Store, Actions, setGameCode } from "store/server.types";
 
-export const initialState = {
+export const initialState: State = {
     state: ServerGameState.GAME_CODE,
     serverId: "",
     gameCode: "",
@@ -98,4 +98,4 @@ export const actionCreators: Actions = {
     // newNotepad: ({playerId, newNotepadOwnerId}: FinishedGameTurnDTO) => ({type: ActionTypes.NEW_NOTEPAD, playerId, newNotepadOwnerId} as newNotepad),
 };
 
-export const GameContext = createContext([initialState, actionCreators] as Store)
+export const GameContext = createContext([initialState, actionCreators] as Store);
