@@ -1,5 +1,3 @@
-import { ReactNode } from "react";
-
 import { ClientGameState } from "types/client";
 import { NewContentDTO } from "types/server";
 
@@ -20,6 +18,8 @@ export enum ActionTypes {
     SUBMIT_GUESS = "SUBMIT_GUESS",
     INIT = "INIT",
 }
+
+// #region Actions
 
 export interface setUser {
     type: ActionTypes.SET_USER;
@@ -53,6 +53,8 @@ export interface submitGuess {
 export interface init {
     type: ActionTypes.INIT;
 }
+
+// #endregion
 
 export type Action = setUser | setGameState | submitNickname | setGuess | submitGuess | newContent | init;
 

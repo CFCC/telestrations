@@ -1,34 +1,35 @@
 import React, { Context as ContextType, ReactNode, useReducer } from "react";
 import _ from "lodash";
 
-interface Store<State, Action> {
-    reducer: (state: State, action: Action) => State;
-    initialState: State;
-    actionCreators: Record<string, (...args: any) => Action>;
+// type StoreType<State> = [State, Record<string, (...args: any) => void>];
+
+interface Store {
+    reducer: (state: any, action: any) => any;
+    initialState: any;
+    actionCreators: Record<string, (...args: any) => any>;
+    GameContext: ContextType<any>;
 }
 
-export interface StoreProps<State, Action> {
-    context: ContextType<[Partial<Object>, Record<string, (...args: any) => void>]>;
-    store: Store<State, Action>;
+export interface StoreProps {
+    store: Store;
     children: ReactNode;
 }
 
-export default function Store<State, Action>(props: StoreProps<State, Action>) {
+export default function Store(props: StoreProps) {
     const {
-        context: Context,
         children,
-        store: {reducer, initialState, actionCreators},
+        store: {reducer, initialState, actionCreators, GameContext},
     } = props;
 
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    type actionCreator = (...args: any) => Action;
+    type actionCreator = (...args: any) => any;
     type action = (...args: any) => void;
     const actions = _.mapValues(actionCreators, (creator: actionCreator): action => (...args: any) => dispatch(creator(...args)));
 
     return (
-        <Context.Provider value={[state, actions]}>
+        <GameContext.Provider value={[state, actions]}>
             {children}
-        </Context.Provider>
+        </GameContext.Provider>
     )
 }

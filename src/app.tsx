@@ -9,9 +9,7 @@ import ClientApp from "client";
 import ServerApp from "server";
 import * as ClientStore from "store/client";
 import * as ServerStore from "store/server";
-import * as ClientStoreTypes from "store/client.types";
-import * as ServerStoreTypes from "store/server.types"
-import GenericStore, { StoreProps } from "components/Store";
+import Store from "components/Store";
 import {darkPrimary, GlobalStyles, primary, theme} from "utils/theme";
 
 const Container = styled.div`
@@ -31,13 +29,10 @@ const isServer = window.location.pathname.match(/^\/server/);
 const App = isServer ? ServerApp : ClientApp;
 const store = isServer ? ServerStore : ClientStore;
 
-type Props = StoreProps<ClientStoreTypes.State, ClientStoreTypes.Action> | StoreProps<ServerStoreTypes.State, ServerStoreTypes.Action>;
-const Store: (props: Props) => Element = GenericStore;
-
 ReactDOM.render(<StylesProvider injectFirst={true}>
     <ThemeProvider theme={theme}>
         <GlobalStyles />
-        <Store context={store.GameContext} store={store}>
+        <Store store={store}>
             <Container>
                 <App />
             </Container>
