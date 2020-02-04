@@ -1,5 +1,5 @@
 import React, {FormEvent, useContext} from "react";
-import {Button, TextField} from "@material-ui/core";
+import {Button as UnstyledButton, TextField} from "@material-ui/core";
 import styled from "styled-components";
 
 import {GameContext} from "store/client";
@@ -24,7 +24,7 @@ const Input = styled(TextField)`
     margin: 1em;
 `;
 
-const StyledButton = styled(Button)`
+const Button = styled(UnstyledButton)`
     flex-shrink: 0;
     margin: 1em;
     height: 4em;
@@ -42,22 +42,24 @@ export default function Typing() {
         return false;
     };
 
+    const updateGuess = ({target: {value}}: Event) => setGuess(value);
+
     return (<Form onSubmit={dontRefresh} content={content}>
         {content !== "" && <Image
-            src={`http://localhost:${process.env.REACT_APP_SERVER_PORT}/i/${content}`}
+            src={content}
             alt="Previous submission" />}
         <Input
             value={guess}
             variant="outlined"
             placeholder={content === "" ? "Describe a scene" : "What is in this picture?"}
-            onChange={(e: Event) => setGuess(e.target.value)} />
-        <StyledButton
+            onChange={updateGuess} />
+        <Button
             onClick={submitGuess}
             variant="contained"
             color="primary"
             type="submit"
         >
             Submit
-        </StyledButton>
+        </Button>
     </Form>);
 }

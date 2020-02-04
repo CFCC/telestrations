@@ -17,12 +17,11 @@ export default function LoginScreen() {
 
     useEffect(() => {
         if (!user) firebaseLoginUi.start(`#${firebaseLoginUiContainerId}`, {
-            callbacks: {
-                uiShown,
-            },
+            callbacks: {uiShown},
             signInFlow: 'popup',
             signInOptions: [
                 firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+                firebase.auth.PhoneAuthProvider.PROVIDER_ID,
                 firebaseUi.auth.AnonymousAuthProvider.PROVIDER_ID
             ],
         });

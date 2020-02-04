@@ -5,7 +5,6 @@ import styled from "styled-components";
 import {GameContext} from "store/server";
 import TitleScreen from "components/TitleScreen";
 import {useEvent} from "utils/hooks";
-import {ServerGameState} from "types/server";
 
 const Form = styled.form`
     width: 50%;

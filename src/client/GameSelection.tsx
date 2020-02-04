@@ -6,7 +6,6 @@ import styled from "styled-components";
 import TitleScreen from "components/TitleScreen";
 import {useEvent} from "utils/hooks";
 import {GameContext} from "store/client";
-import {ClientGameState} from "types/client";
 
 const Form = styled.form`
     width: 50%;
@@ -28,9 +27,11 @@ export default function GameSelection() {
     useEffect(
         () => firebase
             .firestore()
-            .collection("lobby")
-            .onSnapshot(function(snapshot) {
-                const newGames = snapshot.docs.map(doc => doc.id);
+            .collection("games")
+            .onSnapshot(async function(snapshot) {
+                const newGames = (await Promise.all(snapshot.docs
+                    .map(async doc => (await doc.data()).state === "lobby" ? doc.id : "")))
+                    .filter(x => x);
                 setGames(newGames);
                 if (!newGames.includes(game)) rawSetGame("");
             }),

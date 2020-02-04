@@ -25,7 +25,7 @@ const Container = styled.div`
     width: 100vw;
     height: 100vh;
 `;
-    
+
 const Controls = styled.div`
     position: absolute;
     bottom: 0;
@@ -34,26 +34,26 @@ const Controls = styled.div`
     display: flex;
     flex-direction: row;
 `;
-    
+
 const CaptionContainer = styled(Paper)`
     flex: 1;
     margin: 0.5rem;
     padding: 1rem;
 `;
-    
+
 const Canvas = styled(SketchField)`
     height: 100% !important;
 `;
-    
+
 const ListContainer = styled.div`
     width: auto;
     overflow-x: hidden;
 `;
-    
+
 const FAB = styled(IconButton)`
     margin: 2px;
 `;
-    
+
 const StyledSlider = styled(Slider)`
     margin: 2px;
 `;
@@ -93,7 +93,7 @@ export default function Drawing() {
         setCanRedo(sketch.current.canRedo());
     };
     const updateGuess = () => {
-        setGuess(sketch.current.toDataURL().replace(/^data:image\/png;base64,/, ""));
+        setGuess(sketch.current.toDataURL());
         setCanUndo(sketch.current.canUndo());
         setCanRedo(sketch.current.canRedo());
     };
@@ -105,7 +105,8 @@ export default function Drawing() {
             backgroundColor={bgColor}
             lineWidth={lineWeight}
             onChange={updateGuess}
-            ref={c => (c ? sketch.current = c : 0)} />
+            ref={c => (c ? sketch.current = c : 0)}
+        />
         <Controls>
             <FAB onClick={openMenu} color="primary">
                 <Icon fontSize="large">menu</Icon>
@@ -144,7 +145,8 @@ export default function Drawing() {
                                 max={100}
                                 step={1}
                                 value={lineWeight}
-                                onChange={setLineWeight} />
+                                onChange={setLineWeight}
+                            />
                         </ListItem>
                     </List>
                     <Divider />
