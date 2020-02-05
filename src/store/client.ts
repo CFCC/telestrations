@@ -22,7 +22,7 @@ export function reducer(state: State, action: Action): State {
             joinGame(state.user, action.gameCode);
             return {...state, gameState: ClientGameState.WAITING_TO_START};
         case ActionTypes.SET_GUESS:
-            updateGuess(state.notepadId, state.gameCode, action.guess);
+            updateGuess(state.user, state.notepadId, state.gameCode, action.guess);
             return {...state, guess: action.guess};
         case ActionTypes.SUBMIT_GUESS:
             finishTurn(state.user);

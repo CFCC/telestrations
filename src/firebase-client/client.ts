@@ -50,10 +50,26 @@ export async function setPictureGuess(notepadId: UUID, gameCode: string, guess: 
     return fileName;
 }
 
-export function updateGuess(notepadId: UUID, gameCode: string, guess: string) {
+export async function updateGuess(user: User | null, notepadId: UUID, gameCode: string, guess: string) {
+    if (!user) return;
 
+    const firebaseUser = await firebase
+        .firestore()
+        .doc(`games/${gameCode}/users/${user.uid}`)
+        .get();
+
+    if (firebaseUser.data()?.currentIndex % 2 === 1) {
+        await setPictureGuess(notepadId, gameCode, guess);
+    } else {
+        await setSentenceGuess(notepadId, gameCode, guess);
+    }
 }
 
-export function finishTurn(user: User | null) {
+export async function finishTurn(user: User | null, gameCode: string) {
+    if (!user) return;
 
+    const firebaseUser = await firebase
+        .firestore()
+        .doc(`games/${gameCode}/users/${user.uid}`)
+        .get();
 }
