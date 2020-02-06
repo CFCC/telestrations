@@ -1,6 +1,7 @@
 import React, {useContext, useEffect} from "react";
 import firebase from "firebase/app";
 import * as firebaseUi from "firebaseui";
+import {createGlobalStyle} from "styled-components";
 
 import {GameContext} from "store/client";
 import {useBoolean} from "utils/hooks";
@@ -9,6 +10,12 @@ import TitleScreen from "components/TitleScreen";
 import "firebaseui/dist/firebaseui.css"
 
 const firebaseLoginUi = new firebaseUi.auth.AuthUI(firebase.auth());
+
+const MakeAnonLoginABetterColor = createGlobalStyle`
+    .firebaseui-idp-anonymous { 
+        background-color: #000 !important;
+    }
+`;
 
 export default function LoginScreen() {
     const [{user}, {setUser}] = useContext(GameContext);
@@ -28,11 +35,12 @@ export default function LoginScreen() {
     });
 
     firebase.auth().onAuthStateChanged(function(user: firebase.User | null) {
-        if (user) setUser(user);
+        // if (user) setUser(user);
     });
 
     return (
         <TitleScreen title="Log In" loading={uiLoading}>
+            <MakeAnonLoginABetterColor />
             <div id={firebaseLoginUiContainerId} />
         </TitleScreen>
     );

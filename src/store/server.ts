@@ -33,7 +33,7 @@ const defaultNotepad: Notepad = {
 export function reducer(state: State, action: Action): State {
     switch (action.type) {
         case ActionTypes.SET_GAME_CODE:
-            firebase.addGameToLobby(action.gameCode);
+            firebase.addGameToLobby(action.gameCode, state.serverId);
             return {...state, gameCode: action.gameCode, gameState: ServerGameState.LOADING};
         case ActionTypes.SET_SERVER_ID:
             return {...state, serverId: action.serverId};

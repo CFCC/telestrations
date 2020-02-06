@@ -65,11 +65,60 @@ export async function updateGuess(user: User | null, notepadId: UUID, gameCode: 
     }
 }
 
-export async function finishTurn(user: User | null, gameCode: string) {
-    if (!user) return;
+export enum FinishedTurnStatus {
+    MORE_CONTENT, WAIT, GAME_FINISHED, NULL_USER
+}
+
+export interface FinishedTurnResult {
+    status: FinishedTurnStatus;
+    nextNotepad?: UUID;
+}
+
+export async function finishTurn(user: User | null, gameCode: string): Promise<FinishedTurnResult> {
+    if (!user) return {status: FinishedTurnStatus.NULL_USER};
 
     const firebaseUser = await firebase
         .firestore()
-        .doc(`games/${gameCode}/users/${user.uid}`)
-        .get();
+        .doc(`games/${gameCode}/users/${user.uid}`);
+
+    const {currentNotepad, nextPlayer} = (await firebaseUser.get()).data() || {};
+
+    const nextPlayerQueue = firebase
+        .firestore()
+        .collection(`games/${gameCode}/users/${nextPlayer}/queue`);
+    const queueLength = (await nextPlayerQueue.get()).docs.length;
+    nextPlayerQueue.doc(queueLength.toString()).set({notepadId: currentNotepad});
+
+    const firstQueueItem = (await firebaseUser
+        .collection('queue')
+        .doc('0')
+        .get())
+        .data();
+
+    if (firstQueueItem === undefined) return {status: FinishedTurnStatus.WAIT};
+
+    const {ownerId} = (await firebase
+        .firestore()
+        .doc(`games/${gameCode}/notepads/${firstQueueItem.notepadId}`)
+        .get())
+        .data() || {};
+
+    if (ownerId === user.uid) return {status: FinishedTurnStatus.GAME_FINISHED};
+
+    return {
+        status: FinishedTurnStatus.MORE_CONTENT,
+        nextNotepad: firstQueueItem.notepadId,
+    };
+}
+
+export async function waitForNewContent(user: firebase.User | null, gameCode: string, callback: (notepadId: UUID) => any) {
+    if (!user) return;
+
+    firebase
+        .firestore()
+        .collection(`games/${gameCode}/users/${user.uid}/queue`)
+        .onSnapshot(snapshot => {
+            const notepadId = snapshot.docs[0].data().notepadId;
+            callback(notepadId);
+        });
 }

@@ -1,10 +1,11 @@
 import { createContext } from "react";
+import firebase from "firebase";
 
 import { State, Action, ActionTypes, Actions, Store } from "store/client.types";
 import { ClientGameState } from "types/client";
 import { NewContentDTO } from "types/server";
 import { ContentType } from "types/shared";
-import {finishTurn, joinGame, updateGuess} from "firebase-client/client";
+import { finishTurn, joinGame, updateGuess } from "firebase-client/client";
 
 export const initialState: State = {
     user: null,
@@ -25,7 +26,7 @@ export function reducer(state: State, action: Action): State {
             updateGuess(state.user, state.notepadId, state.gameCode, action.guess);
             return {...state, guess: action.guess};
         case ActionTypes.SUBMIT_GUESS:
-            finishTurn(state.user);
+            finishTurn(state.user, state.gameCode);
             return state;
         case ActionTypes.NEW_CONTENT:
             return {

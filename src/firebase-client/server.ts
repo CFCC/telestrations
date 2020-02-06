@@ -1,10 +1,10 @@
 import firebase from 'firebase/app';
 
-export function addGameToLobby(gameCode: string) {
+export function addGameToLobby(gameCode: string, serverId: string) {
     firebase
         .firestore()
         .doc(`games/${gameCode}`)
-        .set({created: Date.now(), state: 'lobby'});
+        .set({created: Date.now(), state: 'lobby', serverId});
 }
 
 export function startGame(gameCode: string) {
