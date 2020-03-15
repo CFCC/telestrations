@@ -14,17 +14,18 @@ import {
     Slider,
     Typography,
 } from "@material-ui/core";
-import {GameContext} from "client/Store";
+import styled from "styled-components";
+
+import {GameContext} from "store/client";
 import {useBoolean, useEvent} from "utils/hooks";
 import SwatchesDialog from "client/SwatchesDialog";
 import ListDialog from "client/ListDialog";
-import styled from "styled-components";
 
 const Container = styled.div`
     width: 100vw;
     height: 100vh;
 `;
-    
+
 const Controls = styled.div`
     position: absolute;
     bottom: 0;
@@ -33,26 +34,26 @@ const Controls = styled.div`
     display: flex;
     flex-direction: row;
 `;
-    
+
 const CaptionContainer = styled(Paper)`
     flex: 1;
     margin: 0.5rem;
     padding: 1rem;
 `;
-    
+
 const Canvas = styled(SketchField)`
     height: 100% !important;
 `;
-    
+
 const ListContainer = styled.div`
     width: auto;
     overflow-x: hidden;
 `;
-    
+
 const FAB = styled(IconButton)`
     margin: 2px;
 `;
-    
+
 const StyledSlider = styled(Slider)`
     margin: 2px;
 `;
@@ -104,7 +105,8 @@ export default function Drawing() {
             backgroundColor={bgColor}
             lineWidth={lineWeight}
             onChange={updateGuess}
-            ref={c => (c ? sketch.current = c : 0)} />
+            ref={c => (c ? sketch.current = c : 0)}
+        />
         <Controls>
             <FAB onClick={openMenu} color="primary">
                 <Icon fontSize="large">menu</Icon>

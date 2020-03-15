@@ -2,7 +2,7 @@ import React, {useContext} from "react";
 import {CardContent, Typography} from "@material-ui/core";
 import styled from "styled-components";
 import {UUID} from "types/shared";
-import {GameContext} from "server/Store";
+import {GameContext} from "store/server";
 
 interface PlayerStreamProps {
     playerId: UUID;

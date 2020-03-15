@@ -1,12 +1,14 @@
-import React, {useContext} from "react";
+import React, {useContext, Dispatch} from "react";
+import uuid from 'uuid/v4';
 
-import {GameContext} from "server/Store";
+import { GameContext } from "store/server";
 import BirdsEye from "server/BirdsEye";
 import LoadingScreen from "server/LoadingScreen";
 import History from "server/History";
 import PlayerStream from "server/PlayerStream";
 import GameCodeScreen from "server/GameCodeScreen";
-import {ServerGameState} from "types/server";
+import { ServerGameState } from "types/server";
+import { Action, ActionTypes } from "store/server.types";
 
 export default function ServerWebapp() {
     const [{state, activePlayerId}] = useContext(GameContext);
@@ -22,3 +24,12 @@ export default function ServerWebapp() {
     }
 };
 
+export function init(dispatch: Dispatch<Action>) {
+    let serverId = localStorage.getItem('serverId');
+    if (!serverId) {
+        serverId = uuid();
+        localStorage.setItem('serverId', serverId);
+    }
+
+    dispatch({type: ActionTypes.SET_SERVER_ID, serverId});
+}
