@@ -11,3 +11,5 @@ jobs:
           node-version: '12.x'
       - run: yarn install
       - run: yarn deploy:ci
+        with:
+          FIREBASE_DEPLOY_TOKEN: ${{secrets.FIREBASE_DEPLOY_TOKEN}}

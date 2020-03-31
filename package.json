@@ -33,7 +33,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "deploy": "yarn build && firebase deploy",
-    "deploy:ci": "yarn build && firebase deploy --token=$FIREBASE_DEPLOY_TOKEN"
+    "deploy:ci": "yarn build && firebase deploy --token \"$FIREBASE_DEPLOY_TOKEN\""
   },
   "devDependencies": {
     "@types/express": "^4.17.3",
