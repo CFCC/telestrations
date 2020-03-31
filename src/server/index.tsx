@@ -1,5 +1,5 @@
 import React, {useContext, Dispatch} from "react";
-import uuid from 'uuid/v4';
+import {v4 as uuid} from "uuid";
 
 import { GameContext } from "store/server";
 import BirdsEye from "server/BirdsEye";

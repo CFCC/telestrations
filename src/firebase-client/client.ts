@@ -1,6 +1,6 @@
 import { User } from "firebase";
 import firebase from "firebase/app";
-import uuid from "uuid/v4";
+import {v4 as uuid} from "uuid";
 import _ from "lodash";
 
 import {UUID} from "types/shared";
