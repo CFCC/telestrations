@@ -138,6 +138,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         "virtual:f430821ed28ae74235089630f71842d620f2406487f29afe737f90360771391c71a3e7a43ed8c6905730f01f85584505a535515d387fdb8df86968c6991b342e#npm:0.2.4"
       ],
       [
+        "react-is",
+        "npm:16.13.1"
+      ],
+      [
         "react-scripts",
         "virtual:f430821ed28ae74235089630f71842d620f2406487f29afe737f90360771391c71a3e7a43ed8c6905730f01f85584505a535515d387fdb8df86968c6991b342e#npm:3.4.1"
       ],
@@ -216,6 +220,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-color", "npm:2.18.0"],
             ["react-dom", "virtual:f430821ed28ae74235089630f71842d620f2406487f29afe737f90360771391c71a3e7a43ed8c6905730f01f85584505a535515d387fdb8df86968c6991b342e#npm:16.13.1"],
             ["react-full-screen", "virtual:f430821ed28ae74235089630f71842d620f2406487f29afe737f90360771391c71a3e7a43ed8c6905730f01f85584505a535515d387fdb8df86968c6991b342e#npm:0.2.4"],
+            ["react-is", "npm:16.13.1"],
             ["react-scripts", "virtual:f430821ed28ae74235089630f71842d620f2406487f29afe737f90360771391c71a3e7a43ed8c6905730f01f85584505a535515d387fdb8df86968c6991b342e#npm:3.4.1"],
             ["react-sketch", "npm:0.5.1"],
             ["react-swipeable-views", "virtual:f430821ed28ae74235089630f71842d620f2406487f29afe737f90360771391c71a3e7a43ed8c6905730f01f85584505a535515d387fdb8df86968c6991b342e#npm:0.13.9"],
@@ -17868,6 +17873,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-is", "npm:16.12.0"]
           ],
           "linkType": "HARD",
+        }],
+        ["npm:16.13.1", {
+          "packageLocation": "./.yarn/cache/react-is-npm-16.13.1-a9b9382b4f-2.zip/node_modules/react-is/",
+          "packageDependencies": [
+            ["react-is", "npm:16.13.1"]
+          ],
+          "linkType": "HARD",
         }]
       ]],
       ["react-scripts", [
@@ -20054,7 +20066,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["hoist-non-react-statics", "npm:3.3.2"],
             ["react", "npm:16.13.1"],
             ["react-dom", "virtual:f430821ed28ae74235089630f71842d620f2406487f29afe737f90360771391c71a3e7a43ed8c6905730f01f85584505a535515d387fdb8df86968c6991b342e#npm:16.13.1"],
-            ["react-is", null],
+            ["react-is", "npm:16.13.1"],
             ["shallowequal", "npm:1.1.0"],
             ["supports-color", "npm:5.5.0"]
           ],
@@ -20305,6 +20317,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-color", "npm:2.18.0"],
             ["react-dom", "virtual:f430821ed28ae74235089630f71842d620f2406487f29afe737f90360771391c71a3e7a43ed8c6905730f01f85584505a535515d387fdb8df86968c6991b342e#npm:16.13.1"],
             ["react-full-screen", "virtual:f430821ed28ae74235089630f71842d620f2406487f29afe737f90360771391c71a3e7a43ed8c6905730f01f85584505a535515d387fdb8df86968c6991b342e#npm:0.2.4"],
+            ["react-is", "npm:16.13.1"],
             ["react-scripts", "virtual:f430821ed28ae74235089630f71842d620f2406487f29afe737f90360771391c71a3e7a43ed8c6905730f01f85584505a535515d387fdb8df86968c6991b342e#npm:3.4.1"],
             ["react-sketch", "npm:0.5.1"],
             ["react-swipeable-views", "virtual:f430821ed28ae74235089630f71842d620f2406487f29afe737f90360771391c71a3e7a43ed8c6905730f01f85584505a535515d387fdb8df86968c6991b342e#npm:0.13.9"],

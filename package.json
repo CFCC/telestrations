@@ -16,6 +16,7 @@
     "react-color": "^2.18.0",
     "react-dom": "^16.13.1",
     "react-full-screen": "^0.2.4",
+    "react-is": "^16.13.1",
     "react-scripts": "^3.4.1",
     "react-sketch": "^0.5.1",
     "react-swipeable-views": "^0.13.9",
