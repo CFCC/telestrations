@@ -2,8 +2,8 @@ import React, {useContext} from "react";
 import {Button, Typography} from "@material-ui/core";
 import styled from "styled-components";
 
-import {GameContext} from "store/server";
-import TitleScreen from "components/TitleScreen";
+import {GameContext} from "../store/server";
+import TitleScreen from "../components/TitleScreen";
 
 const PlayerList = styled.div`
     display: flex;

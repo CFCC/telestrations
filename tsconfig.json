@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
-    "moduleResolution": "node",
-    "baseUrl": "src",
+    "moduleResolution": "Node",
     "target": "es5",
     "lib": [
       "dom",
@@ -23,8 +22,5 @@
   },
   "include": [
     "src/**/*"
-  ],
-  "exclude": [
-    "node_modules"
   ]
 }

@@ -1,16 +1,16 @@
-import 'init-firebase'
+import "./init-firebase";
 
 import React from "react";
 import * as ReactDOM from "react-dom";
 import {StylesProvider, ThemeProvider} from "@material-ui/core/styles";
 import styled from "styled-components";
 
-import ClientApp from "client";
-import ServerApp from "server";
-import * as ClientStore from "store/client";
-import * as ServerStore from "store/server";
-import Store from "components/Store";
-import {darkPrimary, GlobalStyles, primary, theme} from "utils/theme";
+import ClientApp from "./client";
+import ServerApp from "./server";
+import * as ClientStore from "./store/client";
+import * as ServerStore from "./store/server";
+import Store from "./components/Store";
+import {darkPrimary, GlobalStyles, primary, theme} from "./utils/theme";
 
 const Container = styled.div`
     position: absolute;

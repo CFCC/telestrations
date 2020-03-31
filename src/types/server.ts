@@ -1,5 +1,6 @@
-import {ContentType, UUID} from "types/shared";
 import {ChangeEvent} from "react";
+
+import {ContentType, UUID} from "./shared";
 
 export interface NewContentDTO {
     content: string;

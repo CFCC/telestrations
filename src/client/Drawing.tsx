@@ -1,7 +1,6 @@
 import React, {MutableRefObject, useContext, useRef, useState} from "react";
 import {SketchField, Tools} from "react-sketch";
 import * as colors from "@material-ui/core/colors"
-import {ColorResult} from "react-color";
 import {
     Divider,
     Drawer,
@@ -16,10 +15,10 @@ import {
 } from "@material-ui/core";
 import styled from "styled-components";
 
-import {GameContext} from "store/client";
-import {useBoolean, useEvent} from "utils/hooks";
-import SwatchesDialog from "client/SwatchesDialog";
-import ListDialog from "client/ListDialog";
+import {GameContext} from "../store/client";
+import {useBoolean, useEvent} from "../utils/hooks";
+import SwatchesDialog from "../client/SwatchesDialog";
+import ListDialog from "../client/ListDialog";
 
 const Container = styled.div`
     width: 100vw;
@@ -62,8 +61,8 @@ export default function Drawing() {
     const [{content}, {submitGuess, setGuess}] = useContext(GameContext);
 
     const [tool, setTool] = useState(Tools.Pencil);
-    const [color, setColor] = useEvent("#000000", (c: ColorResult) => c.hex);
-    const [bgColor, setBgColor] = useEvent(colors.blueGrey["50"], (c: ColorResult) => c.hex);
+    const [color, setColor] = useState("#000000");
+    const [bgColor, setBgColor] = useState<string>(colors.blueGrey["50"]);
     const [lineWeight, setLineWeight] = useEvent(1, (e, lw: number) => lw);
 
     const [toolPickerOpen, openToolPicker, closeToolPicker] = useBoolean(false);
@@ -105,7 +104,7 @@ export default function Drawing() {
             backgroundColor={bgColor}
             lineWidth={lineWeight}
             onChange={updateGuess}
-            ref={c => (c ? sketch.current = c : 0)}
+            ref={(c: any) => (c ? sketch.current = c : 0)}
         />
         <Controls>
             <FAB onClick={openMenu} color="primary">
@@ -175,17 +174,20 @@ export default function Drawing() {
             setClose={closeColorPicker}
             colors={Object.values(colors).map(c => Object.values(c).slice(0, 10))}
             setColor={setColor}
-            color={color} />
+            color={color} 
+        />
         <SwatchesDialog
             open={bgColorPickerOpen}
             setClose={closeBgColorPicker}
             colors={Object.values(colors).map(c => Object.values(c).slice(0, 10))}
             setColor={setBgColor}
-            color={bgColor} />
+            color={bgColor}
+        />
         <ListDialog
             open={toolPickerOpen}
             close={closeToolPicker}
             items={Object.keys(Tools)}
-            onItemSelected={setTool} />
+            onItemSelected={setTool}
+        />
     </Container>);
 }

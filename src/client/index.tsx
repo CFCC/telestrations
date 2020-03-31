@@ -1,14 +1,14 @@
 import React, {useContext} from "react";
 import _ from "lodash";
 
-import {ClientGameState} from "types/client";
-import TitleScreen from "components/TitleScreen";
-import {GameContext} from "store/client";
-import Drawing from "client/Drawing";
-import Typing from "client/Typing";
-import Waiting from "client/Waiting";
-import LoginScreen from "client/LoginScreen";
-import GameSelection from "client/GameSelection";
+import {ClientGameState} from "../types/client";
+import TitleScreen from "../components/TitleScreen";
+import {GameContext} from "../store/client";
+import Drawing from "../client/Drawing";
+import Typing from "../client/Typing";
+import Waiting from "../client/Waiting";
+import LoginScreen from "../client/LoginScreen";
+import GameSelection from "../client/GameSelection";
 
 export default function Client() {
     const [{gameState}] = useContext(GameContext);

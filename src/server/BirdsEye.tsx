@@ -7,10 +7,11 @@ import {
     Menu,
     MenuItem,
 } from "@material-ui/core";
-import PlayerStream from "server/PlayerStream";
-import {UUID} from "types/shared";
-import {GameContext} from "store/server";
 import styled from "styled-components";
+
+import PlayerStream from "../server/PlayerStream";
+import {UUID} from "../types/shared";
+import {GameContext} from "../store/server";
 
 interface BirdsEyeState {
     anchorElement: HTMLElement | null;

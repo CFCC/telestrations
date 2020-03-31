@@ -1,5 +1,5 @@
-import { ClientGameState } from "types/client";
-import { NewContentDTO } from "types/server";
+import { ClientGameState } from "../types/client";
+import { NewContentDTO } from "../types/server";
 
 export interface State extends Record<string, any> {
     user: firebase.User | null;

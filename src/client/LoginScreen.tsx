@@ -3,9 +3,9 @@ import firebase from "firebase/app";
 import * as firebaseUi from "firebaseui";
 import {createGlobalStyle} from "styled-components";
 
-import {GameContext} from "store/client";
-import {useBoolean} from "utils/hooks";
-import TitleScreen from "components/TitleScreen";
+import {GameContext} from "../store/client";
+import {useBoolean} from "../utils/hooks";
+import TitleScreen from "../components/TitleScreen";
 
 import "firebaseui/dist/firebaseui.css"
 

@@ -2,8 +2,8 @@ import React, {FormEvent, useContext} from "react";
 import {Button as UnstyledButton, TextField} from "@material-ui/core";
 import styled from "styled-components";
 
-import {GameContext} from "store/client";
-import {Event} from "types/server";
+import {GameContext} from "../store/client";
+import {Event} from "../types/server";
 
 interface FormProps {
     content?: string;

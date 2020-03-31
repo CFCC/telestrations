@@ -3,9 +3,9 @@ import {Button as UnstyledButton, FormControl, InputLabel, MenuItem, Select} fro
 import * as firebase from "firebase/app";
 import styled from "styled-components";
 
-import TitleScreen from "components/TitleScreen";
-import {useEvent} from "utils/hooks";
-import {GameContext} from "store/client";
+import TitleScreen from "../components/TitleScreen";
+import {useEvent} from "../utils/hooks";
+import {GameContext} from "../store/client";
 
 const Form = styled.form`
     width: 50%;

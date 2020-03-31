@@ -1,11 +1,11 @@
 import _ from "lodash";
 import { createContext } from "react";
 
-import * as firebase from "firebase-client/server";
-import { ServerGameState, ServerPlayer, PlayerDTO, NotepadPageDTO } from "types/server";
-import { Notepad } from "types/client";
-import { UUID } from "types/shared";
-import { State, Action, ActionTypes, viewPlayerHistory, viewNotepadHistory, startGame, addPlayer, updateGuess, finishedGameTurn, gameFinished, Store, Actions, setGameCode } from "store/server.types";
+import * as firebase from "../firebase-client/server";
+import { ServerGameState, ServerPlayer, PlayerDTO, NotepadPageDTO } from "../types/server";
+import { Notepad } from "../types/client";
+import { UUID } from "../types/shared";
+import { State, Action, ActionTypes, viewPlayerHistory, viewNotepadHistory, startGame, addPlayer, updateGuess, finishedGameTurn, gameFinished, Store, Actions, setGameCode } from "../store/server.types";
 
 export const initialState: State = {
     gameState: ServerGameState.GAME_CODE,

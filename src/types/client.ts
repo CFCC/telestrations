@@ -1,4 +1,4 @@
-import {ContentType, UUID} from "types/shared";
+import {ContentType, UUID} from "./shared";
 
 export enum ClientGameState {
     GAME_SELECTION = "game selection",

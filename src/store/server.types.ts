@@ -1,6 +1,6 @@
-import { UUID } from "types/shared";
-import { ServerGameState, ServerPlayer, PlayerDTO, NotepadPageDTO } from "types/server";
-import { Notepad } from "types/client";
+import { UUID } from "../types/shared";
+import { ServerGameState, ServerPlayer, PlayerDTO, NotepadPageDTO } from "../types/server";
+import { Notepad } from "../types/client";
 
 export interface State extends Record<string, any> {
     gameState: ServerGameState;

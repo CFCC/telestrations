@@ -1,14 +1,14 @@
 import React, {useContext, Dispatch} from "react";
 import {v4 as uuid} from "uuid";
 
-import { GameContext } from "store/server";
-import BirdsEye from "server/BirdsEye";
-import LoadingScreen from "server/LoadingScreen";
-import History from "server/History";
-import PlayerStream from "server/PlayerStream";
-import GameCodeScreen from "server/GameCodeScreen";
-import { ServerGameState } from "types/server";
-import { Action, ActionTypes } from "store/server.types";
+import { GameContext } from "../store/server";
+import BirdsEye from "../server/BirdsEye";
+import LoadingScreen from "../server/LoadingScreen";
+import History from "../server/History";
+import PlayerStream from "../server/PlayerStream";
+import GameCodeScreen from "../server/GameCodeScreen";
+import { ServerGameState } from "../types/server";
+import { Action, ActionTypes } from "../store/server.types";
 
 export default function ServerWebapp() {
     const [{state, activePlayerId}] = useContext(GameContext);

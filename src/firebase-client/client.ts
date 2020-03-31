@@ -3,7 +3,7 @@ import firebase from "firebase/app";
 import {v4 as uuid} from "uuid";
 import _ from "lodash";
 
-import {UUID} from "types/shared";
+import {UUID} from "../types/shared";
 
 export function joinGame(user: User | null, gameCode: string) {
     if (!user) return;
