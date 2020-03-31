@@ -9,7 +9,9 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '12.x'
-      - run: yarn install
-      - run: yarn deploy:ci
-        with:
+      - name: Install
+        run: yarn install
+      - name: Deploy
+        run: yarn deploy:ci
+        env:
           FIREBASE_DEPLOY_TOKEN: ${{secrets.FIREBASE_DEPLOY_TOKEN}}
