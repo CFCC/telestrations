@@ -90,6 +90,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         "npm:7.0.2"
       ],
       [
+        "@yarnpkg/pnpify",
+        "virtual:f430821ed28ae74235089630f71842d620f2406487f29afe737f90360771391c71a3e7a43ed8c6905730f01f85584505a535515d387fdb8df86968c6991b342e#npm:2.0.0-rc.20"
+      ],
+      [
         "dotenv",
         "npm:8.2.0"
       ],
@@ -200,6 +204,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/socket.io-client", "npm:1.4.32"],
             ["@types/styled-components", "npm:5.0.1"],
             ["@types/uuid", "npm:7.0.2"],
+            ["@yarnpkg/pnpify", "virtual:f430821ed28ae74235089630f71842d620f2406487f29afe737f90360771391c71a3e7a43ed8c6905730f01f85584505a535515d387fdb8df86968c6991b342e#npm:2.0.0-rc.20"],
             ["dotenv", "npm:8.2.0"],
             ["express", "npm:4.17.1"],
             ["firebase", "npm:7.13.1"],
@@ -4080,6 +4085,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["@types/emscripten", [
+        ["npm:1.39.3", {
+          "packageLocation": "./.yarn/cache/@types-emscripten-npm-1.39.3-10b6af4117-2.zip/node_modules/@types/emscripten/",
+          "packageDependencies": [
+            ["@types/emscripten", "npm:1.39.3"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["@types/eslint-visitor-keys", [
         ["npm:1.0.0", {
           "packageLocation": "./.yarn/cache/@types-eslint-visitor-keys-npm-1.0.0-a300061b93-2.zip/node_modules/@types/eslint-visitor-keys/",
@@ -4797,6 +4811,45 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@xtuc-long-npm-4.2.2-37236e6d72-2.zip/node_modules/@xtuc/long/",
           "packageDependencies": [
             ["@xtuc/long", "npm:4.2.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@yarnpkg/fslib", [
+        ["npm:2.0.0-rc.17", {
+          "packageLocation": "./.yarn/cache/@yarnpkg-fslib-npm-2.0.0-rc.17-dfef6555ed-2.zip/node_modules/@yarnpkg/fslib/",
+          "packageDependencies": [
+            ["@yarnpkg/fslib", "npm:2.0.0-rc.17"],
+            ["@yarnpkg/libzip", "npm:2.0.0-rc.10"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@yarnpkg/libzip", [
+        ["npm:2.0.0-rc.10", {
+          "packageLocation": "./.yarn/cache/@yarnpkg-libzip-npm-2.0.0-rc.10-68a7ebad07-2.zip/node_modules/@yarnpkg/libzip/",
+          "packageDependencies": [
+            ["@yarnpkg/libzip", "npm:2.0.0-rc.10"],
+            ["@types/emscripten", "npm:1.39.3"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@yarnpkg/pnpify", [
+        ["virtual:f430821ed28ae74235089630f71842d620f2406487f29afe737f90360771391c71a3e7a43ed8c6905730f01f85584505a535515d387fdb8df86968c6991b342e#npm:2.0.0-rc.20", {
+          "packageLocation": "./.yarn/$$virtual/@yarnpkg-pnpify-virtual-c033ffbcea/0/cache/@yarnpkg-pnpify-npm-2.0.0-rc.20-030c75c124-2.zip/node_modules/@yarnpkg/pnpify/",
+          "packageDependencies": [
+            ["@yarnpkg/pnpify", "virtual:f430821ed28ae74235089630f71842d620f2406487f29afe737f90360771391c71a3e7a43ed8c6905730f01f85584505a535515d387fdb8df86968c6991b342e#npm:2.0.0-rc.20"],
+            ["@yarnpkg/fslib", "npm:2.0.0-rc.17"],
+            ["chalk", "npm:3.0.0"],
+            ["comment-json", "npm:2.4.2"],
+            ["cross-spawn", "npm:6.0.5"],
+            ["eslint", null],
+            ["typescript", "patch:typescript@npm%3A3.8.3#builtin<compat/typescript>::version=3.8.3&hash=270b6c"]
+          ],
+          "packagePeers": [
+            "eslint",
+            "typescript"
           ],
           "linkType": "HARD",
         }]
@@ -7219,6 +7272,19 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/commander-npm-4.1.1-22a0fe921b-2.zip/node_modules/commander/",
           "packageDependencies": [
             ["commander", "npm:4.1.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["comment-json", [
+        ["npm:2.4.2", {
+          "packageLocation": "./.yarn/cache/comment-json-npm-2.4.2-ad40caa02b-2.zip/node_modules/comment-json/",
+          "packageDependencies": [
+            ["comment-json", "npm:2.4.2"],
+            ["core-util-is", "npm:1.0.2"],
+            ["esprima", "npm:4.0.1"],
+            ["has-own-prop", "npm:2.0.0"],
+            ["repeat-string", "npm:1.6.1"]
           ],
           "linkType": "HARD",
         }]
@@ -11070,6 +11136,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/has-flag-npm-4.0.0-32af9f0536-2.zip/node_modules/has-flag/",
           "packageDependencies": [
             ["has-flag", "npm:4.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["has-own-prop", [
+        ["npm:2.0.0", {
+          "packageLocation": "./.yarn/cache/has-own-prop-npm-2.0.0-d895adfe8c-2.zip/node_modules/has-own-prop/",
+          "packageDependencies": [
+            ["has-own-prop", "npm:2.0.0"]
           ],
           "linkType": "HARD",
         }]
@@ -20218,6 +20293,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/socket.io-client", "npm:1.4.32"],
             ["@types/styled-components", "npm:5.0.1"],
             ["@types/uuid", "npm:7.0.2"],
+            ["@yarnpkg/pnpify", "virtual:f430821ed28ae74235089630f71842d620f2406487f29afe737f90360771391c71a3e7a43ed8c6905730f01f85584505a535515d387fdb8df86968c6991b342e#npm:2.0.0-rc.20"],
             ["dotenv", "npm:8.2.0"],
             ["express", "npm:4.17.1"],
             ["firebase", "npm:7.13.1"],
