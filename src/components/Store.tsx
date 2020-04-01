@@ -25,7 +25,10 @@ export default function Store(props: StoreProps) {
 
     type actionCreator = (...args: any) => any;
     type action = (...args: any) => void;
-    const actions = _.mapValues(actionCreators, (creator: actionCreator): action => (...args: any) => dispatch(creator(...args)));
+    const actions = _.mapValues(
+        actionCreators,
+        (creator: actionCreator): action => (...args: any) => dispatch(creator(...args))
+    );
 
     return (
         <GameContext.Provider value={[state, actions]}>

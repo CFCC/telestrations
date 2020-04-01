@@ -48,9 +48,11 @@ export default function Waiting() {
         }
     }, []);
 
-    return (<React.Fragment>
-        <Header variant="h3" align="center">The person before you is still finishing!</Header>
-        <SubHeader>Please enjoy random pictures of dogs while you wait.</SubHeader>
-        <Image src={dog} alt="Adorable dog" />
-    </React.Fragment>);
+    return (
+        <React.Fragment>
+            <Header variant="h3" align="center">The person before you is still finishing!</Header>
+            <SubHeader>Please enjoy random pictures of dogs while you wait.</SubHeader>
+            <Image src={dog} alt="Adorable dog" />
+        </React.Fragment>
+    );
 }

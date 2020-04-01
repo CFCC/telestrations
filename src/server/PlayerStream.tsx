@@ -51,17 +51,19 @@ export default function PlayerStream({playerId}: PlayerStreamProps) {
     else if (playerDrawing) picture = `http://localhost:${process.env.REACT_APP_SERVER_PORT}${prevContent}`;
     else picture = `http://localhost:${process.env.REACT_APP_SERVER_PORT}${content}`;
 
-    return (<React.Fragment>
-        <PictureContainer picture={picture}>
-            {picture !== "/question-marks.jpg" && <Picture
-                src={picture}
-                alt={playerDrawing || playerWaiting ? content : prevContent}
-            />}
-        </PictureContainer>
-        <Content>
-            <Typography align="center">
-                {playerDrawing || playerWaiting ? content : prevContent}
-            </Typography>
-        </Content>
-    </React.Fragment>);
+    return (
+        <React.Fragment>
+            <PictureContainer picture={picture}>
+                {picture !== "/question-marks.jpg" && <Picture
+                    src={picture}
+                    alt={playerDrawing || playerWaiting ? content : prevContent}
+                />}
+            </PictureContainer>
+            <Content>
+                <Typography align="center">
+                    {playerDrawing || playerWaiting ? content : prevContent}
+                </Typography>
+            </Content>
+        </React.Fragment>
+    );
 }

@@ -40,12 +40,4 @@ export const GlobalStyles = createGlobalStyle`
         margin: 0;
         overflow: hidden;
     }
-    
-    .swatches-picker > div > :first-child {
-        display: none;
-    }
-    
-    .swatches-picker {
-        height: auto !important;
-    }
 `;

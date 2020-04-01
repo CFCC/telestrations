@@ -37,49 +37,51 @@ export default function BirdsEye() {
         setMenu({anchorElement: e.currentTarget, playerId: id});
     const closeMenu = () => setMenu({anchorElement: null, playerId: ""});
 
-    return (<React.Fragment>
-        <StyledGrid container={true} spacing={4}>
-            {players.map(player => {
-                let playerState: string;
-                if (player.notepadIndex === -1) playerState = "Waiting";
-                else if (player.notepadIndex % 2 === 1) playerState = "Drawing";
-                else /* if (player.notepadIndex % 2 === 0) */ playerState = "Writing";
+    return (
+        <React.Fragment>
+            <StyledGrid container={true} spacing={4}>
+                {players.map(player => {
+                    let playerState: string;
+                    if (player.notepadIndex === -1) playerState = "Waiting";
+                    else if (player.notepadIndex % 2 === 1) playerState = "Drawing";
+                    else /* if (player.notepadIndex % 2 === 0) */ playerState = "Writing";
 
-                return (<Grid item={true} xs={12} sm={6} lg={4} xl={3} key={player.id}>
-                    <Card>
-                        <CardHeader
-                            title={player.nickname}
-                            subheader={`Currently ${playerState}`}
-                            action={<IconButton
-                                onClick={openMenu(player.id)}
-                                aria-owns={menu.playerId === player.id ? "menu" : undefined}
-                                aria-haspopup="true"
-                            >
-                                <Icon>more_vert</Icon>
-                            </IconButton>}
-                        />
-                        <Content>
-                            <PlayerStream playerId={player.id} />
-                        </Content>
-                    </Card>
-                </Grid>)
-            })}
-        </StyledGrid>
-        <Menu
-            open={Boolean(menu.anchorElement)}
-            id="menu"
-            onClose={closeMenu}
-            anchorEl={menu.anchorElement}
-        >
-            <MenuItem onClick={() => viewPlayerHistory(menu.playerId)}>
-                View Player History (Coming Soon!)
-            </MenuItem>
-            <MenuItem onClick={() => viewNotepadHistory(menu.playerId)}>
-                View Notepad History (Coming Soon!)
-            </MenuItem>
-            <MenuItem>
-                Make Stream Fullscreen (Coming Soon!)
-            </MenuItem>
-        </Menu>
-    </React.Fragment>);
+                    return (<Grid item={true} xs={12} sm={6} lg={4} xl={3} key={player.id}>
+                        <Card>
+                            <CardHeader
+                                title={player.nickname}
+                                subheader={`Currently ${playerState}`}
+                                action={<IconButton
+                                    onClick={openMenu(player.id)}
+                                    aria-owns={menu.playerId === player.id ? "menu" : undefined}
+                                    aria-haspopup="true"
+                                >
+                                    <Icon>more_vert</Icon>
+                                </IconButton>}
+                            />
+                            <Content>
+                                <PlayerStream playerId={player.id} />
+                            </Content>
+                        </Card>
+                    </Grid>)
+                })}
+            </StyledGrid>
+            <Menu
+                open={Boolean(menu.anchorElement)}
+                id="menu"
+                onClose={closeMenu}
+                anchorEl={menu.anchorElement}
+            >
+                <MenuItem onClick={() => viewPlayerHistory(menu.playerId)}>
+                    View Player History (Coming Soon!)
+                </MenuItem>
+                <MenuItem onClick={() => viewNotepadHistory(menu.playerId)}>
+                    View Notepad History (Coming Soon!)
+                </MenuItem>
+                <MenuItem>
+                    Make Stream Fullscreen (Coming Soon!)
+                </MenuItem>
+            </Menu>
+        </React.Fragment>
+    );
 }

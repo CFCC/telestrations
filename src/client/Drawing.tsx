@@ -97,97 +97,99 @@ export default function Drawing() {
         setCanRedo(sketch.current.canRedo());
     };
 
-    return (<Container>
-        <Canvas
-            tool={tool}
-            lineColor={color}
-            backgroundColor={bgColor}
-            lineWidth={lineWeight}
-            onChange={updateGuess}
-            ref={(c: any) => (c ? sketch.current = c : 0)}
-        />
-        <Controls>
-            <FAB onClick={openMenu} color="primary">
-                <Icon fontSize="large">menu</Icon>
-            </FAB>
-            <CaptionContainer>
-                <Typography variant="h5">{content}</Typography>
-            </CaptionContainer>
-        </Controls>
-        <Drawer open={menuOpen} onClose={closeMenu}>
-            <div
-                tabIndex={0}
-                role="button"
-                onClick={closeMenu}
-                onKeyDown={closeMenu}
-            >
-                <ListContainer>
-                    <List>
-                        <ListItem button={true} onClick={openToolPicker}>
-                            <ListItemText primary="Tool" />
-                        </ListItem>
-                        <ListItem button={true} onClick={openColorPicker}>
-                            <ListItemText primary="Line Color" />
-                        </ListItem>
-                        <ListItem button={true} onClick={openBgColorPicker}>
-                            <ListItemText primary="Background Color" />
-                        </ListItem>
-                    </List>
-                    <Divider />
-                    <List>
-                        <ListItem>
-                            <ListItemText primary="Line Weight" />
-                        </ListItem>
-                        <ListItem>
-                            <StyledSlider
-                                min={1}
-                                max={100}
-                                step={1}
-                                value={lineWeight}
-                                onChange={setLineWeight}
-                            />
-                        </ListItem>
-                    </List>
-                    <Divider />
-                    <List>
-                        <ListItem button={true} onClick={undo} disabled={!canUndo}>
-                            <ListItemText primary="Undo" />
-                        </ListItem>
-                        <ListItem button={true} onClick={redo} disabled={!canRedo}>
-                            <ListItemText primary="Redo" />
-                        </ListItem>
-                        <ListItem button={true} onClick={clear}>
-                            <ListItemText primary="Clear" />
-                        </ListItem>
-                    </List>
-                    <Divider />
-                    <List>
-                        <ListItem button={true} onClick={submitGuess}>
-                            <ListItemText primary="Submit" />
-                        </ListItem>
-                    </List>
-                </ListContainer>
-            </div>
-        </Drawer>
-        <SwatchesDialog
-            open={colorPickerOpen}
-            setClose={closeColorPicker}
-            colors={Object.values(colors).map(c => Object.values(c).slice(0, 10))}
-            setColor={setColor}
-            color={color} 
-        />
-        <SwatchesDialog
-            open={bgColorPickerOpen}
-            setClose={closeBgColorPicker}
-            colors={Object.values(colors).map(c => Object.values(c).slice(0, 10))}
-            setColor={setBgColor}
-            color={bgColor}
-        />
-        <ListDialog
-            open={toolPickerOpen}
-            close={closeToolPicker}
-            items={Object.keys(Tools)}
-            onItemSelected={setTool}
-        />
-    </Container>);
+    return (
+        <Container>
+            <Canvas
+                tool={tool}
+                lineColor={color}
+                backgroundColor={bgColor}
+                lineWidth={lineWeight}
+                onChange={updateGuess}
+                ref={(c: any) => (c ? sketch.current = c : 0)}
+            />
+            <Controls>
+                <FAB onClick={openMenu} color="primary">
+                    <Icon fontSize="large">menu</Icon>
+                </FAB>
+                <CaptionContainer>
+                    <Typography variant="h5">{content}</Typography>
+                </CaptionContainer>
+            </Controls>
+            <Drawer open={menuOpen} onClose={closeMenu}>
+                <div
+                    tabIndex={0}
+                    role="button"
+                    onClick={closeMenu}
+                    onKeyDown={closeMenu}
+                >
+                    <ListContainer>
+                        <List>
+                            <ListItem button={true} onClick={openToolPicker}>
+                                <ListItemText primary="Tool" />
+                            </ListItem>
+                            <ListItem button={true} onClick={openColorPicker}>
+                                <ListItemText primary="Line Color" />
+                            </ListItem>
+                            <ListItem button={true} onClick={openBgColorPicker}>
+                                <ListItemText primary="Background Color" />
+                            </ListItem>
+                        </List>
+                        <Divider />
+                        <List>
+                            <ListItem>
+                                <ListItemText primary="Line Weight" />
+                            </ListItem>
+                            <ListItem>
+                                <StyledSlider
+                                    min={1}
+                                    max={100}
+                                    step={1}
+                                    value={lineWeight}
+                                    onChange={setLineWeight}
+                                />
+                            </ListItem>
+                        </List>
+                        <Divider />
+                        <List>
+                            <ListItem button={true} onClick={undo} disabled={!canUndo}>
+                                <ListItemText primary="Undo" />
+                            </ListItem>
+                            <ListItem button={true} onClick={redo} disabled={!canRedo}>
+                                <ListItemText primary="Redo" />
+                            </ListItem>
+                            <ListItem button={true} onClick={clear}>
+                                <ListItemText primary="Clear" />
+                            </ListItem>
+                        </List>
+                        <Divider />
+                        <List>
+                            <ListItem button={true} onClick={submitGuess}>
+                                <ListItemText primary="Submit" />
+                            </ListItem>
+                        </List>
+                    </ListContainer>
+                </div>
+            </Drawer>
+            <SwatchesDialog
+                open={colorPickerOpen}
+                setClose={closeColorPicker}
+                colors={Object.values(colors).map(c => Object.values(c).slice(0, 10))}
+                setColor={setColor}
+                color={color}
+            />
+            <SwatchesDialog
+                open={bgColorPickerOpen}
+                setClose={closeBgColorPicker}
+                colors={Object.values(colors).map(c => Object.values(c).slice(0, 10))}
+                setColor={setBgColor}
+                color={bgColor}
+            />
+            <ListDialog
+                open={toolPickerOpen}
+                close={closeToolPicker}
+                items={Object.keys(Tools)}
+                onItemSelected={setTool}
+            />
+        </Container>
+    );
 }

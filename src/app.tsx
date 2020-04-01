@@ -29,13 +29,15 @@ const isServer = window.location.pathname.match(/^\/server/);
 const App = isServer ? ServerApp : ClientApp;
 const store = isServer ? ServerStore : ClientStore;
 
-ReactDOM.render(<StylesProvider injectFirst={true}>
-    <ThemeProvider theme={theme}>
-        <GlobalStyles />
-        <Store store={store}>
-            <Container>
-                <App />
-            </Container>
-        </Store>
-    </ThemeProvider>
-</StylesProvider>, document.getElementById("root"));
+ReactDOM.render((
+    <StylesProvider injectFirst={true}>
+        <ThemeProvider theme={theme}>
+            <GlobalStyles />
+            <Store store={store}>
+                <Container>
+                    <App />
+                </Container>
+            </Store>
+        </ThemeProvider>
+    </StylesProvider>
+), document.getElementById("root"));

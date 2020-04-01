@@ -16,17 +16,19 @@ export default function ListDialog({open, close, items, onItemSelected}: ListDia
         close();
     };
 
-    return (<Dialog open={open} onClose={close}>
-        <List>
-            {items.map(t => (
-                <ListItem
-                    button={true}
-                    onClick={itemSelected(t)}
-                    key={t}
-                >
-                    <ListItemText primary={t} />
-                </ListItem>
-            ))}
-        </List>
-    </Dialog>);
+    return (
+        <Dialog open={open} onClose={close}>
+            <List>
+                {items.map(t => (
+                    <ListItem
+                        button={true}
+                        onClick={itemSelected(t)}
+                        key={t}
+                    >
+                        <ListItemText primary={t} />
+                    </ListItem>
+                ))}
+            </List>
+        </Dialog>
+    );
 }

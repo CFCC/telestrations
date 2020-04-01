@@ -44,22 +44,26 @@ export default function Typing() {
 
     const updateGuess = ({target: {value}}: Event) => setGuess(value);
 
-    return (<Form onSubmit={dontRefresh} content={content}>
-        {content !== "" && <Image
-            src={content}
-            alt="Previous submission" />}
-        <Input
-            value={guess}
-            variant="outlined"
-            placeholder={content === "" ? "Describe a scene" : "What is in this picture?"}
-            onChange={updateGuess} />
-        <Button
-            onClick={submitGuess}
-            variant="contained"
-            color="primary"
-            type="submit"
-        >
-            Submit
-        </Button>
-    </Form>);
+    return (
+        <Form onSubmit={dontRefresh} content={content}>
+            {content !== "" && <Image
+                src={content}
+                alt="Previous submission"
+            />}
+            <Input
+                value={guess}
+                variant="outlined"
+                placeholder={content === "" ? "Describe a scene" : "What is in this picture?"}
+                onChange={updateGuess}
+            />
+            <Button
+                onClick={submitGuess}
+                variant="contained"
+                color="primary"
+                type="submit"
+            >
+                Submit
+            </Button>
+        </Form>
+    );
 }
