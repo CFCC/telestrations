@@ -32,19 +32,17 @@ const Content = styled(CardContent)`
 
 export default function PlayerStream({playerId}: PlayerStreamProps) {
     const [{game: {players, notepads}}] = useContext(GameContext);
-    const playerIndex = players.findIndex(p => p.id === playerId);
-    const notepadIndex = notepads.findIndex(n => n.owner === players[playerIndex].ownerOfCurrentNotepad);
 
-    const playerIndexInNotepad = players[playerIndex].notepadIndex;
+    const playerIndexInNotepad = Object.values(notepads[players[playerId].currentNotepad]).length;
     const playerDrawing = playerIndexInNotepad % 2 === 0;
     const playerWaiting = playerIndexInNotepad === -1;
 
     const prevContent = playerIndexInNotepad === 0 || playerWaiting
         ? "/question-marks.jpg"
-        : notepads[notepadIndex].content[playerIndexInNotepad - 1];
+        : notepads[players[playerId].currentNotepad].pages[playerIndexInNotepad - 1].content;
     const content = playerWaiting
         ? "Waiting for next notepad..."
-        : notepads[notepadIndex].content[playerIndexInNotepad];
+        : notepads[players[playerId].currentNotepad].pages[playerIndexInNotepad].content;
 
     let picture;
     if (playerWaiting || playerIndexInNotepad === 0) picture = "/question-marks.jpg";
