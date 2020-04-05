@@ -10,7 +10,6 @@ import {
 import styled from "styled-components";
 
 import PlayerStream from "../server/PlayerStream";
-import {UUID} from "../types/shared";
 import {GameContext} from "../store/server";
 
 interface BirdsEyeState {
@@ -27,43 +26,54 @@ const StyledGrid = styled(Grid)`
 `;
 
 export default function BirdsEye() {
-    const [{players}, {viewNotepadHistory, viewPlayerHistory}] = useContext(GameContext);
+    const [{game: {players, notepads}}, {viewNotepadHistory, viewPlayerHistory}] = useContext(GameContext);
     const [menu, setMenu] = useState({
         anchorElement: null,
         playerId: "",
     } as BirdsEyeState);
 
-    const openMenu = (id: UUID) => (e: React.MouseEvent<HTMLElement, MouseEvent>) =>
-        setMenu({anchorElement: e.currentTarget, playerId: id});
     const closeMenu = () => setMenu({anchorElement: null, playerId: ""});
 
     return (
         <React.Fragment>
             <StyledGrid container={true} spacing={4}>
-                {players.map(player => {
+                {Object.entries(players).map(([id, player]) => {
                     let playerState: string;
-                    if (player.notepadIndex === -1) playerState = "Waiting";
-                    else if (player.notepadIndex % 2 === 1) playerState = "Drawing";
-                    else /* if (player.notepadIndex % 2 === 0) */ playerState = "Writing";
 
-                    return (<Grid item={true} xs={12} sm={6} lg={4} xl={3} key={player.id}>
-                        <Card>
-                            <CardHeader
-                                title={player.nickname}
-                                subheader={`Currently ${playerState}`}
-                                action={<IconButton
-                                    onClick={openMenu(player.id)}
-                                    aria-owns={menu.playerId === player.id ? "menu" : undefined}
-                                    aria-haspopup="true"
-                                >
-                                    <Icon>more_vert</Icon>
-                                </IconButton>}
-                            />
-                            <Content>
-                                <PlayerStream playerId={player.id} />
-                            </Content>
-                        </Card>
-                    </Grid>)
+                    if (!player.currentNotepad)
+                        playerState = "Waiting";
+                    else if (Object.values(notepads[player.currentNotepad].pages).length % 2 === 1)
+                        playerState = "Drawing";
+                    else /* if (player.notepadIndex % 2 === 0) */
+                        playerState = "Writing";
+
+                    function openMenu() {
+                        return (e: React.MouseEvent<HTMLElement, MouseEvent>) =>
+                            setMenu({anchorElement: e.currentTarget, playerId: id})
+                    }
+
+                    return (
+                        <Grid item={true} xs={12} sm={6} lg={4} xl={3} key={id}>
+                            <Card>
+                                <CardHeader
+                                    title={player.nickname}
+                                    subheader={`Currently ${playerState}`}
+                                    action={(
+                                        <IconButton
+                                            onClick={openMenu}
+                                            aria-owns={menu.playerId === id ? "menu" : undefined}
+                                            aria-haspopup="true"
+                                        >
+                                            <Icon>more_vert</Icon>
+                                        </IconButton>
+                                    )}
+                                />
+                                <Content>
+                                    <PlayerStream playerId={id} />
+                                </Content>
+                            </Card>
+                        </Grid>
+                    );
                 })}
             </StyledGrid>
             <Menu

@@ -20,7 +20,7 @@ export async function setSentenceGuess(notepadId: UUID, gameCode: string, guess:
         .collection(`games/${gameCode}/notepads/${notepadId}/pages`);
     const notepad = (await notepadRef.get()).docs;
 
-    notepadRef
+    await notepadRef
         .doc((notepad.length % 2 === 1 ? notepad.length - 1 : notepad.length).toString())
         .set({content: guess});
 }

@@ -18,11 +18,11 @@ const Button = styled(UnstyledButton)`
 `;
 
 export default function LoadingScreen() {
-    const [, {setGameCode}] = useContext(GameContext);
+    const [, {setGameCode, updateGame}] = useContext(GameContext);
     const [gameCode, updateGameCode] = useEvent('', ({target: {value}}) => value);
 
     function submitGameCode() {
-        setGameCode(gameCode);
+        setGameCode(gameCode, updateGame);
     }
 
     return (

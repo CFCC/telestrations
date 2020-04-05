@@ -4,15 +4,14 @@ import {Game} from "../types/firebase";
 
 export interface State {
     gameState: ServerGameState;
+    game: Game;
     gameCode: string;
-    game?: Game;
     activePlayerId: UUID;
     activeNotepadId: UUID;
 }
 
 export enum ActionTypes {
     SET_GAME_CODE = "SET_GAME_CODE",
-    SET_SERVER_ID = "SET_SERVER_ID",
     VIEW_PLAYER_HISTORY = "VIEW_PLAYER_HISTORY",
     VIEW_NOTEPAD_HISTORY = "VIEW_NOTEPAD_HISTORY",
     START_GAME = "START_GAME",
@@ -23,6 +22,7 @@ export enum ActionTypes {
 export interface setGameCode {
     type: ActionTypes.SET_GAME_CODE;
     gameCode: string;
+    setGameCallback: (game: Game) => void;
 }
 
 export interface viewPlayerHistory {
@@ -57,7 +57,7 @@ export type Action =
     updateGame;
 
 export interface Actions extends Record<string, (...args: any) => Action> {
-    setGameCode: (gameCode: string) => setGameCode;
+    setGameCode: (gameCode: string, setGameCallback: (game: Game) => void) => setGameCode;
     viewPlayerHistory: (playerId: UUID) => viewPlayerHistory,
     viewNotepadHistory: (ownerId: UUID) => viewNotepadHistory,
     startGame: () => startGame,

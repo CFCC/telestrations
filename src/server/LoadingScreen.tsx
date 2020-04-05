@@ -21,7 +21,7 @@ const PlayerLabel = styled(Typography)`
 `;
 
 export default function LoadingScreen() {
-    const [{players, gameCode}, {startGame}] = useContext(GameContext);
+    const [{game: {players}, gameCode}, {startGame}] = useContext(GameContext);
 
     return (
         <TitleScreen
@@ -29,7 +29,7 @@ export default function LoadingScreen() {
             subtitle={`Tell people to select game "${gameCode}"`}
         >
             <PlayerList>
-                {players.map((player, i) => (
+                {Object.values(players).map((player, i) => (
                     <PlayerLabel key={i}>
                         {player.nickname}
                     </PlayerLabel>
@@ -39,7 +39,7 @@ export default function LoadingScreen() {
                 onClick={startGame}
                 variant="contained"
                 color="primary"
-                disabled={players.length < 2}
+                disabled={Object.values(players).length < 2}
                 size="large"
             >
                 Start Game

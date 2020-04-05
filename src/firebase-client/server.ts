@@ -1,35 +1,37 @@
 import firebase from 'firebase/app';
+import {Game} from "../types/firebase";
 
-import {PlayerDTO} from "../types/server";
-
-export function addGameToLobby(gameCode: string, serverId: string) {
+let gameCode: string;
+export function addGameToLobby(code: string, serverId: string) {
+    gameCode = code;
     firebase
         .firestore()
-        .doc(`games/${gameCode}`)
+        .doc(`games/${code}`)
         .set({created: Date.now(), state: 'lobby', serverId});
 }
 
-export function startGame(gameCode: string) {
+export function startGame() {
     firebase
         .firestore()
         .doc(`games/${gameCode}`)
         .set({state: 'in progress'}, {merge: true});
 }
 
-export function endGame(gameCode: string) {
+let cleanUpFn: () => void;
+export function endGame() {
     firebase
         .firestore()
         .doc(`games/${gameCode}`)
         .set({state: 'finished'}, {merge: true});
+    cleanUpFn();
 }
 
-export function listenForPlayers(gameCode: string, callback: (players: PlayerDTO[]) => void) {
-    firebase
+export function listenForGame(callback: (game: Game) => void) {
+    cleanUpFn = firebase
         .firestore()
         .doc(`games/${gameCode}`)
-        .collection('players')
         .onSnapshot(async snapshot => {
-            const players = await Promise.all(snapshot.docs.map(async doc => await doc.data())) as PlayerDTO[];
-            callback(players);
+            const game = snapshot.data() as Game;
+            callback(game);
         });
 }

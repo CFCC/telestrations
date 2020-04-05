@@ -31,7 +31,7 @@ const Content = styled(CardContent)`
 `;
 
 export default function PlayerStream({playerId}: PlayerStreamProps) {
-    const [{players, notepads}] = useContext(GameContext);
+    const [{game: {players, notepads}}] = useContext(GameContext);
     const playerIndex = players.findIndex(p => p.id === playerId);
     const notepadIndex = notepads.findIndex(n => n.owner === players[playerIndex].ownerOfCurrentNotepad);
 
