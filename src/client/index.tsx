@@ -1,5 +1,4 @@
 import React, {useContext} from "react";
-import _ from "lodash";
 
 import {ClientGameState} from "../types/client";
 import TitleScreen from "../components/TitleScreen";
@@ -19,21 +18,27 @@ export default function Client() {
         case ClientGameState.GAME_SELECTION:
             return <GameSelection />;
         case ClientGameState.ALREADY_STARTED:
-            return <TitleScreen
-                title="This game's already started!"
-                subtitle="Wait for it to finish before joining."
-            />;
+            return (
+                <TitleScreen
+                    title="This game's already started!"
+                    subtitle="Wait for it to finish before joining."
+                />
+            );
         case ClientGameState.WAITING_TO_START:
-            return <TitleScreen
-                title="Waiting for the game to start"
-                subtitle="Have your host start the game when everyone's joined!"
-                loading={true}
-            />;
+            return (
+                <TitleScreen
+                    title="Waiting for the game to start"
+                    subtitle="Have your host start the game when everyone's joined!"
+                    loading={true}
+                />
+            );
         case ClientGameState.FINISHED:
-            return <TitleScreen
-                title="The game is finished!"
-                subtitle="Please ask your host to see the results."
-            />;
+            return (
+                <TitleScreen
+                    title="The game is finished!"
+                    subtitle="Please ask your host to see the results."
+                />
+            );
         case ClientGameState.DRAWING:
             return <Drawing />;
         case ClientGameState.TYPING:
@@ -44,5 +49,3 @@ export default function Client() {
             return <div />;
     }
 }
-
-export const init = _.noop;

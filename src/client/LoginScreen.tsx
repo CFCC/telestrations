@@ -35,7 +35,7 @@ export default function LoginScreen() {
     });
 
     firebase.auth().onAuthStateChanged(function(user: firebase.User | null) {
-        // if (user) setUser(user);
+        if (user) setUser(user);
     });
 
     return (

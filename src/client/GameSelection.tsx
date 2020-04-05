@@ -61,7 +61,9 @@ export default function GameSelection() {
                     >
                         <MenuItem value="">None</MenuItem>
                         {games.map(gameOption => (
-                            <MenuItem value={gameOption} key={gameOption}>{gameOption}</MenuItem>
+                            <MenuItem value={gameOption} key={gameOption}>
+                                {gameOption}
+                            </MenuItem>
                         ))}
                     </Select>
                 </FormControl>

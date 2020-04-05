@@ -5,8 +5,8 @@ import * as ReactDOM from "react-dom";
 import {StylesProvider, ThemeProvider} from "@material-ui/core/styles";
 import styled from "styled-components";
 
-import ClientApp from "./client";
-import ServerApp from "./server";
+import ClientApp, {init as initClient} from "./client";
+import ServerApp, {init as initServer} from "./server";
 import * as ClientStore from "./store/client";
 import * as ServerStore from "./store/server";
 import Store from "./components/Store";
@@ -28,12 +28,13 @@ const Container = styled.div`
 const isServer = window.location.pathname.match(/^\/server/);
 const App = isServer ? ServerApp : ClientApp;
 const store = isServer ? ServerStore : ClientStore;
+const init = isServer ? initServer : initClient;
 
 ReactDOM.render((
     <StylesProvider injectFirst={true}>
         <ThemeProvider theme={theme}>
             <GlobalStyles />
-            <Store store={store}>
+            <Store store={store} init={init}>
                 <Container>
                     <App />
                 </Container>

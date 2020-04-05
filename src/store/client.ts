@@ -1,11 +1,10 @@
-import { createContext } from "react";
+import {createContext} from "react";
 import firebase from "firebase";
 
-import { State, Action, ActionTypes, Actions, Store } from "../store/client.types";
-import { ClientGameState } from "../types/client";
-import { NewContentDTO } from "../types/server";
-import { ContentType } from "../types/shared";
-import { finishTurn, joinGame, updateGuess } from "../firebase-client/client";
+import {Action, Actions, ActionTypes, NewContentDTO, State, Store} from "./client.types";
+import {ClientGameState} from "../types/client";
+import {ContentType} from "../types/shared";
+import {finishTurn, joinGame, updateGuess} from "../firebase-client/client";
 
 export const initialState: State = {
     user: null,

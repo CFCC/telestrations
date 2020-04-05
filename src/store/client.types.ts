@@ -1,5 +1,7 @@
-import { ClientGameState } from "../types/client";
-import { NewContentDTO } from "../types/server";
+import * as firebase from "firebase";
+import {ClientGameState} from "../types/client";
+import {Page} from "../types/firebase";
+import {ContentType} from "../types/shared";
 
 export interface State extends Record<string, any> {
     user: firebase.User | null;
@@ -17,7 +19,9 @@ export enum ActionTypes {
     SUBMIT_GUESS = "SUBMIT_GUESS",
 }
 
-// #region Actions
+export interface NewContentDTO extends Page {
+    type: ContentType;
+}
 
 export interface setUser {
     type: ActionTypes.SET_USER;
@@ -42,8 +46,6 @@ export interface setGuess {
 export interface submitGuess {
     type: ActionTypes.SUBMIT_GUESS;
 }
-
-// #endregion
 
 export type Action = setUser | joinGame | setGuess | submitGuess | newContent;
 
