@@ -16,7 +16,7 @@ export interface QueuedNotepad {
 export interface Player {
     currentNotepad: string;
     nextPlayer: string;
-    nickname: string;
+    name: string;
     queue: Record<string, QueuedNotepad>;
 }
 

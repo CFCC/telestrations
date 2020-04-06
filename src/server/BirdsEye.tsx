@@ -56,7 +56,7 @@ export default function BirdsEye() {
                         <Grid item={true} xs={12} sm={6} lg={4} xl={3} key={id}>
                             <Card>
                                 <CardHeader
-                                    title={player.nickname}
+                                    title={player.name}
                                     subheader={`Currently ${playerState}`}
                                     action={(
                                         <IconButton

@@ -1,5 +1,7 @@
 import firebase from 'firebase/app';
-import {Game} from "../types/firebase";
+import _ from "lodash";
+
+import {Game, Notepad, Player} from "../types/firebase";
 
 let gameCode: string;
 export function addGameToLobby(code: string, serverId: string) {
@@ -7,31 +9,60 @@ export function addGameToLobby(code: string, serverId: string) {
     firebase
         .firestore()
         .doc(`games/${code}`)
-        .set({created: Date.now(), state: 'lobby', serverId});
+        .set({
+            created: Date.now(),
+            status: 'lobby',
+            serverId,
+        });
 }
 
 export function startGame() {
     firebase
         .firestore()
         .doc(`games/${gameCode}`)
-        .set({state: 'in progress'}, {merge: true});
+        .set({status: 'in progress'}, {merge: true});
 }
 
-let cleanUpFn: () => void;
+let cleanUpPlayers: () => void;
+let cleanUpNotepads: () => void;
+let cleanUpGame: () => void;
 export function endGame() {
     firebase
         .firestore()
         .doc(`games/${gameCode}`)
-        .set({state: 'finished'}, {merge: true});
-    cleanUpFn();
+        .set({status: 'finished'}, {merge: true});
+    cleanUpPlayers();
+    cleanUpNotepads();
+    cleanUpGame();
 }
 
-export function listenForGame(callback: (game: Game) => void) {
-    cleanUpFn = firebase
+export function listenForGameChanges(
+    code: string,
+    setPlayers: (players: Record<string, Player>) => void,
+    setNotepads: (notepads: Record<string, Notepad>) => void,
+    setGame: (game: Game) => void
+) {
+    if (!code) return;
+
+    cleanUpNotepads = firebase
         .firestore()
-        .doc(`games/${gameCode}`)
-        .onSnapshot(async snapshot => {
+        .collection(`games/${code}/notepads`)
+        .onSnapshot(snapshot => {
+            const notepads = _.mapValues(_.keyBy(snapshot.docs, "id"), d => d.data() as Notepad);
+            setNotepads(notepads);
+        });
+    cleanUpPlayers = firebase
+        .firestore()
+        .collection(`games/${code}/players`)
+        .onSnapshot(snapshot => {
+            const players = _.mapValues(_.keyBy(snapshot.docs, "id"), d => d.data() as Player);
+            setPlayers(players);
+        });
+    cleanUpGame = firebase
+        .firestore()
+        .doc(`games/${code}`)
+        .onSnapshot(snapshot => {
             const game = snapshot.data() as Game;
-            callback(game);
+            setGame(game);
         });
 }

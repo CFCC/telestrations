@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useRef, useState} from "react";
 import {Button as UnstyledButton, FormControl, InputLabel, MenuItem, Select} from "@material-ui/core";
 import * as firebase from "firebase/app";
 import styled from "styled-components";
+import Cookies from "js-cookie";
 
 import TitleScreen from "../components/TitleScreen";
 import {useEvent} from "../utils/hooks";
@@ -28,10 +29,9 @@ export default function GameSelection() {
         () => firebase
             .firestore()
             .collection("games")
+            .where("status", "==", "lobby")
             .onSnapshot(async function(snapshot) {
-                const newGames = (await Promise.all(snapshot.docs
-                    .map(async doc => (await doc.data()).state === "lobby" ? doc.id : "")))
-                    .filter(x => x);
+                const newGames = snapshot.docs.map(doc => doc.id);
                 setGames(newGames);
                 if (!newGames.includes(game)) rawSetGame("");
             }),
@@ -43,8 +43,16 @@ export default function GameSelection() {
     }, []);
 
     function onSubmit() {
+        Cookies.set("gameCode", game, {expires: 0.66})
         joinGame(game);
     }
+
+    useEffect(() => {
+        const gameCode = Cookies.get("gameCode");
+        if (gameCode) {
+            joinGame(gameCode);
+        }
+    });
 
     return (
         <TitleScreen title="Please select a game to join">

@@ -1,5 +1,6 @@
 import {createContext} from "react";
 import firebase from "firebase";
+import _ from "lodash";
 
 import {Action, Actions, ActionTypes, NewContentDTO, State, Store} from "./client.types";
 import {ClientGameState} from "../types/client";
@@ -48,3 +49,5 @@ export const actionCreators: Actions = {
 };
 
 export const GameContext = createContext([initialState, actionCreators] as Store);
+
+export const init = _.noop;

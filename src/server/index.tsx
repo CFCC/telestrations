@@ -13,10 +13,8 @@ export default function Server() {
     const [{gameState, activePlayerId}] = useContext(GameContext);
 
     useEffect(() => {
-        let serverId = localStorage.getItem('serverId');
-        if (!serverId) {
-            serverId = uuid();
-            localStorage.setItem('serverId', serverId);
+        if (!localStorage.getItem('serverId')) {
+            localStorage.setItem('serverId', uuid());
         }
     }, []);
 

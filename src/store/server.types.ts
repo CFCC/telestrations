@@ -1,6 +1,6 @@
 import {UUID} from "../types/shared";
 import {ServerGameState} from "../types/server";
-import {Game} from "../types/firebase";
+import {Game, Notepad, Player} from "../types/firebase";
 
 export interface State {
     gameState: ServerGameState;
@@ -17,12 +17,16 @@ export enum ActionTypes {
     START_GAME = "START_GAME",
     GAME_FINISHED = "GAME_FINISHED",
     UPDATE_GAME = "UPDATE_GAME",
+    UPDATE_PLAYERS = "UPDATE_PLAYERS",
+    UPDATE_NOTEPADS = "UPDATE_NOTEPADS",
 }
 
 export interface setGameCode {
     type: ActionTypes.SET_GAME_CODE;
     gameCode: string;
-    setGameCallback: (game: Game) => void;
+    setNotepads: (notepads: Record<string, Notepad>) => updateNotepads;
+    setPlayers: (players: Record<string, Player>) => updatePlayers;
+    gameIsNew: boolean;
 }
 
 export interface viewPlayerHistory {
@@ -48,20 +52,39 @@ export interface updateGame {
     game: Game;
 }
 
+export interface updateNotepads {
+    type: ActionTypes.UPDATE_NOTEPADS;
+    notepads: Record<string, Notepad>;
+}
+
+export interface updatePlayers {
+    type: ActionTypes.UPDATE_PLAYERS;
+    players: Record<string, Player>;
+}
+
 export type Action =
     viewPlayerHistory |
     viewNotepadHistory |
     startGame |
     gameFinished |
     setGameCode |
-    updateGame;
+    updateGame |
+    updateNotepads |
+    updatePlayers;
 
 export interface Actions extends Record<string, (...args: any) => Action> {
-    setGameCode: (gameCode: string, setGameCallback: (game: Game) => void) => setGameCode;
+    setGameCode: (
+        gameCode: string,
+        setNotepads: (notepads: Record<string, Notepad>) => updateNotepads,
+        setPlayers: (players: Record<string, Player>) => updatePlayers,
+        gameIsNew?: boolean
+    ) => setGameCode;
     viewPlayerHistory: (playerId: UUID) => viewPlayerHistory,
     viewNotepadHistory: (ownerId: UUID) => viewNotepadHistory,
     startGame: () => startGame,
     updateGame: (game: Game) => updateGame,
+    updateNotepads: (notepads: Record<string, Notepad>) => updateNotepads,
+    updatePlayers: (players: Record<string, Player>) => updatePlayers,
     gameFinished: () => gameFinished,
 }
 

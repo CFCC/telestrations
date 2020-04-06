@@ -1,6 +1,7 @@
-import React, {useContext} from "react";
+import React, {useContext, useEffect} from "react";
 import {Button as UnstyledButton, TextField} from "@material-ui/core";
 import styled from "styled-components";
+import Cookies from "js-cookie";
 
 import {GameContext} from "../store/server";
 import TitleScreen from "../components/TitleScreen";
@@ -18,12 +19,20 @@ const Button = styled(UnstyledButton)`
 `;
 
 export default function LoadingScreen() {
-    const [, {setGameCode, updateGame}] = useContext(GameContext);
+    const [, {setGameCode, updatePlayers, updateNotepads}] = useContext(GameContext);
     const [gameCode, updateGameCode] = useEvent('', ({target: {value}}) => value);
 
     function submitGameCode() {
-        setGameCode(gameCode, updateGame);
+        Cookies.set("gameCode", gameCode, {expires: 0.66});
+        setGameCode(gameCode, updateNotepads, updatePlayers);
     }
+
+    useEffect(() => {
+        const oldGameCode = Cookies.get("gameCode");
+        if (oldGameCode) {
+            setGameCode(oldGameCode, updateNotepads, updatePlayers, false);
+        }
+    }, [setGameCode, updateNotepads, updatePlayers]);
 
     return (
         <TitleScreen

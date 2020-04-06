@@ -31,7 +31,7 @@ export default function LoadingScreen() {
             <PlayerList>
                 {Object.values(players).map((player, i) => (
                     <PlayerLabel key={i}>
-                        {player.nickname}
+                        {player.name}
                     </PlayerLabel>
                 ))}
             </PlayerList>
