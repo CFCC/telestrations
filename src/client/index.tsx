@@ -14,7 +14,6 @@ export default function Client() {
 
     useEffect(() => {
         if (gameState === ClientGameState.WAITING_TO_START) {
-            console.log(gameCode);
             return triggerGameStart(gameCode, gameStarted);
         }
     }, [gameState, gameCode, gameStarted]);

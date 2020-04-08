@@ -9,24 +9,23 @@ export function addGameToLobby(gameCode: string, serverId: string) {
         .firestore()
         .doc(`games/${gameCode}`)
         .set({
-            created: Date.now(),
+            created: firebase.firestore.Timestamp.fromDate(new Date()),
             status: Status.Lobby,
             serverId,
         });
 }
 
-export function startGame(gameCode: string, playerIds: string[]) {
-    playerIds.forEach((playerId, i) => {
+export async function startGame(gameCode: string, playerIds: string[]) {
+    await Promise.all(playerIds.map(async (playerId, i) => {
         const notepadId = uuid();
-        firebase
+        await firebase
             .firestore()
-            .collection(`games/${gameCode}/notepads`)
-            .doc(notepadId)
+            .doc(`games/${gameCode}/notepads/${notepadId}`)
             .set({
                 ownerId: playerId,
                 pages: [],
             } as Notepad);
-        firebase
+        await firebase
             .firestore()
             .doc(`games/${gameCode}/players/${playerId}`)
             .set({
@@ -34,9 +33,9 @@ export function startGame(gameCode: string, playerIds: string[]) {
                 nextPlayer: playerIds[(i + 1) % playerIds.length],
                 queue: [],
             }, {merge: true});
-    })
+    }));
 
-    firebase
+    await firebase
         .firestore()
         .doc(`games/${gameCode}`)
         .set({status: Status.InProgress}, {merge: true});

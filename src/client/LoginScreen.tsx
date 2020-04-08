@@ -2,6 +2,8 @@ import React, {useContext, useEffect} from "react";
 import firebase from "firebase/app";
 import * as firebaseUi from "firebaseui";
 import {createGlobalStyle} from "styled-components";
+import {uniqueNamesGenerator, colors, animals} from "unique-names-generator";
+import _ from "lodash";
 
 import {GameContext} from "../store/client";
 import {useBoolean} from "../utils/hooks";
@@ -35,7 +37,18 @@ export default function LoginScreen() {
     });
 
     firebase.auth().onAuthStateChanged(function(user: firebase.User | null) {
-        if (user) setUser(user);
+        if (!user) return;
+        if (!user.displayName) {
+            const displayName = _.startCase(uniqueNamesGenerator({
+                dictionaries: [colors, animals],
+                length: 2,
+                separator: "-",
+            }));
+            user.updateProfile({displayName});
+            setUser({...user, displayName});
+        } else {
+            setUser(user);
+        }
     });
 
     return (

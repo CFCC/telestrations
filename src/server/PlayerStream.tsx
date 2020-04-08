@@ -33,7 +33,9 @@ const Content = styled(CardContent)`
 export default function PlayerStream({playerId}: PlayerStreamProps) {
     const [{game: {players, notepads}}] = useContext(GameContext);
 
-    const playerIndexInNotepad = notepads[players[playerId].currentNotepad].pages.length;
+    const playerIndexInNotepad = notepads[players[playerId]?.currentNotepad]?.pages?.length;
+    if (playerIndexInNotepad == null) return null;
+
     const playerDrawing = playerIndexInNotepad % 2 === 0;
     const playerWaiting = playerIndexInNotepad === -1;
 

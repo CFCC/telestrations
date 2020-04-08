@@ -1,6 +1,8 @@
+import firebase from "firebase";
+
 export interface Page {
     content: string;
-    lastUpdated: string;
+    lastUpdated: firebase.firestore.Timestamp;
     author: string;
 }
 

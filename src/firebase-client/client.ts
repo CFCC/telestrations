@@ -4,7 +4,7 @@ import {v4 as uuid} from "uuid";
 import _ from "lodash";
 
 import {UUID} from "../types/shared";
-import {Game, Status} from "../types/firebase";
+import {Game, Notepad, Status, Player} from "../types/firebase";
 
 export function joinGame(user: User | null, gameCode: string) {
     if (!user) return;
@@ -20,23 +20,35 @@ export function waitForGameToStart(gameCode: string, callback: Function) {
         .firestore()
         .doc(`games/${gameCode}`)
         .onSnapshot(snapshot => {
-            
             if ((snapshot.data() as Game).status === Status.InProgress) callback();
         });
 }
 
-export async function setSentenceGuess(notepadId: UUID, gameCode: string, guess: string) {
-    const notepadRef = firebase
+export async function setSentenceGuess(authorId: UUID, notepadId: UUID, gameCode: string, guess: string) {
+    const notepad = (await firebase
         .firestore()
-        .collection(`games/${gameCode}/notepads/${notepadId}/pages`);
-    const notepad = (await notepadRef.get()).docs;
+        .doc(`games/${gameCode}/notepads/${notepadId}`)
+        .get())
+        .data() as Notepad;
+    const pages = notepad.pages;
 
-    await notepadRef
-        .doc((notepad.length % 2 === 1 ? notepad.length - 1 : notepad.length).toString())
-        .set({content: guess});
+    if (pages.length % 2 === 0) {
+        pages.push({
+            author: authorId,
+            content: guess,
+            lastUpdated: firebase.firestore.Timestamp.fromDate(new Date()),
+        });
+    } else {
+        pages[pages.length - 1].content = guess;
+    }
+
+    await firebase
+        .firestore()
+        .doc(`games/${gameCode}/notepads/${notepadId}`)
+        .set({pages}, {merge: true});
 }
 
-export async function setPictureGuess(notepadId: UUID, gameCode: string, guess: string): Promise<string> {
+export async function setPictureGuess(authorId: UUID, notepadId: UUID, gameCode: string, guess: string): Promise<string> {
     let fileName;
     const notepadRef = firebase
         .firestore()
@@ -45,7 +57,7 @@ export async function setPictureGuess(notepadId: UUID, gameCode: string, guess: 
 
     if (notepad.length % 2 === 1) {
         fileName = `${uuid()}.png`;
-        notepadRef
+        await notepadRef
             .doc(notepad.length.toString())
             .set({content: fileName});
     } else {
@@ -61,18 +73,29 @@ export async function setPictureGuess(notepadId: UUID, gameCode: string, guess: 
     return fileName;
 }
 
-export async function updateGuess(user: User | null, notepadId: UUID, gameCode: string, guess: string) {
+export async function updateGuess(user: User | null, gameCode: string, guess: string) {
     if (!user) return;
 
-    const firebaseUser = await firebase
+    const player = (await firebase
         .firestore()
-        .doc(`games/${gameCode}/users/${user.uid}`)
-        .get();
+        .doc(`games/${gameCode}/players/${user.uid}`)
+        .get())
+        .data() as Player;
 
-    if (firebaseUser.data()?.currentIndex % 2 === 1) {
-        await setPictureGuess(notepadId, gameCode, guess);
+    const notepad = (await firebase
+        .firestore()
+        .doc(`games/${gameCode}/notepads/${player.currentNotepad}`)
+        .get())
+        .data() as Notepad;
+
+    const needsNewPage = notepad.pages[notepad.pages.length - 1]?.author === user.uid;
+    if (
+        (notepad.pages.length % 2 === 0 && !needsNewPage) ||
+        (notepad.pages.length % 2 === 1 && needsNewPage)
+    ) {
+        await setSentenceGuess(user.uid, player.currentNotepad, gameCode, guess);
     } else {
-        await setSentenceGuess(notepadId, gameCode, guess);
+        await setPictureGuess(user.uid, player.currentNotepad, gameCode, guess);
     }
 }
 
@@ -90,13 +113,13 @@ export async function finishTurn(user: User | null, gameCode: string): Promise<F
 
     const firebaseUser = await firebase
         .firestore()
-        .doc(`games/${gameCode}/users/${user.uid}`);
+        .doc(`games/${gameCode}/players/${user.uid}`);
 
     const {currentNotepad, nextPlayer} = (await firebaseUser.get()).data() || {};
 
     const nextPlayerQueue = firebase
         .firestore()
-        .collection(`games/${gameCode}/users/${nextPlayer}/queue`);
+        .collection(`games/${gameCode}/players/${nextPlayer}/queue`);
     const queueLength = (await nextPlayerQueue.get()).docs.length;
     nextPlayerQueue.doc(queueLength.toString()).set({notepadId: currentNotepad});
 
