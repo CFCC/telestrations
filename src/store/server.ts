@@ -23,17 +23,21 @@ export function reducer(state: State, action: Action): State {
         case ActionTypes.SET_GAME_CODE: {
             const serverId = localStorage.getItem('serverId') ?? '';
             if (action.gameIsNew) firebase.addGameToLobby(action.gameCode, serverId);
-            return {...state, gameState: ServerGameState.LOADING, gameCode: action.gameCode};
+            return {
+                ...state,
+                gameState: action.gameIsNew ? ServerGameState.LOADING : ServerGameState.BIRDS_EYE,
+                gameCode: action.gameCode,
+            };
         }
         case ActionTypes.START_GAME:
-            firebase.startGame();
+            firebase.startGame(state.gameCode, Object.keys(state.game.players));
             return {...state, gameState: ServerGameState.BIRDS_EYE};
         case ActionTypes.VIEW_PLAYER_HISTORY:
             return {...state, activePlayerId: action.playerId};
         case ActionTypes.VIEW_NOTEPAD_HISTORY:
             return {...state, activeNotepadId: action.ownerId};
         case ActionTypes.GAME_FINISHED:
-            firebase.endGame();
+            firebase.endGame(state.gameCode);
             return state;
         case ActionTypes.UPDATE_GAME:
             return {...state, game: {...state.game, ...action.game}};

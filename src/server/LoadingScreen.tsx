@@ -23,6 +23,8 @@ const PlayerLabel = styled(Typography)`
 export default function LoadingScreen() {
     const [{game: {players}, gameCode}, {startGame}] = useContext(GameContext);
 
+
+
     return (
         <TitleScreen
             title="Waiting for clients to connect"

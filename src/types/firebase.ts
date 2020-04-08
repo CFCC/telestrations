@@ -6,7 +6,7 @@ export interface Page {
 
 export interface Notepad {
     ownerId: string;
-    pages: Record<string, Page>;
+    pages: Page[];
 }
 
 export interface QueuedNotepad {
@@ -17,7 +17,7 @@ export interface Player {
     currentNotepad: string;
     nextPlayer: string;
     name: string;
-    queue: Record<string, QueuedNotepad>;
+    queue: QueuedNotepad[];
 }
 
 export enum Status {

@@ -33,7 +33,7 @@ const Content = styled(CardContent)`
 export default function PlayerStream({playerId}: PlayerStreamProps) {
     const [{game: {players, notepads}}] = useContext(GameContext);
 
-    const playerIndexInNotepad = Object.values(notepads[players[playerId].currentNotepad]).length;
+    const playerIndexInNotepad = notepads[players[playerId].currentNotepad].pages.length;
     const playerDrawing = playerIndexInNotepad % 2 === 0;
     const playerWaiting = playerIndexInNotepad === -1;
 
@@ -42,12 +42,12 @@ export default function PlayerStream({playerId}: PlayerStreamProps) {
         : notepads[players[playerId].currentNotepad].pages[playerIndexInNotepad - 1].content;
     const content = playerWaiting
         ? "Waiting for next notepad..."
-        : notepads[players[playerId].currentNotepad].pages[playerIndexInNotepad].content;
+        : notepads[players[playerId].currentNotepad].pages[playerIndexInNotepad]?.content;
 
     let picture;
     if (playerWaiting || playerIndexInNotepad === 0) picture = "/question-marks.jpg";
-    else if (playerDrawing) picture = `http://localhost:${process.env.REACT_APP_SERVER_PORT}${prevContent}`;
-    else picture = `http://localhost:${process.env.REACT_APP_SERVER_PORT}${content}`;
+    else if (playerDrawing) picture = prevContent;
+    else picture = content;
 
     return (
         <React.Fragment>

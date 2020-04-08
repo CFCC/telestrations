@@ -15,6 +15,7 @@ export enum ActionTypes {
     SET_USER = "SET_USER",
     NEW_CONTENT = "NEW_CONTENT",
     JOIN_GAME = "JOIN_GAME",
+    GAME_STARTED = "GAME_STARTED",
     SET_GUESS = "SET_GUESS",
     SUBMIT_GUESS = "SUBMIT_GUESS",
 }
@@ -38,6 +39,10 @@ export interface joinGame {
     gameCode: string;
 }
 
+export interface gameStarted {
+    type: ActionTypes.GAME_STARTED;
+}
+
 export interface setGuess {
     type: ActionTypes.SET_GUESS;
     guess: string;
@@ -47,12 +52,13 @@ export interface submitGuess {
     type: ActionTypes.SUBMIT_GUESS;
 }
 
-export type Action = setUser | joinGame | setGuess | submitGuess | newContent;
+export type Action = setUser | joinGame | gameStarted | setGuess | submitGuess | newContent;
 
 export interface Actions extends Record<string, (...args: any) => Action> {
     setUser: (user: firebase.User | null) => setUser,
     newContent: (content: NewContentDTO) => newContent,
     joinGame: (gameCode: string) => joinGame,
+    gameStarted: () => gameStarted,
     setGuess: (guess: string) => setGuess,
     submitGuess: () => submitGuess,
 }

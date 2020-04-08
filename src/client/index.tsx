@@ -1,8 +1,8 @@
-import React, {useContext} from "react";
+import React, {useContext, useEffect} from "react";
 
 import {ClientGameState} from "../types/client";
 import TitleScreen from "../components/TitleScreen";
-import {GameContext} from "../store/client";
+import {GameContext, triggerGameStart} from "../store/client";
 import Drawing from "../client/Drawing";
 import Typing from "../client/Typing";
 import Waiting from "../client/Waiting";
@@ -10,7 +10,14 @@ import LoginScreen from "../client/LoginScreen";
 import GameSelection from "../client/GameSelection";
 
 export default function Client() {
-    const [{gameState}] = useContext(GameContext);
+    const [{gameState, gameCode}, {gameStarted}] = useContext(GameContext);
+
+    useEffect(() => {
+        if (gameState === ClientGameState.WAITING_TO_START) {
+            console.log(gameCode);
+            return triggerGameStart(gameCode, gameStarted);
+        }
+    }, [gameState, gameCode, gameStarted]);
 
     switch (gameState) {
         case ClientGameState.LOGIN:

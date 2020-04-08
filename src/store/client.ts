@@ -5,7 +5,7 @@ import _ from "lodash";
 import {Action, Actions, ActionTypes, NewContentDTO, State, Store} from "./client.types";
 import {ClientGameState} from "../types/client";
 import {ContentType} from "../types/shared";
-import {finishTurn, joinGame, updateGuess} from "../firebase-client/client";
+import {finishTurn, joinGame, updateGuess, waitForGameToStart} from "../firebase-client/client";
 
 export const initialState: State = {
     user: null,
@@ -21,7 +21,9 @@ export function reducer(state: State, action: Action): State {
             return {...state, user: action.user, gameState: ClientGameState.GAME_SELECTION};
         case ActionTypes.JOIN_GAME:
             joinGame(state.user, action.gameCode);
-            return {...state, gameState: ClientGameState.WAITING_TO_START};
+            return {...state, gameCode: action.gameCode, gameState: ClientGameState.WAITING_TO_START};
+        case ActionTypes.GAME_STARTED:
+            return {...state, gameState: ClientGameState.TYPING};
         case ActionTypes.SET_GUESS:
             updateGuess(state.user, state.notepadId, state.gameCode, action.guess);
             return {...state, guess: action.guess};
@@ -44,9 +46,12 @@ export const actionCreators: Actions = {
     setUser: (user: firebase.User | null) => ({type: ActionTypes.SET_USER, user}),
     newContent: (content: NewContentDTO) => ({type: ActionTypes.NEW_CONTENT, content}),
     joinGame: (gameCode: string) => ({type: ActionTypes.JOIN_GAME, gameCode}),
+    gameStarted: () => ({type: ActionTypes.GAME_STARTED}),
     setGuess: (guess: string) => ({type: ActionTypes.SET_GUESS, guess}),
     submitGuess: () => ({type: ActionTypes.SUBMIT_GUESS}),
 };
+
+export const triggerGameStart = (gameCode: string, startGame: Function) => waitForGameToStart(gameCode, startGame);
 
 export const GameContext = createContext([initialState, actionCreators] as Store);
 

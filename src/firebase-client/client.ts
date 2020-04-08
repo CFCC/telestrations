@@ -1,9 +1,10 @@
-import { User } from "firebase";
+import {User} from "firebase";
 import firebase from "firebase/app";
 import {v4 as uuid} from "uuid";
 import _ from "lodash";
 
 import {UUID} from "../types/shared";
+import {Game, Status} from "../types/firebase";
 
 export function joinGame(user: User | null, gameCode: string) {
     if (!user) return;
@@ -12,6 +13,16 @@ export function joinGame(user: User | null, gameCode: string) {
         .collection(`games/${gameCode}/players`)
         .doc(user.uid)
         .set({name: user.displayName});
+}
+
+export function waitForGameToStart(gameCode: string, callback: Function) {
+    return firebase
+        .firestore()
+        .doc(`games/${gameCode}`)
+        .onSnapshot(snapshot => {
+            
+            if ((snapshot.data() as Game).status === Status.InProgress) callback();
+        });
 }
 
 export async function setSentenceGuess(notepadId: UUID, gameCode: string, guess: string) {
