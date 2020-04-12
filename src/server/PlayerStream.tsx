@@ -1,7 +1,7 @@
-import React, {useContext} from "react";
+import * as React from "react";
 import {CardContent, Typography} from "@material-ui/core";
 import styled from "styled-components";
-import {GameContext} from "../store/server";
+import {useSelector} from "../store/server";
 
 interface PlayerStreamProps {
     playerId: string;
@@ -29,7 +29,7 @@ const Content = styled(CardContent)`
 `;
 
 export default function PlayerStream({playerId}: PlayerStreamProps) {
-    const [{game: {players, notepads}}] = useContext(GameContext);
+    const {game: {players, notepads}} = useSelector(state => state);
 
     const notepad = notepads[players[playerId]?.currentNotepad];
     const playerIndexInNotepad = notepad?.pages?.length;

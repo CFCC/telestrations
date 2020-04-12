@@ -1,9 +1,10 @@
-import React, {useContext} from "react";
+import * as React from "react";
 import {Button, Typography} from "@material-ui/core";
 import styled from "styled-components";
 
-import {GameContext} from "../store/server";
+import {startGame, useSelector} from "../store/server";
 import TitleScreen from "../components/TitleScreen";
+import {useDispatch} from "react-redux";
 
 const PlayerList = styled.div`
     display: flex;
@@ -21,9 +22,12 @@ const PlayerLabel = styled(Typography)`
 `;
 
 export default function LoadingScreen() {
-    const [{game: {players}, gameCode}, {startGame}] = useContext(GameContext);
+    const dispatch = useDispatch();
+    const {game: {players}, gameCode} = useSelector(state => state);
 
-
+    function handleStartGame() {
+        dispatch(startGame());
+    }
 
     return (
         <TitleScreen
@@ -38,7 +42,7 @@ export default function LoadingScreen() {
                 ))}
             </PlayerList>
             <Button
-                onClick={startGame}
+                onClick={handleStartGame}
                 variant="contained"
                 color="primary"
                 disabled={Object.values(players).length < 2}

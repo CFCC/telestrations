@@ -1,16 +1,16 @@
-import React, {useContext, useEffect} from "react";
+import React, {useEffect} from "react";
 import {v4 as uuid} from "uuid";
 
-import {GameContext} from "../store/server";
 import BirdsEye from "../server/BirdsEye";
 import LoadingScreen from "../server/LoadingScreen";
 import History from "../server/History";
 import PlayerStream from "../server/PlayerStream";
 import GameCodeScreen from "../server/GameCodeScreen";
-import {ServerGameState} from "../types/server";
+import {ServerGameState} from "../types/web";
+import {useSelector} from "../store/server";
 
 export default function Server() {
-    const [{gameState, activePlayerId}] = useContext(GameContext);
+    const {gameState, activePlayerId} = useSelector(state => state);
 
     useEffect(() => {
         if (!localStorage.getItem('serverId')) {

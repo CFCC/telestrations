@@ -1,11 +1,12 @@
-import React, {useContext, useEffect} from "react";
+import React, {useEffect} from "react";
 import firebase from "firebase/app";
 import * as firebaseUi from "firebaseui";
 import {createGlobalStyle} from "styled-components";
 import {uniqueNamesGenerator, colors, animals} from "unique-names-generator";
 import _ from "lodash";
+import {useDispatch} from "react-redux";
 
-import {GameContext} from "../store/client";
+import {useSelector, setUser} from "../store/client";
 import {useBoolean} from "../utils/hooks";
 import TitleScreen from "../components/TitleScreen";
 
@@ -20,7 +21,8 @@ const MakeAnonLoginABetterColor = createGlobalStyle`
 `;
 
 export default function LoginScreen() {
-    const [{user}, {setUser}] = useContext(GameContext);
+    const dispatch = useDispatch();
+    const user = useSelector(state => state.user);
     const [uiLoading,, uiShown] = useBoolean(true);
     const firebaseLoginUiContainerId = "firebaseui-auth-container";
 
@@ -45,9 +47,9 @@ export default function LoginScreen() {
                 separator: "-",
             }));
             user.updateProfile({displayName});
-            setUser({...user, displayName});
+            dispatch(setUser({...user, displayName}));
         } else {
-            setUser(user);
+            dispatch(setUser(user));
         }
     });
 

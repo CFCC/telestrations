@@ -1,4 +1,4 @@
-import React, {useState, useContext} from "react";
+import React, {useState} from "react";
 import {
     Card, CardContent, CardHeader,
     Grid,
@@ -10,7 +10,7 @@ import {
 import styled from "styled-components";
 
 import PlayerStream from "../server/PlayerStream";
-import {GameContext} from "../store/server";
+import {viewNotepadHistory, viewPlayerHistory, useSelector} from "../store/server";
 
 interface BirdsEyeState {
     anchorElement: HTMLElement | null;
@@ -26,7 +26,7 @@ const StyledGrid = styled(Grid)`
 `;
 
 export default function BirdsEye() {
-    const [{game: {players, notepads}}, {viewNotepadHistory, viewPlayerHistory}] = useContext(GameContext);
+    const {players, notepads} = useSelector(state => state.game);
     const [menu, setMenu] = useState({
         anchorElement: null,
         playerId: "",

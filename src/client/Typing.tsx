@@ -1,9 +1,9 @@
-import React, {FormEvent, useContext} from "react";
+import React, {ChangeEvent, FormEvent} from "react";
 import {Button as UnstyledButton, TextField} from "@material-ui/core";
 import styled from "styled-components";
 
-import {GameContext} from "../store/client";
-import {Event} from "../types/server";
+import {useSelector, setGuess, submitGuess} from "../store/client";
+import {useDispatch} from "react-redux";
 
 interface FormProps {
     content?: string;
@@ -35,15 +35,16 @@ const Image = styled.img`
 `;
 
 export default function Typing() {
-    const [{content, guess}, {setGuess, submitGuess, newContent, gameFinished}] = useContext(GameContext);
+    const dispatch = useDispatch();
+    const {content, guess} = useSelector(state => state);
 
     const dontRefresh = (e: FormEvent) => {
         e.preventDefault();
-        submitGuess(newContent, gameFinished);
+        dispatch(submitGuess());
         return false;
     };
 
-    const updateGuess = ({target: {value}}: Event) => setGuess(value);
+    const updateGuess = ({target: {value}}: ChangeEvent<HTMLInputElement>) => dispatch(setGuess(value));
 
     return (
         <Form onSubmit={dontRefresh} content={content}>

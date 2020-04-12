@@ -1,7 +1,8 @@
 import * as firebase from "../firebase-client/server";
-import {ServerGameState} from "../types/server";
-import {Game, Notepad, Player, Status} from "../types/firebase";
-import {createAction, createReducer} from "@reduxjs/toolkit";
+import {ServerGameState} from "../types/web";
+import {Game, Notepad, Player} from "../types/firebase";
+import {configureStore, createAction, createReducer} from "@reduxjs/toolkit";
+import {TypedUseSelectorHook, useSelector as useUntypedSelector} from "react-redux";
 
 interface State {
     gameState: ServerGameState;
@@ -11,72 +12,79 @@ interface State {
     activeNotepadId: string;
 }
 
-export const defaultState: State = {
+const defaultState: State = {
     gameState: ServerGameState.GAME_CODE,
     gameCode: "",
     game: {
         players: {},
         notepads: {},
         created: -1,
-        status: Status.Lobby,
+        status: "lobby",
     },
     activePlayerId: "",
     activeNotepadId: "",
 };
 
-const setGameCode = createAction<string>("SET_GAME_CODE");
-const viewPlayerHistory = createAction<string>("VIEW_PLAYER_HISTORY");
-const viewNotepadHistory = createAction<string>("VIEW_NOTEPAD_HISTORY");
-const startGame = createAction("START_GAME");
-const updateGame = createAction<Pick<Game, "created" | "status">>("UPDATE_GAME");
-const updateNotepads = createAction<Record<string, Notepad>>("UPDATE_NOTEPADS");
-const updatePlayers = createAction<Record<string, Player>>("UPDATE_PLAYERS");
-const gameFinished = createAction("GAME_FINISHED");
+export const setGameCode = createAction<string>("SET_GAME_CODE");
+export const viewPlayerHistory = createAction<string>("VIEW_PLAYER_HISTORY");
+export const viewNotepadHistory = createAction<string>("VIEW_NOTEPAD_HISTORY");
+export const startGame = createAction("START_GAME");
+export const updateGame = createAction<Pick<Game, "created" | "status">>("UPDATE_GAME");
+export const updateNotepads = createAction<Record<string, Notepad>>("UPDATE_NOTEPADS");
+export const updatePlayers = createAction<Record<string, Player>>("UPDATE_PLAYERS");
+export const gameFinished = createAction("GAME_FINISHED");
 
-const reducer = createReducer(defaultState, {
-    [setGameCode.type]: (state, action) => {
+const reducer = createReducer(defaultState, builder => builder
+    .addCase(setGameCode, (state, action) => {
         const serverId = localStorage.getItem('serverId') ?? '';
-        if (action.gameIsNew) firebase.addGameToLobby(action.gameCode, serverId);
+        firebase.addGameToLobby(action.payload, serverId);
         return {
             ...state,
-            gameState: action.gameIsNew ? ServerGameState.LOADING : ServerGameState.BIRDS_EYE,
-            gameCode: action.gameCode,
+            gameState: ServerGameState.LOADING,
+            gameCode: action.payload,
         };
-    },
-    [startGame.type]: (state, action) => {
+    })
+    .addCase(startGame, state => {
         firebase.startGame(state.gameCode, Object.keys(state.game.players));
-        return {...state, gameState: ServerGameState.BIRDS_EYE};
-    },
-    [viewPlayerHistory.type]: (state, action) => ({
+        return {
+            ...state,
+            gameState: ServerGameState.BIRDS_EYE,
+        };
+    })
+    .addCase(viewPlayerHistory, (state, action) => ({
         ...state,
-        activePlayerId: action.playerId,
-    }),
-    [viewNotepadHistory.type]: (state, action) => ({
+        activePlayerId: action.payload,
+    }))
+    .addCase(viewNotepadHistory, (state, action) => ({
         ...state,
-        activeNotepadId: action.ownerId,
-    }),
-    [gameFinished.type]: (state, action) => {
+        activeNotepadId: action.payload,
+    }))
+    .addCase(gameFinished, state => {
         firebase.endGame(state.gameCode);
-    },
-    [updateGame.type]: (state, action) => ({
+    })
+    .addCase(updateGame, (state, action) => ({
         ...state,
         game: {
             ...state.game,
-            ...action.game,
+            ...action.payload,
         },
-    }),
-    [updateNotepads.type]: (state, action) => ({
+    }))
+    .addCase(updateNotepads, (state, action) => ({
         ...state,
         game: {
             ...state.game,
-            notepads: action.notepads,
+            notepads: action.payload,
         },
-    }),
-    [updatePlayers.type]: (state, action) => ({
+    }))
+    .addCase(updatePlayers, (state, action) => ({
         ...state,
         game: {
             ...state.game,
-            players: action.players,
+            players: action.payload,
         },
-    }),
-});
+    }))
+);
+
+export const store = configureStore({reducer});
+
+export const useSelector: TypedUseSelectorHook<ReturnType<typeof reducer>> = useUntypedSelector;

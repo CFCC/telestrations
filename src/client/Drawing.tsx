@@ -1,4 +1,4 @@
-import React, {MutableRefObject, useContext, useRef, useState} from "react";
+import React, {MutableRefObject, useRef, useState} from "react";
 import {SketchField, Tools} from "react-sketch";
 import * as colors from "@material-ui/core/colors"
 import {
@@ -15,10 +15,11 @@ import {
 } from "@material-ui/core";
 import styled from "styled-components";
 
-import {GameContext} from "../store/client";
+import {useSelector, submitGuess, setGuess} from "../store/client";
 import {useBoolean, useEvent} from "../utils/hooks";
 import SwatchesDialog from "../client/SwatchesDialog";
 import ListDialog from "../client/ListDialog";
+import {useDispatch} from "react-redux";
 
 const Container = styled.div`
     width: 100vw;
@@ -58,7 +59,8 @@ const StyledSlider = styled(Slider)`
 `;
 
 export default function Drawing() {
-    const [{content}, {submitGuess, setGuess, newContent, gameFinished}] = useContext(GameContext);
+    const content = useSelector(state => state.content);
+    const dispatch = useDispatch();
 
     const [tool, setTool] = useState(Tools.Pencil);
     const [color, setColor] = useState("#000000");
@@ -98,7 +100,7 @@ export default function Drawing() {
     };
 
     function handleSubmitGuess() {
-        submitGuess(newContent, gameFinished);
+        dispatch(submitGuess());
     }
 
     return (

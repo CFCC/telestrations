@@ -4,12 +4,12 @@ import React from "react";
 import * as ReactDOM from "react-dom";
 import {StylesProvider, ThemeProvider} from "@material-ui/core/styles";
 import styled from "styled-components";
+import {Provider} from "react-redux";
 
 import ClientApp from "./client";
 import ServerApp from "./server";
-import * as ClientStore from "./store/client";
-import * as ServerStore from "./store/server";
-import Store from "./components/Store";
+import {store as clientStore} from "./store/client";
+import {store as serverStore} from "./store/server";
 import {darkPrimary, GlobalStyles, primary, theme} from "./utils/theme";
 
 const Container = styled.div`
@@ -27,17 +27,17 @@ const Container = styled.div`
 
 const isServer = window.location.pathname.match(/^\/server/);
 const App = isServer ? ServerApp : ClientApp;
-const store = isServer ? ServerStore : ClientStore;
+const store = isServer ? serverStore : clientStore;
 
 ReactDOM.render((
     <StylesProvider injectFirst={true}>
         <ThemeProvider theme={theme}>
             <GlobalStyles />
-            <Store store={store}>
+            <Provider store={store}>
                 <Container>
                     <App />
                 </Container>
-            </Store>
+            </Provider>
         </ThemeProvider>
     </StylesProvider>
 ), document.getElementById("root"));

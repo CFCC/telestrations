@@ -1,5 +1,3 @@
-import {ChangeEvent} from "react";
-
 export enum ServerGameState {
     GAME_CODE = "game code",
     LOADING = "loading",
@@ -8,8 +6,6 @@ export enum ServerGameState {
     PLAYER_HISTORY = "player history",
     NOTEPAD_HISTORY = "notepad history"
 }
-
-export type Event = ChangeEvent<HTMLInputElement>;
 
 export enum ClientGameState {
     GAME_SELECTION = "game selection",

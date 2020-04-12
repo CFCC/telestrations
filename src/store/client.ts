@@ -1,6 +1,7 @@
 import {User} from "firebase";
 import _ from "lodash";
-import {createAction, createReducer} from "@reduxjs/toolkit";
+import {configureStore, createAction, createReducer} from "@reduxjs/toolkit";
+import {TypedUseSelectorHook, useSelector as useUntypedSelector} from "react-redux";
 
 import {ClientGameState} from "../types/web";
 import * as firebaseClient from "../firebase-client/client";
@@ -21,46 +22,54 @@ const defaultState: State = {
     content: "",
 };
 
-const setUser = createAction<User | null>("SET_USER");
-const newContent = createAction<string>("NEW_CONTENT");
-const joinGame = createAction<string>("JOIN_GAME");
-const gameStarted = createAction("GAME_STARTED");
-const setGuess = createAction<string>("SET_GUESS");
-const submitGuess = createAction("SUBMIT_GUESS");
-const gameFinished = createAction("GAME_FINISHED");
+export const setUser = createAction<User | null>("SET_USER");
+export const newContent = createAction<string>("NEW_CONTENT");
+export const joinGame = createAction<string>("JOIN_GAME");
+export const gameStarted = createAction("GAME_STARTED");
+export const setGuess = createAction<string>("SET_GUESS");
+export const submitGuess = createAction("SUBMIT_GUESS");
+export const gameFinished = createAction("GAME_FINISHED");
 
-const reducer = createReducer(defaultState, {
-    [setUser.type]: (state, action) => ({
+const reducer = createReducer(defaultState, builder => builder
+    .addCase(setUser, (state, action) => ({
         ...state,
-        user: action.user,
+        user: action.payload,
         gameState: ClientGameState.GAME_SELECTION,
-    }),
-    [joinGame.type]: (state, action) => {
-        firebaseClient.joinGame(state.user, action.gameCode);
-        return {...state, gameCode: action.gameCode, gameState: ClientGameState.WAITING_TO_START};
-    },
-    [gameStarted.type]: (state, action) => ({
-        ...state,
-        gameState: ClientGameState.IN_GAME,
-    }),
-    [setGuess.type]: (state, action) => {
-        _.debounce(() => firebaseClient.updateGuess(state.user, state.gameCode, action.guess), 1000);
+    }))
+    .addCase(joinGame, (state, action) => {
+        firebaseClient.joinGame(state.user, action.payload);
         return {
             ...state,
-            guess: action.guess,
+            gameCode: action.payload,
+            gameState: ClientGameState.WAITING_TO_START,
         };
-    },
-    [submitGuess.type]: (state, action) => {
-        firebaseClient.finishTurn(state.user, state.gameCode, action.nextTurnCallback, action.gameFinishedCallback);
-    },
-    [newContent.type]: (state, action) => ({
+    })
+    .addCase(gameStarted, state => ({
         ...state,
         gameState: ClientGameState.IN_GAME,
-        content: action.content,
+    }))
+    .addCase(setGuess, (state, action) => {
+        _.debounce(() => firebaseClient.updateGuess(state.user, state.gameCode, action.payload), 1000);
+        return {
+            ...state,
+            guess: action.payload,
+        };
+    })
+    .addCase(submitGuess, state => {
+        firebaseClient.finishTurn(state.user, state.gameCode);
+    })
+    .addCase(newContent, (state, action) => ({
+        ...state,
+        gameState: ClientGameState.IN_GAME,
+        content: action.payload,
         guess: "",
-    }),
-    [gameFinished.type]: (state, action) => ({
+    }))
+    .addCase(gameFinished, state => ({
         ...state,
         gameState: ClientGameState.FINISHED,
-    }),
-});
+    }))
+);
+
+export const store = configureStore({reducer});
+
+export const useSelector: TypedUseSelectorHook<ReturnType<typeof reducer>> = useUntypedSelector;

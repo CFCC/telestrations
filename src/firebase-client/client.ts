@@ -2,7 +2,7 @@ import {User} from "firebase";
 import firebase from "firebase/app";
 import {v4 as uuid} from "uuid";
 import _ from "lodash";
-import {Game, Notepad, Player, Status} from "../types/firebase";
+import {Game, Notepad, Player} from "../types/firebase";
 
 export async function joinGame(user: User | null, gameCode: string) {
     if (!user) return;
@@ -18,7 +18,7 @@ export function waitForGameToStart(gameCode: string, callback: Function) {
         .firestore()
         .doc(`games/${gameCode}`)
         .onSnapshot(snapshot => {
-            if ((snapshot.data() as Game).status === Status.InProgress) callback();
+            if ((snapshot.data() as Game).status === "in progress") callback();
         });
 }
 
@@ -97,12 +97,7 @@ export async function updateGuess(user: User | null, gameCode: string, guess: st
     }
 }
 
-export async function finishTurn(
-    user: User | null,
-    gameCode: string,
-    nextTurnCallback: (content: string) => any,
-    gameFinishedCallback: Function
-) {
+export async function finishTurn(user: User | null, gameCode: string) {
     if (!user) return;
 
     const playerRef = firebase

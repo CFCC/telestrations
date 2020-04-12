@@ -1,11 +1,12 @@
-import React, {useContext, useEffect} from "react";
+import React, {useEffect} from "react";
 import {Button as UnstyledButton, TextField} from "@material-ui/core";
 import styled from "styled-components";
 import Cookies from "js-cookie";
 
-import {GameContext} from "../store/server";
+import {setGameCode} from "../store/server";
 import TitleScreen from "../components/TitleScreen";
 import {useEvent} from "../utils/hooks";
+import {useDispatch} from "react-redux";
 
 const Form = styled.form`
     width: 50%;
@@ -19,20 +20,20 @@ const Button = styled(UnstyledButton)`
 `;
 
 export default function LoadingScreen() {
-    const [, {setGameCode, updatePlayers, updateNotepads}] = useContext(GameContext);
+    const dispatch = useDispatch();
     const [gameCode, updateGameCode] = useEvent('', ({target: {value}}) => value);
 
     function submitGameCode() {
         Cookies.set("gameCode", gameCode, {expires: 0.66});
-        setGameCode(gameCode, updateNotepads, updatePlayers);
+        dispatch(setGameCode(gameCode));
     }
 
     useEffect(() => {
         const oldGameCode = Cookies.get("gameCode");
         if (oldGameCode) {
-            setGameCode(oldGameCode, updateNotepads, updatePlayers, false);
+            dispatch(setGameCode(oldGameCode));
         }
-    }, [setGameCode, updateNotepads, updatePlayers]);
+    }, [setGameCode]);
 
     return (
         <TitleScreen

@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Button as UnstyledButton, FormControl, InputLabel, MenuItem, Select} from "@material-ui/core";
 import * as firebase from "firebase/app";
 import styled from "styled-components";
@@ -6,7 +6,8 @@ import Cookies from "js-cookie";
 
 import TitleScreen from "../components/TitleScreen";
 import {useEvent} from "../utils/hooks";
-import {GameContext} from "../store/client";
+import {joinGame} from "../store/client";
+import {useDispatch} from "react-redux";
 
 const Form = styled.form`
     width: 50%;
@@ -23,7 +24,7 @@ export default function GameSelection() {
     const [labelWidth, setLabelWidth] = useState(0);
     const inputLabel = useRef<HTMLLabelElement>(null);
     const [game, setGame, rawSetGame] = useEvent("", ({target: {value}}) => value);
-    const [, {joinGame}] = useContext(GameContext);
+    const dispatch = useDispatch();
 
     useEffect(
         () => firebase
@@ -44,13 +45,13 @@ export default function GameSelection() {
 
     function onSubmit() {
         Cookies.set("gameCode", game, {expires: 0.66})
-        joinGame(game);
+        dispatch(joinGame(game));
     }
 
     useEffect(() => {
         const gameCode = Cookies.get("gameCode");
         if (gameCode) {
-            joinGame(gameCode);
+            dispatch(joinGame(gameCode));
         }
     });
 
