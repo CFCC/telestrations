@@ -18,15 +18,9 @@ export interface Player {
     queue: string[];
 }
 
-export enum Status {
-    Lobby = "lobby",
-    InProgress = "in progress",
-    Finished = "finished"
-}
-
 export interface Game {
     created: number;
-    status: Status;
+    status: "lobby" | "in progress" | "finished";
     notepads: Record<string, Notepad>;
     players: Record<string, Player>;
 }

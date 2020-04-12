@@ -5,7 +5,7 @@ import "firebase/storage";
 import "firebase/firestore";
 
 firebase.initializeApp({
-    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+    apiKey: "AIzaSyArJkOYiJZ0Ur_BJ67mgERDtDtA8RehFqo",
     authDomain: "telestrations-3aa19.firebaseapp.com",
     databaseURL: "https://telestrations-3aa19.firebaseio.com",
     projectId: "telestrations-3aa19",

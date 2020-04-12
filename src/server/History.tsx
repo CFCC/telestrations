@@ -3,11 +3,9 @@ import {Button, MobileStepper} from "@material-ui/core";
 import {KeyboardArrowLeft, KeyboardArrowRight} from "@material-ui/icons";
 import SwipeableViews from "react-swipeable-views";
 
-import {UUID} from "../types/shared";
-
 interface HistoryProps {
-    ownerId?: UUID;
-    playerId?: UUID;
+    ownerId?: string;
+    playerId?: string;
 }
 
 export default function History({ownerId, playerId}: HistoryProps) {

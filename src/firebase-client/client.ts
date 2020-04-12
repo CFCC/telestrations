@@ -2,8 +2,6 @@ import {User} from "firebase";
 import firebase from "firebase/app";
 import {v4 as uuid} from "uuid";
 import _ from "lodash";
-
-import {UUID} from "../types/shared";
 import {Game, Notepad, Player, Status} from "../types/firebase";
 
 export async function joinGame(user: User | null, gameCode: string) {
@@ -24,7 +22,7 @@ export function waitForGameToStart(gameCode: string, callback: Function) {
         });
 }
 
-export async function setSentenceGuess(authorId: UUID, notepadId: UUID, gameCode: string, guess: string) {
+export async function setSentenceGuess(authorId: string, notepadId: string, gameCode: string, guess: string) {
     const notepad = (await firebase
         .firestore()
         .doc(`games/${gameCode}/notepads/${notepadId}`)
@@ -48,7 +46,7 @@ export async function setSentenceGuess(authorId: UUID, notepadId: UUID, gameCode
         .set({pages}, {merge: true});
 }
 
-export async function setPictureGuess(authorId: UUID, notepadId: UUID, gameCode: string, guess: string): Promise<string> {
+export async function setPictureGuess(authorId: string, notepadId: string, gameCode: string, guess: string): Promise<string> {
     let fileName;
     const notepadRef = firebase
         .firestore()
