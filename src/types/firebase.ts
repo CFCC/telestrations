@@ -11,15 +11,11 @@ export interface Notepad {
     pages: Page[];
 }
 
-export interface QueuedNotepad {
-    notepadId: string;
-}
-
 export interface Player {
     currentNotepad: string;
     nextPlayer: string;
     name: string;
-    queue: QueuedNotepad[];
+    queue: string[];
 }
 
 export enum Status {

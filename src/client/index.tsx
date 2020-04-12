@@ -10,7 +10,7 @@ import LoginScreen from "../client/LoginScreen";
 import GameSelection from "../client/GameSelection";
 
 export default function Client() {
-    const [{gameState, gameCode}, {gameStarted}] = useContext(GameContext);
+    const [{gameState, gameCode, content}, {gameStarted}] = useContext(GameContext);
 
     useEffect(() => {
         if (gameState === ClientGameState.WAITING_TO_START) {
@@ -45,10 +45,8 @@ export default function Client() {
                     subtitle="Please ask your host to see the results."
                 />
             );
-        case ClientGameState.DRAWING:
-            return <Drawing />;
-        case ClientGameState.TYPING:
-            return <Typing />;
+        case ClientGameState.IN_GAME:
+            return content.includes("http") ? <Drawing /> : <Typing />;
         case ClientGameState.WAITING_FOR_CONTENT:
             return <Waiting />;
         default:

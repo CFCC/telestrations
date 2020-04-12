@@ -58,7 +58,7 @@ const StyledSlider = styled(Slider)`
 `;
 
 export default function Drawing() {
-    const [{content}, {submitGuess, setGuess}] = useContext(GameContext);
+    const [{content}, {submitGuess, setGuess, newContent, gameFinished}] = useContext(GameContext);
 
     const [tool, setTool] = useState(Tools.Pencil);
     const [color, setColor] = useState("#000000");
@@ -96,6 +96,10 @@ export default function Drawing() {
         setCanUndo(sketch.current.canUndo());
         setCanRedo(sketch.current.canRedo());
     };
+
+    function handleSubmitGuess() {
+        submitGuess(newContent, gameFinished);
+    }
 
     return (
         <Container>
@@ -163,7 +167,7 @@ export default function Drawing() {
                         </List>
                         <Divider />
                         <List>
-                            <ListItem button={true} onClick={submitGuess}>
+                            <ListItem button={true} onClick={handleSubmitGuess}>
                                 <ListItemText primary="Submit" />
                             </ListItem>
                         </List>

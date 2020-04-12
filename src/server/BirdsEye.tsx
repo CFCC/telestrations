@@ -42,10 +42,10 @@ export default function BirdsEye() {
 
                     if (!player.currentNotepad)
                         playerState = "Waiting";
-                    else if (Object.values(notepads[player.currentNotepad].pages).length % 2 === 1)
-                        playerState = "Drawing";
-                    else /* if (player.notepadIndex % 2 === 0) */
+                    else if (notepads[player.currentNotepad].pages.length % 2 === 1)
                         playerState = "Writing";
+                    else
+                        playerState = "Drawing";
 
                     function openMenu() {
                         return (e: React.MouseEvent<HTMLElement, MouseEvent>) =>

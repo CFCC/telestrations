@@ -35,10 +35,11 @@ const Image = styled.img`
 `;
 
 export default function Typing() {
-    const [{content, guess}, {setGuess, submitGuess}] = useContext(GameContext);
+    const [{content, guess}, {setGuess, submitGuess, newContent, gameFinished}] = useContext(GameContext);
 
     const dontRefresh = (e: FormEvent) => {
         e.preventDefault();
+        submitGuess(newContent, gameFinished);
         return false;
     };
 
@@ -57,7 +58,6 @@ export default function Typing() {
                 onChange={updateGuess}
             />
             <Button
-                onClick={submitGuess}
                 variant="contained"
                 color="primary"
                 type="submit"

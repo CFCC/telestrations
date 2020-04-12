@@ -4,11 +4,11 @@ import {v4 as uuid} from "uuid";
 import _ from "lodash";
 
 import {UUID} from "../types/shared";
-import {Game, Notepad, Status, Player} from "../types/firebase";
+import {Game, Notepad, Player, Status} from "../types/firebase";
 
-export function joinGame(user: User | null, gameCode: string) {
+export async function joinGame(user: User | null, gameCode: string) {
     if (!user) return;
-    firebase
+    await firebase
         .firestore()
         .collection(`games/${gameCode}/players`)
         .doc(user.uid)
@@ -99,60 +99,50 @@ export async function updateGuess(user: User | null, gameCode: string, guess: st
     }
 }
 
-export enum FinishedTurnStatus {
-    MORE_CONTENT, WAIT, GAME_FINISHED, NULL_USER
-}
-
-export interface FinishedTurnResult {
-    status: FinishedTurnStatus;
-    nextNotepad?: UUID;
-}
-
-export async function finishTurn(user: User | null, gameCode: string): Promise<FinishedTurnResult> {
-    if (!user) return {status: FinishedTurnStatus.NULL_USER};
-
-    const firebaseUser = await firebase
-        .firestore()
-        .doc(`games/${gameCode}/players/${user.uid}`);
-
-    const {currentNotepad, nextPlayer} = (await firebaseUser.get()).data() || {};
-
-    const nextPlayerQueue = firebase
-        .firestore()
-        .collection(`games/${gameCode}/players/${nextPlayer}/queue`);
-    const queueLength = (await nextPlayerQueue.get()).docs.length;
-    nextPlayerQueue.doc(queueLength.toString()).set({notepadId: currentNotepad});
-
-    const firstQueueItem = (await firebaseUser
-        .collection('queue')
-        .doc('0')
-        .get())
-        .data();
-
-    if (firstQueueItem === undefined) return {status: FinishedTurnStatus.WAIT};
-
-    const {ownerId} = (await firebase
-        .firestore()
-        .doc(`games/${gameCode}/notepads/${firstQueueItem.notepadId}`)
-        .get())
-        .data() || {};
-
-    if (ownerId === user.uid) return {status: FinishedTurnStatus.GAME_FINISHED};
-
-    return {
-        status: FinishedTurnStatus.MORE_CONTENT,
-        nextNotepad: firstQueueItem.notepadId,
-    };
-}
-
-export async function waitForNewContent(user: firebase.User | null, gameCode: string, callback: (notepadId: UUID) => any) {
+export async function finishTurn(
+    user: User | null,
+    gameCode: string,
+    nextTurnCallback: (content: string) => any,
+    gameFinishedCallback: Function
+) {
     if (!user) return;
 
-    firebase
+    const playerRef = firebase
         .firestore()
-        .collection(`games/${gameCode}/users/${user.uid}/queue`)
-        .onSnapshot(snapshot => {
-            const notepadId = snapshot.docs[0].data().notepadId;
-            callback(notepadId);
+        .doc(`games/${gameCode}/players/${user.uid}`);
+    const {currentNotepad, nextPlayer, queue} = (await playerRef.get()).data() as Player;
+
+    const nextPlayerRef = firebase
+        .firestore()
+        .doc(`games/${gameCode}/players/${nextPlayer}`);
+    const {queue: nextPlayerQueue} = (await nextPlayerRef.get()).data() as Player;
+
+    await nextPlayerRef.set({queue: [...nextPlayerQueue, currentNotepad]}, {merge: true});
+
+
+    const firstQueueItem = queue.shift();
+    await playerRef.set({currentNotepad: firstQueueItem}, {merge: true});
+    if (firstQueueItem === undefined) {
+        const unsubscribe = playerRef.onSnapshot(async snapshot => {
+            const playerSnapshot = snapshot.data() as Player;
+            if (_.eq(playerSnapshot.queue, queue) || _.isEmpty(playerSnapshot.queue)) return;
+
+            const newQueue = [...playerSnapshot.queue];
+            const queueItem = newQueue.shift();
+            const notepad = (await firebase
+                .firestore()
+                .doc(`games/${gameCode}/notepads/${queueItem}`)
+                .get())
+                .data() as Notepad;
+
+            if (notepad.ownerId === user.uid) {
+                gameFinishedCallback();
+            } else {
+                nextTurnCallback(notepad.pages[notepad.pages.length - 1].content);
+            }
+
+            await playerRef.set({queue: newQueue, currentNotepad: queueItem}, {merge: true});
+            unsubscribe();
         });
+    }
 }

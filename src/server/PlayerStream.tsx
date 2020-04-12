@@ -33,36 +33,36 @@ const Content = styled(CardContent)`
 export default function PlayerStream({playerId}: PlayerStreamProps) {
     const [{game: {players, notepads}}] = useContext(GameContext);
 
-    const playerIndexInNotepad = notepads[players[playerId]?.currentNotepad]?.pages?.length;
-    if (playerIndexInNotepad == null) return null;
+    const notepad = notepads[players[playerId]?.currentNotepad];
+    const playerIndexInNotepad = notepad?.pages?.length;
 
-    const playerDrawing = playerIndexInNotepad % 2 === 0;
-    const playerWaiting = playerIndexInNotepad === -1;
-
-    const prevContent = playerIndexInNotepad === 0 || playerWaiting
-        ? "/question-marks.jpg"
-        : notepads[players[playerId].currentNotepad].pages[playerIndexInNotepad - 1].content;
-    const content = playerWaiting
-        ? "Waiting for next notepad..."
-        : notepads[players[playerId].currentNotepad].pages[playerIndexInNotepad]?.content;
-
-    let picture;
-    if (playerWaiting || playerIndexInNotepad === 0) picture = "/question-marks.jpg";
-    else if (playerDrawing) picture = prevContent;
-    else picture = content;
+    let picture, text;
+    if (playerIndexInNotepad == null) {
+        picture = "/question-marks.jpg";
+        text = "Waiting for next notepad...";
+    } else if (playerIndexInNotepad <= 1) {
+        picture = "/question-marks.jpg";
+        text = notepad.pages[playerIndexInNotepad - 1]?.content;
+    } else if (playerIndexInNotepad % 2 === 0) {
+        picture = notepad.pages[playerIndexInNotepad - 1]?.content;
+        text = notepad.pages[playerIndexInNotepad - 2]?.content;
+    } else {
+        picture = notepad.pages[playerIndexInNotepad - 2]?.content;
+        text = notepad.pages[playerIndexInNotepad - 1]?.content;
+    }
 
     return (
         <React.Fragment>
             <PictureContainer picture={picture}>
-                {picture !== "/question-marks.jpg" && <Picture
-                    src={picture}
-                    alt={playerDrawing || playerWaiting ? content : prevContent}
-                />}
+                {picture !== "/question-marks.jpg" && (
+                    <Picture
+                        src={picture}
+                        alt={text}
+                    />
+                )}
             </PictureContainer>
             <Content>
-                <Typography align="center">
-                    {playerDrawing || playerWaiting ? content : prevContent}
-                </Typography>
+                <Typography align="center">{text}</Typography>
             </Content>
         </React.Fragment>
     );
