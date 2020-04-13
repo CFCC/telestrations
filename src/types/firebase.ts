@@ -19,7 +19,7 @@ export interface Player {
 }
 
 export interface Game {
-    created: number;
+    created: firebase.firestore.Timestamp;
     status: "lobby" | "in progress" | "finished";
     notepads: Record<string, Notepad>;
     players: Record<string, Player>;

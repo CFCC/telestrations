@@ -2,6 +2,8 @@ import {User} from "firebase";
 import firebase from "firebase/app";
 import {v4 as uuid} from "uuid";
 import _ from "lodash";
+
+import {store, newContent, gameFinished} from "../store/client";
 import {Game, Notepad, Player} from "../types/firebase";
 
 export async function joinGame(user: User | null, gameCode: string) {
@@ -129,9 +131,9 @@ export async function finishTurn(user: User | null, gameCode: string) {
                 .data() as Notepad;
 
             if (notepad.ownerId === user.uid) {
-                gameFinishedCallback();
+                store.dispatch(gameFinished());
             } else {
-                nextTurnCallback(notepad.pages[notepad.pages.length - 1].content);
+                store.dispatch(newContent(notepad.pages[notepad.pages.length - 1].content));
             }
 
             await playerRef.set({queue: newQueue, currentNotepad: queueItem}, {merge: true});
@@ -139,3 +141,4 @@ export async function finishTurn(user: User | null, gameCode: string) {
         });
     }
 }
+
