@@ -14,6 +14,7 @@ import {
     Typography,
 } from "@material-ui/core";
 import styled from "styled-components";
+import _ from "lodash";
 
 import {useSelector, submitGuess, setGuess} from "../store/client";
 import {useBoolean, useEvent} from "../utils/hooks";
@@ -59,7 +60,9 @@ const StyledSlider = styled(Slider)`
 `;
 
 export default function Drawing() {
-    const content = useSelector(state => state.content);
+    const currentNotepad = useSelector(state => state.currentNotepad);
+    const {content} = _.last(currentNotepad?.pages) ?? {};
+
     const dispatch = useDispatch();
 
     const [tool, setTool] = useState(Tools.Pencil);

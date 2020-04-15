@@ -36,7 +36,7 @@ interface TitleScreenProps {
 export default function TitleScreen({title, subtitle, loading = false, children}: TitleScreenProps) {
     return (
         <Container>
-            <Image src="/logo.png" alt="Telestrations logo" />
+            <Image src="/logo.png" alt="Telestrations" />
             <Header>{title}</Header>
             {subtitle && <Typography>{subtitle}</Typography>}
             {children}

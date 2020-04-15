@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import * as React from "react";
 
 import {ClientGameState} from "../types/web";
 import TitleScreen from "../components/TitleScreen";
@@ -10,13 +10,7 @@ import LoginScreen from "../client/LoginScreen";
 import GameSelection from "../client/GameSelection";
 
 export default function Client() {
-    const {gameState, gameCode, content} = useSelector(state => state);
-
-    useEffect(() => {
-        if (gameState === ClientGameState.WAITING_TO_START) {
-            // return triggerGameStart(gameCode, gameStarted);
-        }
-    }, [gameState, gameCode]);
+    const {gameState, currentNotepad} = useSelector(state => state);
 
     switch (gameState) {
         case ClientGameState.LOGIN:
@@ -46,7 +40,7 @@ export default function Client() {
                 />
             );
         case ClientGameState.IN_GAME:
-            return content.includes("http") ? <Typing /> : <Drawing />;
+            return currentNotepad?.pages.length ?? 0 % 2 === 1 ? <Typing /> : <Drawing />;
         case ClientGameState.WAITING_FOR_CONTENT:
             return <Waiting />;
         default:
