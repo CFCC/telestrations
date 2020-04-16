@@ -44,6 +44,12 @@ const CaptionContainer = styled(Paper)`
 
 const Canvas = styled(SketchField)`
     height: 100% !important;
+    width: 100% !important;
+    
+    div, canvas {
+        height: 100% !important;
+        width: 100% !important;
+    }
 `;
 
 const ListContainer = styled.div`
@@ -93,6 +99,7 @@ export default function Drawing() {
     const clear = () => {
         sketch.current.clear();
         sketch.current.setBackgroundFromDataUrl("");
+        setBgColor(bgColor);
         setCanUndo(sketch.current.canUndo());
         setCanRedo(sketch.current.canRedo());
     };

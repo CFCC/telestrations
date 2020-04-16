@@ -1,6 +1,7 @@
 import React, {ChangeEvent, FormEvent} from "react";
 import {Button as UnstyledButton, TextField} from "@material-ui/core";
 import styled from "styled-components";
+import _ from "lodash";
 
 import {useSelector, setGuess, submitGuess} from "../store/client";
 import {useDispatch} from "react-redux";
@@ -36,7 +37,9 @@ const Image = styled.img`
 
 export default function Typing() {
     const dispatch = useDispatch();
-    const {content, guess} = useSelector(state => state);
+    const {currentNotepad, guess} = useSelector(state => state);
+
+    const content = _.last(currentNotepad?.pages)?.content
 
     const dontRefresh = (e: FormEvent) => {
         e.preventDefault();

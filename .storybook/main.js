@@ -8,4 +8,15 @@ module.exports = {
         "@storybook/addon-a11y",
         "@storybook/addon-viewport",
     ],
+    webpackFinal: config => ({
+        ...config,
+        node: {
+            ...config.node,
+            child_process: "empty",
+            fs: "empty",
+            crypto: "empty",
+            net: "empty",
+            tls: "empty"
+        },
+    }),
 };

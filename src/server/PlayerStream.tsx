@@ -37,7 +37,7 @@ export default function PlayerStream({playerId}: PlayerStreamProps) {
     let picture, text;
     if (playerIndexInNotepad == null) {
         picture = "/question-marks.jpg";
-        text = "Waiting for next notepad...";
+        text = "Drawing for next notepad...";
     } else if (playerIndexInNotepad <= 1) {
         picture = "/question-marks.jpg";
         text = notepad.pages[playerIndexInNotepad - 1]?.content;
