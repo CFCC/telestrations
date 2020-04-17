@@ -1,4 +1,4 @@
-import firebase, {User} from "firebase";
+import firebase, {User} from "firebase/app";
 import _ from "lodash";
 import {
     Action,
@@ -6,16 +6,16 @@ import {
     createAction,
     createAsyncThunk,
     createReducer,
-    getDefaultMiddleware, PayloadAction
+    getDefaultMiddleware
 } from "@reduxjs/toolkit";
 import {TypedUseSelectorHook, useSelector as useUntypedSelector} from "react-redux";
 import {combineEpics, createEpicMiddleware, Epic, ofType} from "redux-observable";
 import {merge, of} from "rxjs";
-import {filter, map, switchMap, tap} from "rxjs/operators";
+import {filter, map, switchMap} from "rxjs/operators";
 import {docData} from "rxfire/firestore";
 
 import {ClientGameState} from "../types/web";
-import {Game, Notepad, Player, WithId} from "../types/firebase";
+import {Notepad, Player, WithId} from "../types/firebase";
 import {v4 as uuid} from "uuid";
 
 interface State {
@@ -29,7 +29,7 @@ interface State {
     queue: string[];
 }
 
-const defaultState: State = {
+export const defaultState: State = {
     user: null,
     gameCode: "",
     gameState: ClientGameState.LOGIN,
@@ -77,7 +77,7 @@ export const setGuess = createAsyncThunk<string, string>("SET_GUESS", async (gue
         if (needsNewPage) {
             pages.push({
                 author: user.uid,
-                lastUpdated: firebase.firestore.Timestamp.fromDate(new Date()),
+                lastUpdated: new Date().getTime(),
                 content: "",
             });
         }

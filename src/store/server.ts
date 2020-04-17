@@ -27,13 +27,13 @@ interface State {
     activeNotepadId: string;
 }
 
-const defaultState: State = {
+export const defaultState: State = {
     gameState: ServerGameState.GAME_CODE,
     gameCode: "",
     game: {
         players: {},
         notepads: {},
-        created: firebase.firestore.Timestamp.now(),
+        created: new Date().getTime(),
         status: "lobby",
     },
     activePlayerId: "",
@@ -51,7 +51,7 @@ export const setGameCode = createAsyncThunk<void, string>("SET_GAME_CODE", async
         .firestore()
         .doc(`games/${gameCode}`)
         .set({
-            created: firebase.firestore.Timestamp.fromDate(new Date()),
+            created: new Date().getTime(),
             status: "lobby",
             serverId: localStorage.getItem('serverId') ?? '',
         } as Partial<Game>);

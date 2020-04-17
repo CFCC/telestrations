@@ -1,7 +1,12 @@
-const {addDecorator} = require("@storybook/react");
-const {withA11y} = require("@storybook/addon-a11y");
+import {withA11y} from "@storybook/addon-a11y";
+import {addDecorator, addParameters} from "@storybook/react";
 
-const withWrapper = require('./withWrapper').default;
+import withWrapper from "./withWrapper";
 
+addParameters({
+    options: {
+        showRoots: true,
+    },
+});
 addDecorator(withWrapper);
 addDecorator(withA11y);

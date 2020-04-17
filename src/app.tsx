@@ -1,4 +1,4 @@
-import "./init-firebase";
+import "./utils/init-firebase";
 
 import React from "react";
 import * as ReactDOM from "react-dom";

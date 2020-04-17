@@ -104,7 +104,7 @@ export default function Drawing() {
         setCanRedo(sketch.current.canRedo());
     };
     const updateGuess = () => {
-        setGuess(sketch.current.toDataURL());
+        dispatch(setGuess(sketch.current.toDataURL()));
         setCanUndo(sketch.current.canUndo());
         setCanRedo(sketch.current.canRedo());
     };

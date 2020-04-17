@@ -1,12 +1,10 @@
-import firebase from "firebase";
-
 export type WithId<T extends {}> = T & {
     id: string;
 }
 
 export interface Page {
     content: string;
-    lastUpdated: firebase.firestore.Timestamp;
+    lastUpdated: number;
     author: string;
 }
 
@@ -23,7 +21,7 @@ export interface Player {
 }
 
 export interface Game {
-    created: firebase.firestore.Timestamp;
+    created: number;
     status: "lobby" | "in progress" | "finished";
     notepads: Record<string, Notepad>;
     players: Record<string, Player>;

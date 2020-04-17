@@ -3,7 +3,7 @@ import React from 'react';
 import Drawing from "./Drawing";
 
 export default {
-    title: 'Drawing',
+    title: 'Client/Drawing',
     component: Drawing,
 };
 

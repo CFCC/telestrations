@@ -3,7 +3,7 @@ import React from 'react';
 import Waiting from "./Waiting";
 
 export default {
-    title: 'Waiting',
+    title: 'Client/Waiting',
     component: Waiting,
 };
 

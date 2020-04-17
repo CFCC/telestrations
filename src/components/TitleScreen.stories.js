@@ -1,10 +1,11 @@
 import React from 'react';
 import {text} from "@storybook/addon-knobs";
+import Typography from "@material-ui/core/Typography";
 
 import TitleScreen from "./TitleScreen";
 
 export default {
-    title: 'Title Screen',
+    title: 'Common/Title Screen',
     component: TitleScreen,
 };
 
@@ -28,6 +29,6 @@ export const WithChildren = () => (
         title={text("Title", "Hello, world!")}
         subtitle={text("Subtitle", "How are you?")}
     >
-        <p style={{marginTop: '2rem'}}>Example child content</p>
+        <Typography style={{marginTop: '2rem'}}>Example child content</Typography>
     </TitleScreen>
 );

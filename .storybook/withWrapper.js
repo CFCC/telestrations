@@ -2,9 +2,12 @@ import {StylesProvider, ThemeProvider} from "@material-ui/core/styles";
 import {Provider} from "react-redux";
 import React from "react";
 import styled from "styled-components";
-import {configureStore, createReducer} from "@reduxjs/toolkit";
+import {configureStore} from "@reduxjs/toolkit";
+import {action} from "@storybook/addon-actions";
 
 import {darkPrimary, GlobalStyles, primary, theme} from "../src/utils/theme";
+import {defaultState as defaultClientState} from "../src/store/client";
+import {defaultState as defaultServerState} from "../src/store/server";
 
 const Container = styled.div`
     position: absolute;
@@ -19,7 +22,10 @@ const Container = styled.div`
     flex-direction: column;
 `;
 
-const reducer = createReducer({}, {});
+const reducer = (state, dispatchedAction) => {
+    action("Redux Action Dispatched")(dispatchedAction.type, dispatchedAction.payload);
+    return {...defaultServerState, ...defaultClientState};
+}
 const store = configureStore({reducer})
 
 export default storyCallback => (
