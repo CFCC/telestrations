@@ -10,7 +10,7 @@ import {
 import styled from "styled-components";
 
 import PlayerStream from "../server/PlayerStream";
-import {viewNotepadHistory, viewPlayerHistory, useSelector} from "../store/server";
+import {viewNotepadHistory, viewPlayerHistory, useSelector} from "../utils/store";
 
 interface BirdsEyeState {
     anchorElement: HTMLElement | null;

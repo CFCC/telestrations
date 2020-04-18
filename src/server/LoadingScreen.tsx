@@ -2,7 +2,7 @@ import * as React from "react";
 import {Button, Typography} from "@material-ui/core";
 import styled from "styled-components";
 
-import {startGame, useSelector} from "../store/server";
+import {startGame, useSelector} from "../utils/store";
 import TitleScreen from "../components/TitleScreen";
 import {useDispatch} from "react-redux";
 
@@ -23,7 +23,7 @@ const PlayerLabel = styled(Typography)`
 
 export default function LoadingScreen() {
     const dispatch = useDispatch();
-    const {game: {players}, gameCode} = useSelector(state => state);
+    const {game: {players, id: gameCode}} = useSelector(state => state);
 
     function handleStartGame() {
         dispatch(startGame());

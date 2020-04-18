@@ -1,7 +1,7 @@
 import * as React from "react";
 import {CardContent, Typography} from "@material-ui/core";
 import styled from "styled-components";
-import {useSelector} from "../store/server";
+import {useSelector} from "../utils/store";
 
 interface PlayerStreamProps {
     playerId: string;

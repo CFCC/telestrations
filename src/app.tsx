@@ -1,5 +1,3 @@
-import "./utils/init-firebase";
-
 import React from "react";
 import * as ReactDOM from "react-dom";
 import {StylesProvider, ThemeProvider} from "@material-ui/core/styles";
@@ -8,9 +6,8 @@ import {Provider} from "react-redux";
 
 import ClientApp from "./client";
 import ServerApp from "./server";
-import {store as clientStore} from "./store/client";
-import {store as serverStore} from "./store/server";
 import {darkPrimary, GlobalStyles, primary, theme} from "./utils/theme";
+import {store} from "./utils/store";
 
 const Container = styled.div`
     position: absolute;
@@ -27,7 +24,6 @@ const Container = styled.div`
 
 const isServer = window.location.pathname.match(/^\/server/);
 const App = isServer ? ServerApp : ClientApp;
-const store = isServer ? serverStore : clientStore;
 
 ReactDOM.render((
     <StylesProvider injectFirst={true}>

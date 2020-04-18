@@ -6,11 +6,10 @@ import LoadingScreen from "../server/LoadingScreen";
 import History from "../server/History";
 import PlayerStream from "../server/PlayerStream";
 import GameCodeScreen from "../server/GameCodeScreen";
-import {ServerGameState} from "../types/web";
-import {useSelector} from "../store/server";
+import {GameState, useSelector} from "../utils/store";
 
 export default function Server() {
-    const {gameState, activePlayerId} = useSelector(state => state);
+    const {client: {gameState, activePlayerId}} = useSelector(state => state);
 
     useEffect(() => {
         if (!localStorage.getItem('serverId')) {
@@ -19,17 +18,17 @@ export default function Server() {
     }, []);
 
     switch (gameState) {
-        case ServerGameState.GAME_CODE:
+        case GameState.GAME_CODE:
             return <GameCodeScreen />;
-        case ServerGameState.LOADING:
+        case GameState.LOADING:
             return <LoadingScreen />;
-        case ServerGameState.BIRDS_EYE:
+        case GameState.BIRDS_EYE:
             return <BirdsEye />;
-        case ServerGameState.NOTEPAD_HISTORY:
+        case GameState.NOTEPAD_HISTORY:
             return <History ownerId={activePlayerId} />;
-        case ServerGameState.PLAYER_HISTORY:
+        case GameState.PLAYER_HISTORY:
             return <History playerId={activePlayerId} />;
-        case ServerGameState.SINGLE_PLAYER:
+        case GameState.SINGLE_PLAYER:
             return <PlayerStream playerId={activePlayerId} />;
         default:
             return <div />;

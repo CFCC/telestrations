@@ -6,8 +6,7 @@ import {configureStore} from "@reduxjs/toolkit";
 import {action} from "@storybook/addon-actions";
 
 import {darkPrimary, GlobalStyles, primary, theme} from "../src/utils/theme";
-import {defaultState as defaultClientState} from "../src/store/client";
-import {defaultState as defaultServerState} from "../src/store/server";
+import {defaultState} from "../src/utils/store";
 
 const Container = styled.div`
     position: absolute;
@@ -24,7 +23,7 @@ const Container = styled.div`
 
 const reducer = (state, dispatchedAction) => {
     action("Redux Action Dispatched")(dispatchedAction.type, dispatchedAction.payload);
-    return {...defaultServerState, ...defaultClientState};
+    return defaultState;
 }
 const store = configureStore({reducer})
 

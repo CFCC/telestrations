@@ -15,12 +15,12 @@ import {
 } from "@material-ui/core";
 import styled from "styled-components";
 import _ from "lodash";
-
-import {useSelector, submitGuess, setGuess} from "../store/client";
-import {useBoolean, useEvent} from "../utils/hooks";
-import SwatchesDialog from "../client/SwatchesDialog";
-import ListDialog from "../client/ListDialog";
 import {useDispatch} from "react-redux";
+
+import {useSelector, submitGuess, setGuess} from "../utils/store";
+import {useBoolean, useEvent} from "../utils/hooks";
+import SwatchesDialog from "../components/SwatchesDialog";
+import ListDialog from "../components/ListDialog";
 
 const Container = styled.div`
     width: 100vw;
@@ -66,9 +66,8 @@ const StyledSlider = styled(Slider)`
 `;
 
 export default function Drawing() {
-    const currentNotepad = useSelector(state => state.currentNotepad);
-    const {content} = _.last(currentNotepad?.pages) ?? {};
-
+    const {user} = useSelector(state => state.client);
+    const {players, notepads} = useSelector(state => state.game);
     const dispatch = useDispatch();
 
     const [tool, setTool] = useState(Tools.Pencil);
@@ -85,6 +84,10 @@ export default function Drawing() {
     const [canRedo, setCanRedo] = useState(false);
 
     const sketch: MutableRefObject<SketchField> = useRef(new SketchField({}));
+
+    if (!user) return null;
+    const currentNotepad = notepads[players[user.uid].currentNotepad];
+    const {content} = _.last(currentNotepad?.pages) ?? {};
 
     const undo = () => {
         sketch.current.undo();

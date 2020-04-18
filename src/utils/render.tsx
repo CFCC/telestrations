@@ -4,13 +4,13 @@ import {StylesProvider, ThemeProvider} from "@material-ui/core/styles";
 import {Provider} from "react-redux";
 
 import {GlobalStyles, theme} from "./theme";
-import {store} from "../store/client";
+import {store} from "./store";
 
 interface WrapperProps {
     children: React.ReactNode;
 }
 
-const wrapper = (store: any) => ({children}: WrapperProps) => (
+const wrapper = ({children}: WrapperProps) => (
     <React.Fragment>
         <StylesProvider injectFirst={true}>
             <ThemeProvider theme={theme}>

@@ -6,7 +6,7 @@ import {uniqueNamesGenerator, colors, animals} from "unique-names-generator";
 import _ from "lodash";
 import {useDispatch} from "react-redux";
 
-import {useSelector, setUser} from "../store/client";
+import {useSelector, setUser} from "../utils/store";
 import {useBoolean} from "../utils/hooks";
 import TitleScreen from "../components/TitleScreen";
 
@@ -22,7 +22,7 @@ const MakeAnonLoginABetterColor = createGlobalStyle`
 
 export default function LoginScreen() {
     const dispatch = useDispatch();
-    const user = useSelector(state => state.user);
+    const user = useSelector(state => state.client.user);
     const [uiLoading,, uiShown] = useBoolean(true);
     const firebaseLoginUiContainerId = "firebaseui-auth-container";
 

@@ -6,7 +6,7 @@ import Cookies from "js-cookie";
 
 import TitleScreen from "../components/TitleScreen";
 import {useEvent} from "../utils/hooks";
-import {joinGame} from "../store/client";
+import {joinGame} from "../utils/store";
 import {useDispatch} from "react-redux";
 
 const Form = styled.form`

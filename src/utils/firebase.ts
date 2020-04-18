@@ -3,9 +3,6 @@ import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/storage";
 import "firebase/firestore";
-import DocumentReference = firebase.firestore.DocumentReference;
-import {Game, Notepad, Player} from "../types/firebase";
-import CollectionReference = firebase.firestore.CollectionReference;
 
 firebase.initializeApp({
     apiKey: "AIzaSyArJkOYiJZ0Ur_BJ67mgERDtDtA8RehFqo",
@@ -18,22 +15,54 @@ firebase.initializeApp({
     measurementId: "G-GVT95G6SSL"
 });
 
+type DocumentReference<T> = firebase.firestore.DocumentReference<T>;
+type CollectionReference<T> = firebase.firestore.CollectionReference<T>;
+
+export type WithId<T extends {}> = T & {
+    id: string;
+}
+
+export interface Page {
+    content: string;
+    lastUpdated: number;
+    author: string;
+}
+
+export interface Notepad {
+    ownerId: string;
+    pages: Page[];
+}
+
+export interface Player {
+    currentNotepad: string;
+    nextPlayer: string;
+    name: string;
+    queue: string[];
+}
+
+export interface Game {
+    created: number;
+    status: "lobby" | "in progress" | "finished";
+    notepads: Record<string, WithId<Notepad>>;
+    players: Record<string, WithId<Player>>;
+}
+
 export const playerRef = (gameCode: string, playerId: string): DocumentReference<Player> => firebase
     .firestore()
-    .doc(`games/${gameCode}/players/${playerId}`);
+    .doc(`games/${gameCode}/players/${playerId}`) as DocumentReference<Player>;
 
 export const playerListRef = (gameCode: string): CollectionReference<Player> => firebase
     .firestore()
-    .collection(`games/${gameCode}/players`);
+    .collection(`games/${gameCode}/players`) as CollectionReference<Player>;
 
 export const notebookRef = (gameCode: string, notepadId: string): DocumentReference<Notepad> => firebase
     .firestore()
-    .doc(`games/${gameCode}/notepad/${notepadId}`);
+    .doc(`games/${gameCode}/notepad/${notepadId}`) as DocumentReference<Notepad>;
 
 export const notebookListRef = (gameCode: string): CollectionReference<Notepad> => firebase
     .firestore()
-    .collection(`games/${gameCode}/notepad`);
+    .collection(`games/${gameCode}/notepad`) as CollectionReference<Notepad>;
 
 export const gameRef = (gameCode: string): DocumentReference<Game> => firebase
     .firestore()
-    .doc(`games/${gameCode}}`);
+    .doc(`games/${gameCode}}`) as DocumentReference<Game>;

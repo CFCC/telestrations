@@ -3,7 +3,7 @@ import {Button as UnstyledButton, TextField} from "@material-ui/core";
 import styled from "styled-components";
 import _ from "lodash";
 
-import {useSelector, setGuess, submitGuess} from "../store/client";
+import {useSelector, setGuess, submitGuess} from "../utils/store";
 import {useDispatch} from "react-redux";
 
 interface FormProps {
@@ -37,9 +37,13 @@ const Image = styled.img`
 
 export default function Typing() {
     const dispatch = useDispatch();
-    const {currentNotepad, guess} = useSelector(state => state);
+    const {client: {user}, game: {players, notepads}} = useSelector(state => state);
 
-    const content = _.last(currentNotepad?.pages)?.content
+    if (!user) return null;
+
+    const currentNotepad = notepads[players[user.uid].currentNotepad];
+    const content = _.nth(currentNotepad?.pages, -2)?.content
+    const guess = _.last(currentNotepad?.pages)?.content;
 
     const dontRefresh = (e: FormEvent) => {
         e.preventDefault();
