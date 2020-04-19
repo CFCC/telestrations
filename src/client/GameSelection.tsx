@@ -1,13 +1,13 @@
 import React, {useEffect, useRef, useState} from "react";
 import {Button as UnstyledButton, FormControl, InputLabel, MenuItem, Select} from "@material-ui/core";
-import * as firebase from "firebase/app";
 import styled from "styled-components";
 import Cookies from "js-cookie";
+import {useDispatch} from "react-redux";
 
 import TitleScreen from "../components/TitleScreen";
 import {useEvent} from "../utils/hooks";
 import {joinGame} from "../utils/store";
-import {useDispatch} from "react-redux";
+import {gameListRef} from "../utils/firebase";
 
 const Form = styled.form`
     width: 50%;
@@ -27,9 +27,7 @@ export default function GameSelection() {
     const dispatch = useDispatch();
 
     useEffect(
-        () => firebase
-            .firestore()
-            .collection("games")
+        () => gameListRef()
             .where("status", "==", "lobby")
             .onSnapshot(async function(snapshot) {
                 const newGames = snapshot.docs.map(doc => doc.id);

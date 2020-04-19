@@ -2,11 +2,11 @@ import React, {useEffect} from "react";
 import {Button as UnstyledButton, TextField} from "@material-ui/core";
 import styled from "styled-components";
 import Cookies from "js-cookie";
+import {useDispatch} from "react-redux";
 
 import {setGameCode} from "../utils/store";
 import TitleScreen from "../components/TitleScreen";
 import {useEvent} from "../utils/hooks";
-import {useDispatch} from "react-redux";
 
 const Form = styled.form`
     width: 50%;

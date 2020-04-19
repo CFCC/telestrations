@@ -1,15 +1,16 @@
 import * as React from "react";
 
 import TitleScreen from "../components/TitleScreen";
-import {GameState, useSelector} from "../utils/store";
+import {GameState} from "../utils/store";
 import Drawing from "../client/Drawing";
 import Typing from "../client/Typing";
 import Waiting from "../client/Waiting";
 import LoginScreen from "../client/LoginScreen";
 import GameSelection from "../client/GameSelection";
+import {useReduxState} from "../utils/hooks";
 
 export default function Client() {
-    const {client: {gameState, user}, game: {players, notepads}} = useSelector(state => state);
+    const {client: {gameState, user}, firebase: {players, notepads}} = useReduxState();
 
     switch (gameState) {
         case GameState.LOGIN:

@@ -6,10 +6,11 @@ import LoadingScreen from "../server/LoadingScreen";
 import History from "../server/History";
 import PlayerStream from "../server/PlayerStream";
 import GameCodeScreen from "../server/GameCodeScreen";
-import {GameState, useSelector} from "../utils/store";
+import {GameState} from "../utils/store";
+import {useReduxState} from "../utils/hooks";
 
 export default function Server() {
-    const {client: {gameState, activePlayerId}} = useSelector(state => state);
+    const {client: {gameState, activePlayerId}} = useReduxState();
 
     useEffect(() => {
         if (!localStorage.getItem('serverId')) {

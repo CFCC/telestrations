@@ -67,7 +67,7 @@ const StyledSlider = styled(Slider)`
 
 export default function Drawing() {
     const {user} = useSelector(state => state.client);
-    const {players, notepads} = useSelector(state => state.game);
+    const {players, notepads} = useSelector(state => state.firebase);
     const dispatch = useDispatch();
 
     const [tool, setTool] = useState(Tools.Pencil);

@@ -26,7 +26,7 @@ const StyledGrid = styled(Grid)`
 `;
 
 export default function BirdsEye() {
-    const {players, notepads} = useSelector(state => state.game);
+    const {players, notepads} = useSelector(state => state.firebase);
     const [menu, setMenu] = useState({
         anchorElement: null,
         playerId: "",

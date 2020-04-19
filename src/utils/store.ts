@@ -9,15 +9,14 @@ import {
 } from "@reduxjs/toolkit";
 import {TypedUseSelectorHook, useSelector as useUntypedSelector} from "react-redux";
 import {merge} from "rxjs";
-import {combineEpics, createEpicMiddleware, Epic, ofType} from "redux-observable";
+import {createEpicMiddleware, Epic, ofType} from "redux-observable";
 import {map, switchMap} from "rxjs/operators";
-import * as firebase from "firebase/app";
 import _ from "lodash";
 import {v4 as uuid} from "uuid";
 import {collectionData, docData} from "rxfire/firestore";
+import {User} from "firebase/app";
 
-import {Game, Notepad, Player, WithId} from "./firebase";
-import {User} from "firebase";
+import {Game, gameRef, notebookRef, Notepad, Player, playerRef, storageRef, WithId} from "./firebase";
 
 export enum GameState {
     // Common
@@ -39,22 +38,29 @@ export enum GameState {
     WAITING_FOR_CONTENT = "waiting for content",
 }
 
-interface State {
-    game: WithId<Game>;
+export interface State {
+    firebase: {
+        game: WithId<Game>;
+        notepads: Record<string, WithId<Notepad>>;
+        players: Record<string, WithId<Player>>;
+    }
     client: {
-        user: firebase.User | null;
+        user: User | null;
         gameState: GameState;
         activePlayerId: string;
     }
 }
 
 export const defaultState: State = {
-    game: {
-        id: "",
+    firebase: {
+        game: {
+            id: "",
+            created: new Date().getTime(),
+            status: "lobby",
+            serverId: "",
+        },
         players: {},
         notepads: {},
-        created: new Date().getTime(),
-        status: "lobby",
     },
     client: {
         user: null,
@@ -66,53 +72,37 @@ export const defaultState: State = {
 // Server Actions
 export const viewPlayerHistory = createAction<string>("VIEW_PLAYER_HISTORY");
 export const viewNotepadHistory = createAction<string>("VIEW_NOTEPAD_HISTORY");
+
 export const setGameCode = createAsyncThunk<void, string>("SET_GAME_CODE", async gameCode => {
-    await firebase
-        .firestore()
-        .doc(`games/${gameCode}`)
+    await gameRef(gameCode)
         .set({
             created: new Date().getTime(),
             status: "lobby",
             serverId: localStorage.getItem('serverId') ?? '',
-        } as Partial<Game>);
+        } as Game);
 });
 export const startGame = createAsyncThunk("START_GAME", async (_, {getState}) => {
-    const {game: {id: gameCode, players}} = getState() as State;
+    const {firebase: {game: {id: gameCode}, players}} = getState() as State;
     const playerIds = Object.keys(players);
 
     await Promise.all(playerIds.map(async (playerId, i) => {
         const notepadId = uuid();
-        await firebase
-            .firestore()
-            .doc(`games/${gameCode}/notepads/${notepadId}`)
-            .set({
-                ownerId: playerId,
-                pages: [],
-            } as Notepad);
-        await firebase
-            .firestore()
-            .doc(`games/${gameCode}/players/${playerId}`)
-            .set({
-                currentNotepad: notepadId,
-                nextPlayer: playerIds[(i + 1) % playerIds.length],
-                queue: [],
-            }, {merge: true});
+        await notebookRef(gameCode, notepadId).set({ownerId: playerId, pages: []});
+        await playerRef(gameCode, playerId).set({
+            currentNotepad: notepadId,
+            nextPlayer: playerIds[(i + 1) % playerIds.length],
+            queue: [],
+        }, {merge: true});
     }));
-
-    await firebase
-        .firestore()
-        .doc(`games/${gameCode}`)
-        .set({status: "in progress"} as Partial<Game>, {merge: true});
+    await gameRef(`games/${gameCode}`).set({status: "in progress"}, {merge: true});
 });
 
 const updateGame = createAction<Pick<Game, "created" | "status">>("UPDATE_GAME");
 const updateNotepads = createAction<Record<string, Notepad>>("UPDATE_NOTEPADS");
 const updatePlayers = createAction<Record<string, Player>>("UPDATE_PLAYERS");
+
 const finishGame = createAsyncThunk("GAME_FINISHED", async (_, {getState}) => {
-    await firebase
-        .firestore()
-        .doc(`games/${(getState() as State).game.id}`)
-        .set({status: "finished"} as Partial<Game>, {merge: true});
+    await gameRef(`games/${(getState() as State).firebase.game.id}`).set({status: "finished"}, {merge: true});
 });
 
 // Client Actions
@@ -121,11 +111,7 @@ export const joinGame = createAsyncThunk<string, string>("JOIN_GAME", async (gam
     const {client: {user}} = getState() as State;
     if (!user) return gameCode;
 
-    await firebase
-        .firestore()
-        .collection(`games/${gameCode}/players`)
-        .doc(user.uid)
-        .set({name: user.displayName});
+    await playerRef(gameCode, user.uid).set({name: user.displayName as NonNullable<string>});
 
     // firebase
     //     .firestore()
@@ -137,7 +123,7 @@ export const joinGame = createAsyncThunk<string, string>("JOIN_GAME", async (gam
     return gameCode;
 });
 export const setGuess = createAsyncThunk<string, string>("SET_GUESS", async (guess, {getState}) => {
-    const {client: {user}, game: {id: gameCode, players, notepads}} = getState() as State;
+    const {client: {user}, firebase: {game: {id: gameCode}, players, notepads}} = getState() as State;
 
     if (!user) return guess;
     const notepad = players[user.uid].currentNotepad;
@@ -165,37 +151,22 @@ export const setGuess = createAsyncThunk<string, string>("SET_GUESS", async (gue
                 pages[pages.length - 1].content = fileName
             }
 
-            firebase
-                .storage()
-                .ref()
-                .child(fileName)
-                .putString(guess, "data_url");
+            storageRef(fileName).putString(guess, "data_url");
         }
 
-        const player = (await firebase
-            .firestore()
-            .doc(`games/${gameCode}/players/${user.uid}`)
-            .get())
-            .data() as Player;
-        await firebase
-            .firestore()
-            .doc(`games/${gameCode}/notepads/${player.currentNotepad}`)
-            .set({pages}, {merge: true});
+        const player = (await playerRef(gameCode, user.uid).get()).data() as Player;
+        await notebookRef(gameCode, player.currentNotepad).set({pages}, {merge: true});
     }, 1000);
     return guess;
 });
 export const submitGuess = createAsyncThunk("SUBMIT_GUESS", async (__, {getState}) => {
-    const {client: {user}, game: {id: gameCode}} = getState() as State;
+    const {client: {user}, firebase: {game: {id: gameCode}}} = getState() as State;
     if (!user) return;
 
-    const playerRef = firebase
-        .firestore()
-        .doc(`games/${gameCode}/players/${user.uid}`);
-    const {currentNotepad, nextPlayer} = (await playerRef.get()).data() as Player;
+    const currentPlayerRef = playerRef(gameCode, user.uid);
+    const {currentNotepad, nextPlayer} = (await currentPlayerRef.get()).data() as Player;
 
-    const nextPlayerRef = firebase
-        .firestore()
-        .doc(`games/${gameCode}/players/${nextPlayer}`);
+    const nextPlayerRef = playerRef(gameCode, nextPlayer);
     const {queue: nextPlayerQueue} = (await nextPlayerRef.get()).data() as Player;
 
     await nextPlayerRef.set({queue: [...nextPlayerQueue, currentNotepad]}, {merge: true});
@@ -205,18 +176,19 @@ const gameStarted = createAction("GAME_STARTED");
 const gameFinished = createAction("GAME_FINISHED");
 const newContent = createAction<string>("NEW_CONTENT");
 
-
-const reducer = createReducer(defaultState, builder => builder
-    // Server Reducers
+const reducer = createReducer<State>(defaultState, builder => builder
+    // Server
     .addCase(setGameCode.fulfilled, (state, {payload: gameCode}) => _.merge(state, {gameState: GameState.LOADING, gameCode}))
     .addCase(startGame.fulfilled, state => _.merge(state, {gameState: GameState.BIRDS_EYE}))
     .addCase(viewPlayerHistory, (state, {payload: activePlayerId}) => _.merge(state, {activePlayerId}))
     .addCase(viewNotepadHistory, (state, {payload: activeNotepadId}) => _.merge(state, {activeNotepadId}))
+
+    // Firebase
     .addCase(updateGame, (state, {payload: game}) => _.merge(state, {game}))
     .addCase(updateNotepads, (state, {payload: notepads}) => _.merge(state, {game: {notepads}}))
     .addCase(updatePlayers, (state, {payload: players}) => _.merge(state, {game: {players}}))
 
-    // Client Reducers
+    // Client
     .addCase(joinGame.fulfilled, (state, {payload: gameCode}) => _.merge(state, {gameCode, gameState: GameState.WAITING_TO_START}))
     .addCase(setGuess.fulfilled, (state, {payload: guess}) => _.merge(state, {guess}))
     .addCase(setUser, (state, {payload: user}) => _.merge(state, {user, gameState: GameState.GAME_CODE}))
@@ -226,9 +198,9 @@ const reducer = createReducer(defaultState, builder => builder
 );
 
 const epicMiddleware = createEpicMiddleware<Action, Action, State>();
-const updateGameEpic: Epic<Action, Action, State> = (action) => action.pipe(
+const epic: Epic<Action, Action, State> = (action) => action.pipe(
     ofType(setGameCode.fulfilled.type),
-    map(o => firebase.firestore().doc(`games/${(o as PayloadAction).payload}`)),
+    map(o => gameRef((o as PayloadAction<string>).payload)),
     switchMap(game => merge(
         docData<Game>(game, "id").pipe(
             map(updateGame)
@@ -243,27 +215,11 @@ const updateGameEpic: Epic<Action, Action, State> = (action) => action.pipe(
         )
     ))
 );
-const waitingForQueueItemEpic: Epic<Action, Action, State> = (action) => action.pipe(
-    ofType(submitGuess.fulfilled),
-    // switchMap(() =>
-    //     docData<Player>(firebase
-    //         .firestore()
-    //         .doc(`games/${state.value.gameCode}/players/${state.value.user?.uid}`)
-    //     ).pipe(
-    //         filter(u => u.queue.length > 0),
-    //         tap(p => {
-    //
-    //         }),
-    //         map()
-    //     )
-    // )
-);
-const rootEpic = combineEpics<Action, Action, State>(updateGameEpic, waitingForQueueItemEpic);
 
 export const store = configureStore({
     reducer,
     middleware: [...getDefaultMiddleware(), epicMiddleware],
 });
-epicMiddleware.run(rootEpic);
+epicMiddleware.run(epic);
 
 export const useSelector: TypedUseSelectorHook<State> = useUntypedSelector;

@@ -28,7 +28,13 @@ interface SwatchesDialogProps {
     setColor: (color: string) => void;
 }
 
-export default function SwatchesDialog({open, setClose, color: selectedColor, colors, setColor}: SwatchesDialogProps) {
+export default function SwatchesDialog({
+    open,
+    setClose,
+    color: selectedColor,
+    colors,
+    setColor,
+}: SwatchesDialogProps) {
     function onColorSelected(c: string) {
         return () => {
             setColor(c);

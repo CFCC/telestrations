@@ -10,8 +10,6 @@ interface ListDialogProps {
 
 export default function ListDialog({open, close, items, onItemSelected}: ListDialogProps) {
     const itemSelected = (item: string) => () => {
-        // Because this is only being used once, this operation is safe, but if this had to be
-        // reused, I'd probably introduce an optional transform prop
         onItemSelected(item.toLowerCase());
         close();
     };

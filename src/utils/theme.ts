@@ -1,7 +1,6 @@
 import {createMuiTheme} from "@material-ui/core/styles";
 import {createGlobalStyle} from "styled-components";
 
-// original primary = "hsl(45, 100%, 52%)";
 export const primary = "hsl(50, 100%, 65%)";
 export const darkPrimary = "hsl(40, 100%, 45%)";
 

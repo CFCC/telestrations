@@ -22,7 +22,12 @@ const Container = styled.div`
 `;
 
 const reducer = (state, dispatchedAction) => {
-    action("Redux Action Dispatched")(dispatchedAction.type, dispatchedAction.payload);
+    if (action.payload) {
+        action("Redux Action Dispatched")(dispatchedAction.type, dispatchedAction.payload);
+    } else {
+        action("Redux Action Dispatched")(dispatchedAction.type);
+    }
+
     return defaultState;
 }
 const store = configureStore({reducer})

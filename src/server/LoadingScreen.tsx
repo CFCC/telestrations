@@ -23,7 +23,7 @@ const PlayerLabel = styled(Typography)`
 
 export default function LoadingScreen() {
     const dispatch = useDispatch();
-    const {game: {players, id: gameCode}} = useSelector(state => state);
+    const {game: {id: gameCode}, players} = useSelector(state => state.firebase);
 
     function handleStartGame() {
         dispatch(startGame());

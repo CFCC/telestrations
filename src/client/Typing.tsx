@@ -3,8 +3,9 @@ import {Button as UnstyledButton, TextField} from "@material-ui/core";
 import styled from "styled-components";
 import _ from "lodash";
 
-import {useSelector, setGuess, submitGuess} from "../utils/store";
+import {setGuess, submitGuess} from "../utils/store";
 import {useDispatch} from "react-redux";
+import {useReduxState} from "../utils/hooks";
 
 interface FormProps {
     content?: string;
@@ -37,7 +38,7 @@ const Image = styled.img`
 
 export default function Typing() {
     const dispatch = useDispatch();
-    const {client: {user}, game: {players, notepads}} = useSelector(state => state);
+    const {client: {user}, firebase: {players, notepads}} = useReduxState();
 
     if (!user) return null;
 

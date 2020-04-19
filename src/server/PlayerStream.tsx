@@ -1,6 +1,7 @@
 import * as React from "react";
 import {CardContent, Typography} from "@material-ui/core";
 import styled from "styled-components";
+
 import {useSelector} from "../utils/store";
 
 interface PlayerStreamProps {
@@ -29,7 +30,7 @@ const Content = styled(CardContent)`
 `;
 
 export default function PlayerStream({playerId}: PlayerStreamProps) {
-    const {game: {players, notepads}} = useSelector(state => state);
+    const {players, notepads} = useSelector(state => state.firebase);
 
     const notepad = notepads[players[playerId]?.currentNotepad];
     const playerIndexInNotepad = notepad?.pages?.length;
