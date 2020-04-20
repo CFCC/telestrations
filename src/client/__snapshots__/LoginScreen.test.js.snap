@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Renders 1`] = `
+<DocumentFragment>
+  <div
+    class="sc-AxjAm kwsLvR"
+  >
+    <img
+      alt="Telestrations"
+      class="sc-AxiKw iXGiQC"
+      src="/logo.png"
+    />
+    <p
+      class="MuiTypography-root sc-AxhCb bDZFln MuiTypography-body1"
+    >
+      Log In
+    </p>
+    <div
+      id="firebaseui-auth-container"
+    />
+    <div
+      class="MuiCircularProgress-root sc-AxirZ eovyrP MuiCircularProgress-colorPrimary MuiCircularProgress-indeterminate"
+      role="progressbar"
+      style="width: 40px; height: 40px;"
+    >
+      <svg
+        class="MuiCircularProgress-svg"
+        viewBox="22 22 44 44"
+      >
+        <circle
+          class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
+          cx="44"
+          cy="44"
+          fill="none"
+          r="20.2"
+          stroke-width="3.6"
+        />
+      </svg>
+    </div>
+  </div>
+</DocumentFragment>
+`;
