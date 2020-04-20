@@ -7,6 +7,4 @@ export default {
     component: Waiting,
 };
 
-export const Standard = () => (
-    <Waiting />
-);
+export const Standard = () => <Waiting />;

@@ -5,7 +5,7 @@ import * as colors from "@material-ui/core/colors";
 import SwatchesDialog from "./SwatchesDialog";
 
 export default {
-    title: 'Client/Swatches Dialog',
+    title: 'Common/Swatches Dialog',
     component: SwatchesDialog,
 }
 

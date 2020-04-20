@@ -1,5 +1,4 @@
-import {render} from "@testing-library/react";
-
+import {render} from "../utils/render";
 import {Standard} from "./Drawing.stories";
 
 it('Renders', () => {

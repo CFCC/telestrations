@@ -7,6 +7,4 @@ export default {
     component: Drawing,
 };
 
-export const Standard = () => (
-    <Drawing />
-);
+export const Standard = () => <Drawing />;

@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Renders 1`] = `
+<DocumentFragment>
+  <div
+    class="sc-AxjAm kwsLvR"
+  >
+    <img
+      alt="Telestrations"
+      class="sc-AxiKw iXGiQC"
+      src="/logo.png"
+    />
+    <p
+      class="MuiTypography-root sc-AxhCb bDZFln MuiTypography-body1"
+    >
+      Waiting for clients to connect
+    </p>
+    <p
+      class="MuiTypography-root MuiTypography-body1"
+    >
+      Tell people to select game ""
+    </p>
+    <div
+      class="sc-AxhUy jywaEU"
+    />
+    <button
+      class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-containedSizeLarge MuiButton-sizeLarge Mui-disabled Mui-disabled"
+      disabled=""
+      tabindex="-1"
+      type="button"
+    >
+      <span
+        class="MuiButton-label"
+      >
+        Start Game
+      </span>
+    </button>
+  </div>
+</DocumentFragment>
+`;

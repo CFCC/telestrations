@@ -22,6 +22,6 @@ const wrapper = ({children}: WrapperProps) => (
         </StylesProvider>
     </React.Fragment>
 );
-const customRender = (ui: React.ReactElement, options: any) => render(ui, {wrapper, ...options});
+const customRender = (ui: React.ReactElement) => render(ui, {wrapper} as object);
 
 export {customRender as render};

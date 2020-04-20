@@ -1,3 +1,6 @@
+const path = require("path");
+const _ = require("lodash");
+
 module.exports = {
     stories: ["../src/**/*.stories.js"],
     addons: [
@@ -8,15 +11,19 @@ module.exports = {
         "@storybook/addon-a11y",
         "@storybook/addon-viewport",
     ],
-    webpackFinal: config => ({
-        ...config,
+    webpackFinal: config => _.merge(config, {
         node: {
-            ...config.node,
             child_process: "empty",
             fs: "empty",
             crypto: "empty",
             net: "empty",
             tls: "empty"
+        },
+        resolve: {
+            alias: {
+                "./firebase": path.resolve(__dirname, "..", "src", "utils", "__mocks__", "firebase.js"),
+                "../utils/firebase": path.resolve(__dirname, "..", "src", "utils", "__mocks__", "firebase.js"),
+            },
         },
     }),
 };

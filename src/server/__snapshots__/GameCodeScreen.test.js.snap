@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Renders 1`] = `
+<DocumentFragment>
+  <div
+    class="sc-AxjAm kwsLvR"
+  >
+    <img
+      alt="Telestrations"
+      class="sc-AxiKw iXGiQC"
+      src="/logo.png"
+    />
+    <p
+      class="MuiTypography-root sc-AxhCb bDZFln MuiTypography-body1"
+    >
+      Please Choose a Game Code
+    </p>
+    <p
+      class="MuiTypography-root MuiTypography-body1"
+    >
+      Players will select this code from the list of available games
+    </p>
+    <form
+      class="sc-AxhUy jxwSyn"
+    >
+      <div
+        class="MuiFormControl-root MuiTextField-root"
+      >
+        <label
+          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined"
+          data-shrink="false"
+        >
+          Game Code
+        </label>
+        <div
+          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-formControl"
+        >
+          <input
+            aria-invalid="false"
+            class="MuiInputBase-input MuiOutlinedInput-input"
+            type="text"
+            value=""
+          />
+          <fieldset
+            aria-hidden="true"
+            class="PrivateNotchedOutline-root-89 MuiOutlinedInput-notchedOutline"
+          >
+            <legend
+              class="PrivateNotchedOutline-legendLabelled-91"
+            >
+              <span>
+                Game Code
+              </span>
+            </legend>
+          </fieldset>
+        </div>
+      </div>
+      <button
+        class="MuiButtonBase-root MuiButton-root MuiButton-contained sc-AxgMl dwWkfH MuiButton-containedPrimary MuiButton-containedSizeLarge MuiButton-sizeLarge Mui-disabled Mui-disabled"
+        disabled=""
+        tabindex="-1"
+        type="button"
+      >
+        <span
+          class="MuiButton-label"
+        >
+          Open Lobby
+        </span>
+      </button>
+    </form>
+  </div>
+</DocumentFragment>
+`;

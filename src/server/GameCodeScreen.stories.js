@@ -1,5 +1,4 @@
 import React from "react";
-
 import GameCodeScreen from "./GameCodeScreen";
 
 export default {
@@ -7,6 +6,4 @@ export default {
     component: GameCodeScreen,
 };
 
-export const Standard = () => (
-    <GameCodeScreen />
-)
+export const Standard = () => <GameCodeScreen />;

@@ -4,7 +4,7 @@ import {action} from "@storybook/addon-actions";
 import ListDialog from "./ListDialog";
 
 export default {
-    title: 'Client/List Dialog',
+    title: 'Common/List Dialog',
     component: ListDialog,
 }
 

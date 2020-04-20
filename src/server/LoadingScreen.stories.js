@@ -6,6 +6,4 @@ export default {
     component: LoadingScreen,
 };
 
-export const Standard = () => (
-    <LoadingScreen />
-)
+export const Standard = () => <LoadingScreen />;

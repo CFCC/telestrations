@@ -33,7 +33,7 @@ export default function LoadingScreen() {
         if (oldGameCode) {
             dispatch(setGameCode(oldGameCode));
         }
-    }, [setGameCode]);
+    }, [setGameCode, dispatch]);
 
     return (
         <TitleScreen

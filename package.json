@@ -32,7 +32,8 @@
     "start": "cross-env BROWSER=none react-scripts start",
     "build": "react-scripts build",
     "deploy": "yarn build && firebase deploy",
-    "deploy:ci": "yarn build && firebase deploy --token \"$FIREBASE_DEPLOY_TOKEN\"",
+    "test": "react-scripts test",
+    "deploy:ci": "yarn test && yarn build && firebase deploy --token \"$FIREBASE_DEPLOY_TOKEN\"",
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public"
   },

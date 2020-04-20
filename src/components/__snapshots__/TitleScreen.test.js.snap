@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Renders 1`] = `
+<DocumentFragment>
+  <div
+    class="sc-AxjAm kwsLvR"
+  >
+    <img
+      alt="Telestrations"
+      class="sc-AxiKw iXGiQC"
+      src="/logo.png"
+    />
+    <p
+      class="MuiTypography-root sc-AxhCb bDZFln MuiTypography-body1"
+    >
+      Hello, world!
+    </p>
+    <p
+      class="MuiTypography-root MuiTypography-body1"
+    >
+      How are you?
+    </p>
+  </div>
+</DocumentFragment>
+`;

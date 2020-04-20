@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Renders 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiGrid-root sc-AxhUy ljtkiQ MuiGrid-container MuiGrid-spacing-xs-4"
+  />
+</DocumentFragment>
+`;

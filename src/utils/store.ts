@@ -101,24 +101,23 @@ const updateGame = createAction<Pick<Game, "created" | "status">>("UPDATE_GAME")
 const updateNotepads = createAction<Record<string, Notepad>>("UPDATE_NOTEPADS");
 const updatePlayers = createAction<Record<string, Player>>("UPDATE_PLAYERS");
 
-const finishGame = createAsyncThunk("GAME_FINISHED", async (_, {getState}) => {
-    await gameRef(`games/${(getState() as State).firebase.game.id}`).set({status: "finished"}, {merge: true});
-});
+// const finishGame = createAsyncThunk("GAME_FINISHED", async (_, {getState}) => {
+//     await gameRef(`games/${(getState() as State).firebase.game.id}`).set({status: "finished"}, {merge: true});
+// });
 
 // Client Actions
 export const setUser = createAction<User | null>("SET_USER");
-export const joinGame = createAsyncThunk<string, string>("JOIN_GAME", async (gameCode, {getState}) => {
+export const joinGame = createAsyncThunk<string, string>("JOIN_GAME", async (gameCode, {getState, dispatch}) => {
     const {client: {user}} = getState() as State;
     if (!user) return gameCode;
 
     await playerRef(gameCode, user.uid).set({name: user.displayName as NonNullable<string>});
 
-    // firebase
-    //     .firestore()
-    //     .doc(`games/${gameCode}`)
-    //     .onSnapshot(snapshot => {
-    //         if ((snapshot.data() as Game).status === "in progress") callback();
-    //     });
+    gameRef(gameCode).onSnapshot(snapshot => {
+        const game = snapshot.data() as Game;
+        if (game.status === "in progress") dispatch(gameStarted());
+        else if (game.status === "finished") dispatch(gameFinished());
+    });
 
     return gameCode;
 });

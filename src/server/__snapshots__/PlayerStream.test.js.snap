@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`While Drawing Renders 1`] = `
+<DocumentFragment>
+  <div
+    class="sc-AxjAm ehZnxG"
+  />
+  <div
+    class="MuiCardContent-root sc-AxiKw fiNxug"
+  >
+    <p
+      class="MuiTypography-root MuiTypography-body1 MuiTypography-alignCenter"
+    >
+      Drawing for next notepad...
+    </p>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`While Typing Renders 1`] = `
+<DocumentFragment>
+  <div
+    class="sc-AxjAm ehZnxG"
+  />
+  <div
+    class="MuiCardContent-root sc-AxiKw fiNxug"
+  >
+    <p
+      class="MuiTypography-root MuiTypography-body1 MuiTypography-alignCenter"
+    >
+      Drawing for next notepad...
+    </p>
+  </div>
+</DocumentFragment>
+`;
