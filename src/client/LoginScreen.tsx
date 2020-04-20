@@ -2,17 +2,13 @@ import React, {useEffect} from "react";
 import firebase from "firebase/app";
 import * as firebaseUi from "firebaseui";
 import {createGlobalStyle} from "styled-components";
-import {uniqueNamesGenerator, colors, animals} from "unique-names-generator";
-import _ from "lodash";
-import {useDispatch} from "react-redux";
 
-import {useSelector, setUser} from "../utils/store";
+import {useSelector} from "../utils/store";
 import {useBoolean} from "../utils/hooks";
 import TitleScreen from "../components/TitleScreen";
+import {firebaseLoginUi} from "../utils/firebase";
 
-import "firebaseui/dist/firebaseui.css"
-
-const firebaseLoginUi = new firebaseUi.auth.AuthUI(firebase.auth());
+import "firebaseui/dist/firebaseui.css";
 
 const MakeAnonLoginABetterColor = createGlobalStyle`
     .firebaseui-idp-anonymous { 
@@ -21,7 +17,6 @@ const MakeAnonLoginABetterColor = createGlobalStyle`
 `;
 
 export default function LoginScreen() {
-    const dispatch = useDispatch();
     const user = useSelector(state => state.client.user);
     const [uiLoading,, uiShown] = useBoolean(true);
     const firebaseLoginUiContainerId = "firebaseui-auth-container";
@@ -36,21 +31,6 @@ export default function LoginScreen() {
                 firebaseUi.auth.AnonymousAuthProvider.PROVIDER_ID
             ],
         });
-    });
-
-    firebase.auth().onAuthStateChanged(function(user: firebase.User | null) {
-        if (!user) return;
-        if (!user.displayName) {
-            const displayName = _.startCase(uniqueNamesGenerator({
-                dictionaries: [colors, animals],
-                length: 2,
-                separator: "-",
-            }));
-            user.updateProfile({displayName});
-            dispatch(setUser({...user, displayName}));
-        } else {
-            dispatch(setUser(user));
-        }
     });
 
     return (

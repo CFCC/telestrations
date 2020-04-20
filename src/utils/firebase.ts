@@ -1,8 +1,13 @@
 import * as firebase from "firebase/app";
+import _ from "lodash";
+import {animals, colors, uniqueNamesGenerator} from "unique-names-generator";
+import * as firebaseUi from "firebaseui";
 
 import "firebase/auth";
 import "firebase/storage";
 import "firebase/firestore";
+
+import {setUser, store} from "./store";
 
 firebase.initializeApp({
     apiKey: "AIzaSyArJkOYiJZ0Ur_BJ67mgERDtDtA8RehFqo",
@@ -14,6 +19,23 @@ firebase.initializeApp({
     appId: "1:751293854725:web:1f057bd8b910b9b6e8d86c",
     measurementId: "G-GVT95G6SSL"
 });
+
+firebase.auth().onAuthStateChanged(function(user: firebase.User | null) {
+    if (!user) return;
+    if (!user.displayName) {
+        const displayName = _.startCase(uniqueNamesGenerator({
+            dictionaries: [colors, animals],
+            length: 2,
+            separator: "-",
+        }));
+        user.updateProfile({displayName});
+        store.dispatch(setUser({...user, displayName}));
+    } else {
+        store.dispatch(setUser(user));
+    }
+});
+
+export const firebaseLoginUi = new firebaseUi.auth.AuthUI(firebase.auth());
 
 type DocumentReference<T> = firebase.firestore.DocumentReference<T>;
 type CollectionReference<T> = firebase.firestore.CollectionReference<T>;
