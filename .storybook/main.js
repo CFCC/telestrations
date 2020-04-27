@@ -21,8 +21,10 @@ module.exports = {
         },
         resolve: {
             alias: {
-                "./firebase": path.resolve(__dirname, "..", "src", "utils", "__mocks__", "firebase.js"),
-                "../utils/firebase": path.resolve(__dirname, "..", "src", "utils", "__mocks__", "firebase.js"),
+                "firebaseui/dist/firebaseui.css$": path.resolve(__dirname, "..", "src", "__mocks__", "firebaseui.js"),
+                "firebaseui$": path.resolve(__dirname, "..", "src", "__mocks__", "firebaseui.js"),
+                "./firebase$": path.resolve(__dirname, "..", "src", "utils", "__mocks__", "firebase.js"),
+                "../utils/firebase$": path.resolve(__dirname, "..", "src", "utils", "__mocks__", "firebase.js"),
             },
         },
     }),

@@ -19,7 +19,7 @@ export default function Server() {
     }, []);
 
     switch (gameState) {
-        case GameState.GAME_CODE:
+        case GameState.LOGIN:
             return <GameCodeScreen />;
         case GameState.LOADING:
             return <LoadingScreen />;
