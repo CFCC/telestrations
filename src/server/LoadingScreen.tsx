@@ -2,7 +2,8 @@ import * as React from "react";
 import {Button, Typography} from "@material-ui/core";
 import styled from "styled-components";
 
-import {startGame, useSelector} from "../utils/store";
+import {clientSlice, GameState, useSelector} from "../utils/store";
+import {startGame} from "../utils/firebase";
 import TitleScreen from "../components/TitleScreen";
 import {useDispatch} from "react-redux";
 
@@ -26,7 +27,8 @@ export default function LoadingScreen() {
     const {game: {id: gameCode}, players} = useSelector(state => state.firebase);
 
     function handleStartGame() {
-        dispatch(startGame());
+        startGame();
+        dispatch(clientSlice.actions.setGameState(GameState.BIRDS_EYE));
     }
 
     return (

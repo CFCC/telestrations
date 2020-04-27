@@ -8,9 +8,10 @@ import {
     MenuItem,
 } from "@material-ui/core";
 import styled from "styled-components";
+import {useDispatch} from "react-redux";
 
-import PlayerStream from "../server/PlayerStream";
-import {viewNotepadHistory, viewPlayerHistory, useSelector} from "../utils/store";
+import {clientSlice, useSelector} from "../utils/store";
+import PlayerStream from "./PlayerStream";
 
 interface BirdsEyeState {
     anchorElement: HTMLElement | null;
@@ -27,12 +28,21 @@ const StyledGrid = styled(Grid)`
 
 export default function BirdsEye() {
     const {players, notepads} = useSelector(state => state.firebase);
+    const dispatch = useDispatch();
     const [menu, setMenu] = useState({
         anchorElement: null,
         playerId: "",
     } as BirdsEyeState);
 
-    const closeMenu = () => setMenu({anchorElement: null, playerId: ""});
+    const closeMenu = () => {
+        setMenu({anchorElement: null, playerId: ""});
+    };
+    const handleViewPlayerHistory = () => {
+        dispatch(clientSlice.actions.viewPlayerHistory(menu.playerId));
+    };
+    const handleViewNotepadHistory = () => {
+        dispatch(clientSlice.actions.viewNotepadHistory(notepads[players[menu.playerId].currentNotepad].ownerId));
+    };
 
     return (
         <React.Fragment>
@@ -82,10 +92,10 @@ export default function BirdsEye() {
                 onClose={closeMenu}
                 anchorEl={menu.anchorElement}
             >
-                <MenuItem onClick={() => viewPlayerHistory(menu.playerId)}>
+                <MenuItem onClick={handleViewPlayerHistory}>
                     View Player History (Coming Soon!)
                 </MenuItem>
-                <MenuItem onClick={() => viewNotepadHistory(menu.playerId)}>
+                <MenuItem onClick={handleViewNotepadHistory}>
                     View Notepad History (Coming Soon!)
                 </MenuItem>
                 <MenuItem>

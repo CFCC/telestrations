@@ -1,6 +1,6 @@
 import {useState} from "react";
 
-import {useSelector, State} from "./store";
+import {useSelector} from "./store";
 
 export function useBoolean(initialState: boolean): [boolean, () => void, () => void] {
     const [bool, setBool] = useState(initialState);
@@ -17,6 +17,6 @@ export function useEvent<T>(defaultValue: T, getter: (...args: any) => T): [T, (
     return [state, wrappedSetState, setState];
 }
 
-export function useReduxState(): State {
+export function useReduxState() {
     return useSelector(state => state);
 }

@@ -6,8 +6,8 @@ import {useDispatch} from "react-redux";
 
 import TitleScreen from "../components/TitleScreen";
 import {useEvent} from "../utils/hooks";
-import {joinGame} from "../utils/store";
-import {gameListRef} from "../utils/firebase";
+import {clientSlice, GameState} from "../utils/store";
+import {getGameCodes, joinGame} from "../utils/firebase";
 
 const Form = styled.form`
     width: 50%;
@@ -27,13 +27,10 @@ export default function GameSelection() {
     const dispatch = useDispatch();
 
     useEffect(
-        () => gameListRef()
-            .where("status", "==", "lobby")
-            .onSnapshot(async function(snapshot) {
-                const newGames = snapshot.docs.map(doc => doc.id);
-                setGames(newGames);
-                if (!newGames.includes(game)) rawSetGame("");
-            }),
+        () => getGameCodes(function(newGames) {
+            setGames(newGames);
+            if (!newGames.includes(game)) rawSetGame("");
+        }),
         [game, rawSetGame]
     );
 
@@ -43,13 +40,15 @@ export default function GameSelection() {
 
     function onSubmit() {
         Cookies.set("gameCode", game, {expires: 0.66})
-        dispatch(joinGame(game));
+        joinGame(game);
+        dispatch(clientSlice.actions.setGameState(GameState.WAITING_TO_START));
     }
 
     useEffect(() => {
         const gameCode = Cookies.get("gameCode");
         if (gameCode) {
-            dispatch(joinGame(gameCode));
+            joinGame(gameCode);
+            dispatch(clientSlice.actions.setGameState(GameState.WAITING_TO_START));
         }
     });
 

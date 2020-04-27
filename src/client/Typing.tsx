@@ -3,7 +3,8 @@ import {Button as UnstyledButton, TextField} from "@material-ui/core";
 import styled from "styled-components";
 import _ from "lodash";
 
-import {setGuess, submitGuess} from "../utils/store";
+import {clientSlice, GameState} from "../utils/store";
+import {setGuess, submitGuess} from "../utils/firebase";
 import {useDispatch} from "react-redux";
 import {useReduxState} from "../utils/hooks";
 
@@ -48,11 +49,12 @@ export default function Typing() {
 
     const dontRefresh = (e: FormEvent) => {
         e.preventDefault();
-        dispatch(submitGuess());
+        submitGuess()
+        dispatch(clientSlice.actions.setGameState(GameState.WAITING_FOR_CONTENT));
         return false;
     };
 
-    const updateGuess = ({target: {value}}: ChangeEvent<HTMLInputElement>) => dispatch(setGuess(value));
+    const updateGuess = ({target: {value}}: ChangeEvent<HTMLInputElement>) => setGuess(value);
 
     return (
         <Form onSubmit={dontRefresh} content={content}>

@@ -8,7 +8,9 @@ import "firebase/auth";
 import "firebase/storage";
 import "firebase/firestore";
 
-import {GameState, setGameState, setUser, store, updateGame, updateNotepads, updatePlayers} from "./store";
+import {GameState, store, firebaseSlice, clientSlice} from "./store";
+const {actions: {updatePlayers, updateNotepads, updateGame}} = firebaseSlice;
+const {actions: {setGameState, setUser}} = clientSlice;
 
 firebase.initializeApp({
     apiKey: "AIzaSyArJkOYiJZ0Ur_BJ67mgERDtDtA8RehFqo",
@@ -20,7 +22,6 @@ firebase.initializeApp({
     appId: "1:751293854725:web:1f057bd8b910b9b6e8d86c",
     measurementId: "G-GVT95G6SSL"
 });
-
 firebase.auth().onAuthStateChanged(function(user: firebase.User | null) {
     if (!user) return;
     if (!user.displayName) {
@@ -39,35 +40,40 @@ firebase.auth().onAuthStateChanged(function(user: firebase.User | null) {
 export const firebaseLoginUi = new firebaseUi.auth.AuthUI(firebase.auth());
 
 type DocumentReference<T> = firebase.firestore.DocumentReference<T>;
-
 export type WithId<T extends {}> = T & {
     id: string;
 }
-
 export interface Page {
     content: string;
     lastUpdated: number;
     author: string;
 }
-
 export interface Notepad {
     ownerId: string;
     pages: Page[];
 }
-
 export interface Player {
     currentNotepad: string;
     nextPlayer: string;
     name: string;
     queue: string[];
 }
-
 export interface Game {
     created: number;
     status: "lobby" | "in progress" | "finished";
     serverId: string;
 }
 
+export const getGameCodes = (callback: (ids: string[]) => void) => {
+    firebase
+        .firestore()
+        .collection("games")
+        .where("status", "==", "lobby")
+        .onSnapshot(async function(snapshot) {
+            const newGames = snapshot.docs.map(doc => doc.id);
+            callback(newGames);
+        });
+}
 export const setGameCode = (gameCode: string, isClient: boolean = false) => {
     const game = firebase
         .firestore()
@@ -100,7 +106,6 @@ export const setGameCode = (gameCode: string, isClient: boolean = false) => {
         }
     });
 };
-
 export const createGame = async (gameCode: string) => {
     await (firebase
         .firestore()
@@ -109,8 +114,7 @@ export const createGame = async (gameCode: string) => {
         status: "lobby",
         serverId: localStorage.getItem('serverId') ?? '',
     } as Game);
-}
-
+};
 export const joinGame = async (gameCode: string) => {
     const {client: {user}} = store.getState();
     if (!user) return;
@@ -120,7 +124,6 @@ export const joinGame = async (gameCode: string) => {
         .doc(`games/${gameCode}/players/${(user.uid)}`) as DocumentReference<Partial<Player>>)
         .set({name: user.displayName as NonNullable<string>});
 };
-
 export const startGame = async () => {
     const {firebase: {game: {id: gameCode}, players}} = store.getState();
     const playerIds = Object.keys(players);
@@ -142,8 +145,7 @@ export const startGame = async () => {
         .firestore()
         .doc(`games/${gameCode}`) as DocumentReference<Partial<Game>>)
         .set({status: "in progress"}, {merge: true});
-}
-
+};
 export const setGuess = async (guess: string) => {
     const {
         client: {user},
@@ -196,8 +198,7 @@ export const setGuess = async (guess: string) => {
             .doc(`games/${gameCode}/notepad/${(player.currentNotepad)}`) as DocumentReference<Partial<Notepad>>)
             .set({pages}, {merge: true});
     }, 1000);
-}
-
+};
 export const submitGuess = async () => {
     const {client: {user}, firebase: {game: {id: gameCode}}} = store.getState();
     if (!user) return;
@@ -213,4 +214,4 @@ export const submitGuess = async () => {
     const {queue: nextPlayerQueue} = (await nextPlayerRef.get()).data() as Player;
 
     await nextPlayerRef.set({queue: [...nextPlayerQueue, currentNotepad]}, {merge: true});
-}
+};

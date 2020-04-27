@@ -2,7 +2,7 @@ import {configureStore, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {TypedUseSelectorHook, useSelector as useUntypedSelector} from "react-redux";
 import {User} from "firebase/app";
 
-import {Game, Notepad, Player} from "./firebase";
+import {Game, Notepad, Player, WithId} from "./firebase";
 
 export enum GameState {
     // Common
@@ -33,11 +33,11 @@ export const firebaseSlice = createSlice({
             status: "lobby",
             serverId: "",
         },
-        players: {},
-        notepads: {},
+        players: {} as Record<string, Player>,
+        notepads: {} as Record<string, Notepad>,
     },
     reducers: {
-        updateGame: (state, action: PayloadAction<Partial<Game>>) => {
+        updateGame: (state, action: PayloadAction<Partial<WithId<Game>>>) => {
             state.game = {...state.game, ...action.payload};
         },
         updateNotepads: (state, action: PayloadAction<Record<string, Notepad>>) => {
