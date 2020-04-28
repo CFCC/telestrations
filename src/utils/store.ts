@@ -8,16 +8,15 @@ export enum GameState {
     // Common
     LOGIN = "login",
     GAME_CODE = "game code",
+    WAITING_TO_START = "waiting to start",
 
     // Server
-    LOADING = "loading",
     BIRDS_EYE = "bird's eye",
     SINGLE_PLAYER = "single player",
     PLAYER_HISTORY = "player history",
     NOTEPAD_HISTORY = "notepad history",
 
     // Client
-    WAITING_TO_START = "waiting to start",
     IN_GAME = "in game",
     FINISHED = "finished",
     ALREADY_STARTED = "already started",

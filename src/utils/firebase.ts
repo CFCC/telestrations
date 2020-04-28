@@ -107,12 +107,15 @@ export const setGameCode = (gameCode: string, isClient: boolean = false) => {
     });
 };
 export const createGame = async (gameCode: string) => {
+    const {client: {user}} = store.getState();
+    if (!user) return;
+
     await (firebase
         .firestore()
         .doc(`games/${gameCode}`) as DocumentReference<Game>).set({
         created: new Date().getTime(),
         status: "lobby",
-        serverId: localStorage.getItem('serverId') ?? '',
+        serverId: user.uid,
     } as Game);
 };
 export const joinGame = async (gameCode: string) => {

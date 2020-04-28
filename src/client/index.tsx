@@ -5,7 +5,7 @@ import {GameState} from "../utils/store";
 import Drawing from "../client/Drawing";
 import Typing from "../client/Typing";
 import Waiting from "../client/Waiting";
-import LoginScreen from "../client/LoginScreen";
+import LoginScreen from "../components/LoginScreen";
 import GameSelection from "../client/GameSelection";
 import {useReduxState} from "../utils/hooks";
 

@@ -5,7 +5,7 @@ import {createGlobalStyle} from "styled-components";
 
 import {useSelector} from "../utils/store";
 import {useBoolean} from "../utils/hooks";
-import TitleScreen from "../components/TitleScreen";
+import TitleScreen from "./TitleScreen";
 import {firebaseLoginUi} from "../utils/firebase";
 
 import "firebaseui/dist/firebaseui.css";

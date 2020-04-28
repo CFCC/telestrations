@@ -1,5 +1,4 @@
-import React, {useEffect} from "react";
-import {v4 as uuid} from "uuid";
+import React from "react";
 
 import BirdsEye from "../server/BirdsEye";
 import LoadingScreen from "../server/LoadingScreen";
@@ -8,20 +7,17 @@ import PlayerStream from "../server/PlayerStream";
 import GameCodeScreen from "../server/GameCodeScreen";
 import {GameState} from "../utils/store";
 import {useReduxState} from "../utils/hooks";
+import LoginScreen from "../components/LoginScreen";
 
 export default function Server() {
     const {client: {gameState, activePlayerId}} = useReduxState();
 
-    useEffect(() => {
-        if (!localStorage.getItem('serverId')) {
-            localStorage.setItem('serverId', uuid());
-        }
-    }, []);
-
     switch (gameState) {
         case GameState.LOGIN:
+            return <LoginScreen />;
+        case GameState.GAME_CODE:
             return <GameCodeScreen />;
-        case GameState.LOADING:
+        case GameState.WAITING_TO_START:
             return <LoadingScreen />;
         case GameState.BIRDS_EYE:
             return <BirdsEye />;
