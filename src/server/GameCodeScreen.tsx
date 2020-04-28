@@ -4,9 +4,9 @@ import styled from "styled-components";
 import Cookies from "js-cookie";
 import {useDispatch} from "react-redux";
 
-import {setGameCode} from "../utils/store";
 import TitleScreen from "../components/TitleScreen";
 import {useEvent} from "../utils/hooks";
+import {setGameCode} from "../utils/firebase";
 
 const Form = styled.form`
     width: 50%;
@@ -26,14 +26,14 @@ export default function LoadingScreen() {
     function submitGameCode(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         Cookies.set("gameCode", gameCode, {expires: 0.66});
-        dispatch(setGameCode(gameCode));
+        setGameCode(gameCode);
     }
 
     useEffect(() => {
         const oldGameCode = Cookies.get("gameCode");
         console.log(oldGameCode);
         if (oldGameCode) {
-            dispatch(setGameCode(oldGameCode));
+            setGameCode(oldGameCode);
         }
     }, [dispatch]);
 

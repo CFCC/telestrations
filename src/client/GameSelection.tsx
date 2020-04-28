@@ -7,7 +7,7 @@ import {useDispatch} from "react-redux";
 import TitleScreen from "../components/TitleScreen";
 import {useEvent} from "../utils/hooks";
 import {clientSlice, GameState} from "../utils/store";
-import {getGameCodes, joinGame} from "../utils/firebase";
+import {getGameCodes, joinGame, setGameCode} from "../utils/firebase";
 
 const Form = styled.form`
     width: 50%;
@@ -40,6 +40,7 @@ export default function GameSelection() {
 
     function onSubmit() {
         Cookies.set("gameCode", game, {expires: 0.66})
+        setGameCode(game, true);
         joinGame(game);
         dispatch(clientSlice.actions.setGameState(GameState.WAITING_TO_START));
     }
@@ -47,6 +48,7 @@ export default function GameSelection() {
     useEffect(() => {
         const gameCode = Cookies.get("gameCode");
         if (gameCode) {
+            setGameCode(game, true);
             joinGame(gameCode);
             dispatch(clientSlice.actions.setGameState(GameState.WAITING_TO_START));
         }
