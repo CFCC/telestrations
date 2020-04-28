@@ -10,6 +10,10 @@ export const firebaseLoginUi = {
     start: jest.fn(),
 };
 
+export const loginOptions = [];
+
+export const getGameCodes = () => undefined;
+
 export const playerRef = (gameCode: string, playerId: string) => ref;
 
 export const playerListRef = (gameCode: string) => ref;

@@ -1,12 +1,10 @@
 import React, {useEffect} from "react";
-import firebase from "firebase/app";
-import * as firebaseUi from "firebaseui";
 import {createGlobalStyle} from "styled-components";
 
 import {useSelector} from "../utils/store";
 import {useBoolean} from "../utils/hooks";
 import TitleScreen from "./TitleScreen";
-import {firebaseLoginUi} from "../utils/firebase";
+import {firebaseLoginUi, signInOptions} from "../utils/firebase";
 
 import "firebaseui/dist/firebaseui.css";
 
@@ -25,11 +23,7 @@ export default function LoginScreen() {
         if (!user) firebaseLoginUi.start(`#${firebaseLoginUiContainerId}`, {
             callbacks: {uiShown},
             signInFlow: 'popup',
-            signInOptions: [
-                firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-                firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-                firebaseUi.auth.AnonymousAuthProvider.PROVIDER_ID
-            ],
+            signInOptions,
         });
     });
 

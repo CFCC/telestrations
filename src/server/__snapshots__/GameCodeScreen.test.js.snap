@@ -59,7 +59,7 @@ exports[`Renders 1`] = `
         class="MuiButtonBase-root MuiButton-root MuiButton-contained sc-AxgMl dwWkfH MuiButton-containedPrimary MuiButton-containedSizeLarge MuiButton-sizeLarge Mui-disabled Mui-disabled"
         disabled=""
         tabindex="-1"
-        type="button"
+        type="submit"
       >
         <span
           class="MuiButton-label"

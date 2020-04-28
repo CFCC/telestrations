@@ -38,7 +38,13 @@ firebase.auth().onAuthStateChanged(function(user: firebase.User | null) {
 });
 
 export const firebaseLoginUi = new firebaseUi.auth.AuthUI(firebase.auth());
+export const signInOptions = [
+    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+    firebase.auth.PhoneAuthProvider.PROVIDER_ID,
+    firebaseUi.auth.AnonymousAuthProvider.PROVIDER_ID
+];
 
+export type User = firebase.User;
 type DocumentReference<T> = firebase.firestore.DocumentReference<T>;
 export type WithId<T extends {}> = T & {
     id: string;

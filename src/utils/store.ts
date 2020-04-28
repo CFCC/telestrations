@@ -1,8 +1,7 @@
 import {configureStore, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {TypedUseSelectorHook, useSelector as useUntypedSelector} from "react-redux";
-import {User} from "firebase/app";
 
-import {Game, Notepad, Player, WithId} from "./firebase";
+import {User, Game, Notepad, Player, WithId} from "./firebase";
 
 export enum GameState {
     // Common
