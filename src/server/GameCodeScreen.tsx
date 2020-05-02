@@ -6,7 +6,8 @@ import {useDispatch} from "react-redux";
 
 import TitleScreen from "../components/TitleScreen";
 import {useEvent} from "../utils/hooks";
-import {setGameCode} from "../utils/firebase";
+import {createGame, setGameCode} from "../utils/firebase";
+import {clientSlice, GameState} from "../utils/store";
 
 const Form = styled.form`
     width: 50%;
@@ -23,17 +24,19 @@ export default function LoadingScreen() {
     const dispatch = useDispatch();
     const [gameCode, updateGameCode] = useEvent('', ({target: {value}}) => value);
 
-    function submitGameCode(e: FormEvent<HTMLFormElement>) {
+    async function submitGameCode(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         Cookies.set("gameCode", gameCode, {expires: 0.66});
+        await createGame(gameCode)
         setGameCode(gameCode);
+        dispatch(clientSlice.actions.setGameState(GameState.WAITING_TO_START));
     }
 
     useEffect(() => {
         const oldGameCode = Cookies.get("gameCode");
-        console.log(oldGameCode);
         if (oldGameCode) {
             setGameCode(oldGameCode);
+            dispatch(clientSlice.actions.setGameState(GameState.WAITING_TO_START));
         }
     }, [dispatch]);
 

@@ -1,35 +1,6 @@
 rules_version = '2';
-
 service cloud.firestore {
-  function isAdmin(gameCode) {
-    return request.auth.uid == get(/games/$(gameCode)).data.serverId
-  }
-
-  function nextPlayer(gameCode) {
-    return get(/games/$(gameCode)/players/$(request.auth.uid)).data.nextPlayer
-  }
-
-  function currentNotepad(gameCode) {
-    return get(/games/$(gameCode)/users/$(request.auth.uid)).data.currentNotepad
-  }
-
-  match /databases/{database}/documents {
-    match /games {
-    	allow delete, create, write: if false;
-    	allow read: if request.auth != null;
-
-      match /{gameCode} {
-      	allow create: if request.auth != null;
-        allow write: if isAdmin(gameCode);
-
-      	match /users/{user} {
-        	allow write: if request.auth.uid == user || nextPlayer(gameCode) == user;
-        }
-
-        match /notepads/{notepad} {
-        	allow write: if currentNotepad(gameCode) == notepad;
-        }
-      }
-    }
+  match /{document=**} {
+    allow read, write: if request.auth != null;
   }
 }

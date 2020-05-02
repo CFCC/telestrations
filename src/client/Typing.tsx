@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FormEvent} from "react";
+import React, {ChangeEvent, FormEvent, useState} from "react";
 import {Button as UnstyledButton, TextField} from "@material-ui/core";
 import styled from "styled-components";
 import _ from "lodash";
@@ -15,7 +15,7 @@ interface FormProps {
 const Form = styled.form`
     width: 100%;
     height: 100%;
-    background-image: ${(props: FormProps) => props.content === "" ? "url(/question-marks.jpg)" : "none"};
+    background-image: ${(props: FormProps) => !props.content ? "url(/question-marks.jpg)" : "none"};
     background-repeat: repeat;
     display: flex;
     align-items: flex-end;
@@ -40,6 +40,7 @@ const Image = styled.img`
 export default function Typing() {
     const dispatch = useDispatch();
     const {client: {user}, firebase: {players, notepads}} = useReduxState();
+    const [value, setValue] = useState("");
 
     if (!user) return null;
 
@@ -54,16 +55,19 @@ export default function Typing() {
         return false;
     };
 
-    const updateGuess = ({target: {value}}: ChangeEvent<HTMLInputElement>) => setGuess(value);
+    const updateGuess = ({target: {value: newGuess}}: ChangeEvent<HTMLInputElement>) => {
+        setValue(newGuess)
+        setGuess(newGuess);
+    }
 
     return (
         <Form onSubmit={dontRefresh} content={content}>
-            {content !== "" && <Image
+            {content && <Image
                 src={content}
                 alt="Previous submission"
             />}
             <Input
-                value={guess}
+                value={value}
                 variant="outlined"
                 placeholder={content === "" ? "Describe a scene" : "What is in this picture?"}
                 onChange={updateGuess}

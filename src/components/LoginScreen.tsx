@@ -20,7 +20,7 @@ export default function LoginScreen() {
     const firebaseLoginUiContainerId = "firebaseui-auth-container";
 
     useEffect(() => {
-        if (!user) firebaseLoginUi.start(`#${firebaseLoginUiContainerId}`, {
+        if (!user.uid) firebaseLoginUi.start(`#${firebaseLoginUiContainerId}`, {
             callbacks: {uiShown},
             signInFlow: 'popup',
             signInOptions,

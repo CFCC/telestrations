@@ -18,7 +18,6 @@ export enum GameState {
     // Client
     IN_GAME = "in game",
     FINISHED = "finished",
-    ALREADY_STARTED = "already started",
     WAITING_FOR_CONTENT = "waiting for content",
 }
 
@@ -49,7 +48,7 @@ export const firebaseSlice = createSlice({
 export const clientSlice = createSlice({
     name: "client",
     initialState: {
-        user: null as User | null,
+        user: {displayName: "", uid: ""} as User,
         gameState: GameState.LOGIN,
         activePlayerId: "",
     },
@@ -62,7 +61,7 @@ export const clientSlice = createSlice({
             state.gameState = GameState.NOTEPAD_HISTORY;
             state.activePlayerId = action.payload;
         },
-        setUser: (state, action: PayloadAction<User | null>) => {
+        setUser: (state, action: PayloadAction<User>) => {
             state.user = action.payload;
             state.gameState = GameState.GAME_CODE;
         },

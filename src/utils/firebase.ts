@@ -24,17 +24,18 @@ firebase.initializeApp({
 });
 firebase.auth().onAuthStateChanged(function(user: firebase.User | null) {
     if (!user) return;
+
+    let {displayName, uid} = user;
     if (!user.displayName) {
-        const displayName = _.startCase(uniqueNamesGenerator({
+        displayName = _.startCase(uniqueNamesGenerator({
             dictionaries: [colors, animals],
             length: 2,
             separator: "-",
         }));
         user.updateProfile({displayName});
-        store.dispatch(setUser({...user, displayName}));
-    } else {
-        store.dispatch(setUser(user));
     }
+
+    store.dispatch(setUser({uid, displayName}));
 });
 
 export const firebaseLoginUi = new firebaseUi.auth.AuthUI(firebase.auth());
@@ -44,7 +45,7 @@ export const signInOptions = [
     firebaseUi.auth.AnonymousAuthProvider.PROVIDER_ID
 ];
 
-export type User = firebase.User;
+export type User = Pick<firebase.User, "uid" | "displayName">;
 type DocumentReference<T> = firebase.firestore.DocumentReference<T>;
 export type WithId<T extends {}> = T & {
     id: string;
@@ -81,18 +82,18 @@ export const getGameCodes = (callback: (ids: string[]) => void) => {
         });
 }
 export const setGameCode = (gameCode: string, isClient: boolean = false) => {
-    const game = firebase
-        .firestore()
-        .doc(`games/${gameCode}`) as DocumentReference<Partial<Game>>;
+    const game = firebase.firestore().doc(`games/${gameCode}`) as DocumentReference<Partial<Game>>;
+
     game.onSnapshot(snapshot => {
-        const newGame = snapshot.data() as Game;
+        const newGame = snapshot.data();
+        if (!newGame) return;
 
         if (isClient) {
             if (newGame.status === "in progress") store.dispatch(setGameState(GameState.IN_GAME));
             else if (newGame.status === "finished") store.dispatch(setGameState(GameState.FINISHED));
         }
 
-        if (newGame) updateGame(newGame);
+        store.dispatch(updateGame({...newGame, id: snapshot.id}));
     });
     game.collection("notepads").onSnapshot(snapshot => {
         const notepads = _.mapValues(_.keyBy(snapshot.docs, "id"), d => d.data() as Notepad);
@@ -103,10 +104,11 @@ export const setGameCode = (gameCode: string, isClient: boolean = false) => {
         store.dispatch(updatePlayers(players));
 
         if (!isClient) {
-            const notepads = store.getState().firebase.notepads;
-            const gameIsOver = Object
-                .entries(players)
-                .every(([pid, p]) => notepads[p.currentNotepad].ownerId === pid);
+            const {notepads, game: {status}} = store.getState().firebase;
+            const gameIsOver =
+                status === "in progress" &&
+                Object.entries(players).every(([pid, p]) => notepads[p.currentNotepad].ownerId === pid) &&
+                Object.values(notepads).every(n => n.pages.length > 1);
 
             if (gameIsOver) game.set({status: "finished"}, {merge: true});
         }
@@ -114,19 +116,18 @@ export const setGameCode = (gameCode: string, isClient: boolean = false) => {
 };
 export const createGame = async (gameCode: string) => {
     const {client: {user}} = store.getState();
-    if (!user) return;
 
     await (firebase
         .firestore()
-        .doc(`games/${gameCode}`) as DocumentReference<Game>).set({
-        created: new Date().getTime(),
-        status: "lobby",
-        serverId: user.uid,
-    } as Game);
+        .doc(`games/${gameCode}`) as DocumentReference<Game>)
+        .set({
+            created: new Date().getTime(),
+            status: "lobby",
+            serverId: user.uid,
+        } as Game);
 };
 export const joinGame = async (gameCode: string) => {
     const {client: {user}} = store.getState();
-    if (!user) return;
 
     await (firebase
         .firestore()
@@ -141,10 +142,12 @@ export const startGame = async () => {
         const notepadId = uuid();
         await (firebase
             .firestore()
-            .doc(`games/${gameCode}/notepad/${notepadId}`) as DocumentReference<Notepad>).set({ownerId: playerId, pages: []});
+            .doc(`games/${gameCode}/notepads/${notepadId}`) as DocumentReference<Notepad>)
+            .set({ownerId: playerId, pages: []});
         await (firebase
             .firestore()
-            .doc(`games/${gameCode}/players/${playerId}`) as DocumentReference<Partial<Player>>).set({
+            .doc(`games/${gameCode}/players/${playerId}`) as DocumentReference<Partial<Player>>)
+            .set({
                 currentNotepad: notepadId,
                 nextPlayer: playerIds[(i + 1) % playerIds.length],
                 queue: [],
@@ -155,7 +158,8 @@ export const startGame = async () => {
         .doc(`games/${gameCode}`) as DocumentReference<Partial<Game>>)
         .set({status: "in progress"}, {merge: true});
 };
-export const setGuess = async (guess: string) => {
+
+const updateGuessInFirebase = _.throttle(async (guess: string) => {
     const {
         client: {user},
         firebase: {
@@ -164,63 +168,53 @@ export const setGuess = async (guess: string) => {
             notepads,
         },
     } = store.getState();
+    const currentNotepadId = players[user.uid].currentNotepad;
+    const currentNotepad = notepads[currentNotepadId];
+    if (!currentNotepad) return;
 
-    if (!user) return;
-    const notepad = players[user.uid].currentNotepad;
-    const currentNotepad = notepads[notepad];
+    const pages = _.cloneDeep(currentNotepad.pages);
+    const needsNewPage = _.last(pages)?.author !== user.uid;
+    if (needsNewPage) {
+        pages.push({
+            author: user.uid,
+            lastUpdated: new Date().getTime(),
+            content: "",
+        });
+    }
 
-    _.debounce(async () => {
-        if (!currentNotepad) return;
-
-        const pages = _.clone(currentNotepad.pages);
-        const needsNewPage = _.last(pages)?.author === user.uid;
-        if (needsNewPage) {
-            pages.push({
-                author: user.uid,
-                lastUpdated: new Date().getTime(),
-                content: "",
-            });
+    if (pages.length % 2 === 1) {
+        pages[pages.length - 1].content = guess;
+    } else {
+        let fileName = _.last(pages)?.content;
+        if (!fileName) {
+            fileName = `${uuid()}.png`;
+            pages[pages.length - 1].content = fileName
         }
 
-        if (pages.length % 2 === 0) {
-            pages[pages.length - 1].content = guess;
-        } else {
-            let fileName = _.last(pages)?.content;
-            if (!fileName) {
-                fileName = `${uuid()}.png`;
-                pages[pages.length - 1].content = fileName
-            }
+        firebase
+            .storage()
+            .ref()
+            .child(fileName)
+            .putString(guess, "data_url");
+    }
 
-            firebase
-                .storage()
-                .ref()
-                .child(fileName).putString(guess, "data_url");
-        }
-
-        const player = (await (firebase
-            .firestore()
-            .doc(`games/${gameCode}/players/${(user.uid)}`) as DocumentReference<Player>)
-            .get())
-            .data() as Player;
-        await (firebase
-            .firestore()
-            .doc(`games/${gameCode}/notepad/${(player.currentNotepad)}`) as DocumentReference<Partial<Notepad>>)
-            .set({pages}, {merge: true});
-    }, 1000);
-};
+    await (firebase
+        .firestore()
+        .doc(`games/${gameCode}/notepads/${currentNotepadId}`) as DocumentReference<Partial<Notepad>>)
+        .set({pages}, {merge: true});
+}, 200)
+export const setGuess = (guess: string) => updateGuessInFirebase(guess);
 export const submitGuess = async () => {
-    const {client: {user}, firebase: {game: {id: gameCode}}} = store.getState();
-    if (!user) return;
+    const {client: {user}, firebase: {game: {id: gameCode}, players}} = store.getState();
+    const {currentNotepad, nextPlayer} = players[user.uid];
+    const {queue: nextPlayerQueue} = players[nextPlayer];
 
-    const currentPlayerRef = firebase
+    await (firebase
         .firestore()
-        .doc(`games/${gameCode}/players/${(user.uid)}`) as DocumentReference<Player>;
-    const {currentNotepad, nextPlayer} = (await currentPlayerRef.get()).data() as Player;
-
-    const nextPlayerRef = firebase
+        .doc(`games/${gameCode}/players/${nextPlayer}`) as DocumentReference<Partial<Player>>)
+        .set({queue: [...nextPlayerQueue, currentNotepad]}, {merge: true});
+    await (firebase
         .firestore()
-        .doc(`games/${gameCode}/players/${nextPlayer}`) as DocumentReference<Partial<Player>>;
-    const {queue: nextPlayerQueue} = (await nextPlayerRef.get()).data() as Player;
-
-    await nextPlayerRef.set({queue: [...nextPlayerQueue, currentNotepad]}, {merge: true});
+        .doc(`games/${gameCode}/players/${user.uid}`) as DocumentReference<Partial<Player>>)
+        .set({currentNotepad: ""}, {merge: true});
 };

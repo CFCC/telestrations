@@ -1,4 +1,5 @@
 import * as React from "react";
+import _ from "lodash";
 
 import TitleScreen from "../components/TitleScreen";
 import {GameState} from "../utils/store";
@@ -17,13 +18,6 @@ export default function Client() {
             return <LoginScreen />;
         case GameState.GAME_CODE:
             return <GameSelection />;
-        case GameState.ALREADY_STARTED:
-            return (
-                <TitleScreen
-                    title="This game's already started!"
-                    subtitle="Wait for it to finish before joining."
-                />
-            );
         case GameState.WAITING_TO_START:
             return (
                 <TitleScreen
@@ -40,9 +34,18 @@ export default function Client() {
                 />
             );
         case GameState.IN_GAME: {
-            if (!user) return <div />;
-            const currentNotepad = notepads[players[user.uid].currentNotepad];
-            return currentNotepad?.pages.length ?? 0 % 2 === 1 ? <Typing /> : <Drawing />;
+            if (!user.uid) return <div />;
+
+            const player = players[user.uid];
+            if (!player) return <div />;
+
+            const currentNotepad = notepads[player.currentNotepad];
+            if (!currentNotepad) return <div />;
+
+            const numPages = _.last(currentNotepad?.pages)?.author === user.uid
+                ? currentNotepad?.pages.length
+                : currentNotepad?.pages.length + 1;
+            return numPages ?? 0 % 2 === 1 ? <Typing /> : <Drawing />;
         }
         case GameState.WAITING_FOR_CONTENT:
             return <Waiting />;

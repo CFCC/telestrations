@@ -1,11 +1,11 @@
 import * as React from "react";
 import {Button, Typography} from "@material-ui/core";
 import styled from "styled-components";
+import {useDispatch} from "react-redux";
 
 import {clientSlice, GameState, useSelector} from "../utils/store";
 import {startGame} from "../utils/firebase";
 import TitleScreen from "../components/TitleScreen";
-import {useDispatch} from "react-redux";
 
 const PlayerList = styled.div`
     display: flex;
@@ -24,7 +24,11 @@ const PlayerLabel = styled(Typography)`
 
 export default function LoadingScreen() {
     const dispatch = useDispatch();
-    const {game: {id: gameCode}, players} = useSelector(state => state.firebase);
+    const {game: {id: gameCode, status}, players} = useSelector(state => state.firebase);
+
+    if (status === "in progress") {
+        dispatch(clientSlice.actions.setGameState(GameState.BIRDS_EYE));
+    }
 
     function handleStartGame() {
         startGame();

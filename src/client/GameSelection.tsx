@@ -48,8 +48,7 @@ export default function GameSelection() {
     useEffect(() => {
         const gameCode = Cookies.get("gameCode");
         if (gameCode) {
-            setGameCode(game, true);
-            joinGame(gameCode);
+            setGameCode(gameCode, true);
             dispatch(clientSlice.actions.setGameState(GameState.WAITING_TO_START));
         }
     });

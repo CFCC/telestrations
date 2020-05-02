@@ -52,7 +52,7 @@ export default function BirdsEye() {
 
                     if (!player.currentNotepad)
                         playerState = "Drawing";
-                    else if (notepads[player.currentNotepad].pages.length % 2 === 1)
+                    else if (notepads[player.currentNotepad]?.pages?.length % 2 === 1)
                         playerState = "Writing";
                     else
                         playerState = "Drawing";
