@@ -45,7 +45,9 @@ export default function Client() {
             const numPages = _.last(currentNotepad?.pages)?.author === user.uid
                 ? currentNotepad?.pages.length
                 : currentNotepad?.pages.length + 1;
-            return numPages ?? 0 % 2 === 1 ? <Typing /> : <Drawing />;
+
+            console.log(currentNotepad.pages, user.uid, numPages);
+            return (numPages ?? 0) % 2 === 1 ? <Typing /> : <Drawing />;
         }
         case GameState.WAITING_FOR_CONTENT:
             return <Waiting />;

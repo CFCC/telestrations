@@ -88,7 +88,7 @@ export default function Drawing() {
 
     if (!user) return null;
     const currentNotepad = notepads[players[user.uid].currentNotepad];
-    const {content} = _.last(currentNotepad?.pages) ?? {};
+    const {content} = _.nth(currentNotepad?.pages, -2) ?? {};
 
     const undo = () => {
         sketch.current.undo();

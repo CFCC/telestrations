@@ -71,6 +71,9 @@ export interface Game {
     serverId: string;
 }
 
+export const getImageURL = async (image: string): Promise<string> => {
+    return await firebase.storage().ref(image).getDownloadURL() as string;
+};
 export const getGameCodes = (callback: (ids: string[]) => void) => {
     firebase
         .firestore()
@@ -99,7 +102,7 @@ export const setGameCode = (gameCode: string, isClient: boolean = false) => {
         const notepads = _.mapValues(_.keyBy(snapshot.docs, "id"), d => d.data() as Notepad);
         store.dispatch(updateNotepads(notepads));
     });
-    game.collection("players").onSnapshot(snapshot => {
+    game.collection("players").onSnapshot(async snapshot => {
         const players = _.mapValues(_.keyBy(snapshot.docs, "id"), d => d.data() as Player);
         store.dispatch(updatePlayers(players));
 
@@ -107,10 +110,23 @@ export const setGameCode = (gameCode: string, isClient: boolean = false) => {
             const {notepads, game: {status}} = store.getState().firebase;
             const gameIsOver =
                 status === "in progress" &&
-                Object.entries(players).every(([pid, p]) => notepads[p.currentNotepad].ownerId === pid) &&
+                Object.entries(players).every(([pid, p]) => notepads[p.currentNotepad]?.ownerId === pid) &&
                 Object.values(notepads).every(n => n.pages.length > 1);
 
             if (gameIsOver) game.set({status: "finished"}, {merge: true});
+        } else {
+            const {uid} = store.getState().client.user;
+            const {currentNotepad, queue} = players[uid];
+
+            if (!currentNotepad && queue.length > 0) {
+                const newQueue = [...queue];
+                const newNotepad = newQueue.shift();
+
+                await (firebase
+                    .firestore()
+                    .doc(`games/${gameCode}/players/${uid}`) as DocumentReference<Partial<Player>>)
+                    .set({queue: newQueue, currentNotepad: newNotepad}, {merge: true})
+            }
         }
     });
 };
@@ -158,7 +174,6 @@ export const startGame = async () => {
         .doc(`games/${gameCode}`) as DocumentReference<Partial<Game>>)
         .set({status: "in progress"}, {merge: true});
 };
-
 const updateGuessInFirebase = _.throttle(async (guess: string) => {
     const {
         client: {user},
@@ -184,13 +199,15 @@ const updateGuessInFirebase = _.throttle(async (guess: string) => {
 
     if (pages.length % 2 === 1) {
         pages[pages.length - 1].content = guess;
+        pages[pages.length - 1].lastUpdated = new Date().getTime();
     } else {
         let fileName = _.last(pages)?.content;
         if (!fileName) {
             fileName = `${uuid()}.png`;
-            pages[pages.length - 1].content = fileName
+            pages[pages.length - 1].content = fileName;
         }
 
+        pages[pages.length - 1].lastUpdated = new Date().getTime();
         firebase
             .storage()
             .ref()
@@ -202,7 +219,7 @@ const updateGuessInFirebase = _.throttle(async (guess: string) => {
         .firestore()
         .doc(`games/${gameCode}/notepads/${currentNotepadId}`) as DocumentReference<Partial<Notepad>>)
         .set({pages}, {merge: true});
-}, 200)
+}, 500);
 export const setGuess = (guess: string) => updateGuessInFirebase(guess);
 export const submitGuess = async () => {
     const {client: {user}, firebase: {game: {id: gameCode}, players}} = store.getState();

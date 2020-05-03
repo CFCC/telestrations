@@ -1,8 +1,9 @@
-import * as React from "react";
+import React, {useEffect, useState} from "react";
 import {CardContent, Typography} from "@material-ui/core";
 import styled from "styled-components";
 
 import {useSelector} from "../utils/store";
+import {getImageURL} from "../utils/firebase";
 
 interface PlayerStreamProps {
     playerId: string;
@@ -31,31 +32,38 @@ const Content = styled(CardContent)`
 
 export default function PlayerStream({playerId}: PlayerStreamProps) {
     const {players, notepads} = useSelector(state => state.firebase);
+    const [pictureUrl, setPictureUrl] = useState("");
 
     const notepad = notepads[players[playerId]?.currentNotepad];
     const playerIndexInNotepad = notepad?.pages?.length;
 
-    let picture, text;
+    let picture: string, t, text;
     if (playerIndexInNotepad == null) {
         picture = "/question-marks.jpg";
-        text = "Drawing for next notepad...";
+        text = "Waiting for next notepad...";
     } else if (playerIndexInNotepad <= 1) {
         picture = "/question-marks.jpg";
         text = notepad.pages[playerIndexInNotepad - 1]?.content;
     } else if (playerIndexInNotepad % 2 === 0) {
         picture = notepad.pages[playerIndexInNotepad - 1]?.content;
+        t = notepad.pages[playerIndexInNotepad - 1]?.lastUpdated;
         text = notepad.pages[playerIndexInNotepad - 2]?.content;
     } else {
         picture = notepad.pages[playerIndexInNotepad - 2]?.content;
+        t = notepad.pages[playerIndexInNotepad - 2]?.lastUpdated;
         text = notepad.pages[playerIndexInNotepad - 1]?.content;
     }
+
+    useEffect(() => {
+        getImageURL(picture).then(p => setPictureUrl(p));
+    }, [picture, t]);
 
     return (
         <React.Fragment>
             <PictureContainer picture={picture}>
                 {picture !== "/question-marks.jpg" && (
                     <Picture
-                        src={picture}
+                        src={pictureUrl}
                         alt={text}
                     />
                 )}

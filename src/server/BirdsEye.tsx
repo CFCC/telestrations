@@ -57,9 +57,8 @@ export default function BirdsEye() {
                     else
                         playerState = "Drawing";
 
-                    function openMenu() {
-                        return (e: React.MouseEvent<HTMLElement, MouseEvent>) =>
-                            setMenu({anchorElement: e.currentTarget, playerId: id})
+                    function openMenu(e: React.MouseEvent<HTMLElement, MouseEvent>) {
+                        setMenu({anchorElement: e.currentTarget, playerId: id});
                     }
 
                     return (
@@ -87,7 +86,7 @@ export default function BirdsEye() {
                 })}
             </StyledGrid>
             <Menu
-                open={Boolean(menu.anchorElement)}
+                open={!!menu.anchorElement}
                 id="menu"
                 onClose={closeMenu}
                 anchorEl={menu.anchorElement}
