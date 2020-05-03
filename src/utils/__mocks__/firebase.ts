@@ -12,6 +12,8 @@ export const firebaseLoginUi = {
 
 export const loginOptions = [];
 
+export const getImageURL = () => Promise.resolve("");
+
 export const getGameCodes = () => undefined;
 
 export const playerRef = (gameCode: string, playerId: string) => ref;

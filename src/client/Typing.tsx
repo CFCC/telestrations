@@ -40,13 +40,11 @@ const Image = styled.img`
 export default function Typing() {
     const dispatch = useDispatch();
     const {client: {user}, firebase: {players, notepads}} = useReduxState();
-    const [value, setValue] = useState("");
 
-    if (!user) return null;
-
-    const currentNotepad = notepads[players[user.uid].currentNotepad];
+    const currentNotepad = notepads[players[user?.uid]?.currentNotepad];
     const content = _.nth(currentNotepad?.pages, -2)?.content
     const guess = _.last(currentNotepad?.pages)?.content;
+    const [value, setValue] = useState(guess);
 
     const dontRefresh = (e: FormEvent) => {
         e.preventDefault();

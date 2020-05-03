@@ -11,7 +11,7 @@ exports[`While Drawing Renders 1`] = `
     <p
       class="MuiTypography-root MuiTypography-body1 MuiTypography-alignCenter"
     >
-      Drawing for next notepad...
+      Waiting for next notepad...
     </p>
   </div>
 </DocumentFragment>
@@ -28,7 +28,7 @@ exports[`While Typing Renders 1`] = `
     <p
       class="MuiTypography-root MuiTypography-body1 MuiTypography-alignCenter"
     >
-      Drawing for next notepad...
+      Waiting for next notepad...
     </p>
   </div>
 </DocumentFragment>

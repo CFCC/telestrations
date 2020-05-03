@@ -6,7 +6,7 @@ import {configureStore} from "@reduxjs/toolkit";
 import {action} from "@storybook/addon-actions";
 
 import {darkPrimary, GlobalStyles, primary, theme} from "../src/utils/theme";
-import {defaultState} from "../src/utils/store";
+import {clientSlice, firebaseSlice} from "../src/utils/store";
 
 const Container = styled.div`
     position: absolute;
@@ -21,6 +21,10 @@ const Container = styled.div`
     flex-direction: column;
 `;
 
+const defaultState = {
+    firebase: firebaseSlice.reducer(undefined, {}),
+    client: clientSlice.reducer(undefined, {}),
+};
 const reducer = (state, dispatchedAction) => {
     if (action.payload) {
         action("Redux Action Dispatched")(dispatchedAction.type, dispatchedAction.payload);

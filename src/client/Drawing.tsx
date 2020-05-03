@@ -87,7 +87,7 @@ export default function Drawing() {
     const sketch: MutableRefObject<SketchField> = useRef(new SketchField({}));
 
     if (!user) return null;
-    const currentNotepad = notepads[players[user.uid].currentNotepad];
+    const currentNotepad = notepads[players[user.uid]?.currentNotepad];
     const {content} = _.nth(currentNotepad?.pages, -2) ?? {};
 
     const undo = () => {
