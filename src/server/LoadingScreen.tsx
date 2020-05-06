@@ -22,11 +22,23 @@ const PlayerLabel = styled(Typography)`
     margin-bottom: 0.75rem;
 `;
 
+const DeleteGameContainer = styled.div`
+    margin-top: 5rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    & > * {
+        margin: 1rem;
+    }
+`;
+
 export default function LoadingScreen() {
     const dispatch = useDispatch();
     const {game: {id: gameCode, status}, players} = useSelector(state => state.firebase);
 
-    if (status === "in progress") {
+    if (status !== "lobby") {
         dispatch(clientSlice.actions.setGameState(GameState.BIRDS_EYE));
     }
 
@@ -56,6 +68,10 @@ export default function LoadingScreen() {
             >
                 Start Game
             </Button>
+            {/*<DeleteGameContainer>*/}
+            {/*    <Typography>Want to start a new game?</Typography>*/}
+            {/*    <Button color="secondary">Delete Game</Button>*/}
+            {/*</DeleteGameContainer>*/}
         </TitleScreen>
     );
 };

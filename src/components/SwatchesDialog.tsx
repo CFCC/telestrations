@@ -46,10 +46,10 @@ export default function SwatchesDialog({
         <Dialog open={open} onClose={setClose}>
             <Container>
                 <Grid container spacing={2}>
-                    {colors.map(colorGroup => (
-                        <Grid container item xs={4}>
+                    {colors.map((colorGroup, i) => (
+                        <Grid container item xs={4} key={i}>
                             {colorGroup.map(color => (
-                                <Grid item>
+                                <Grid item key={color}>
                                     <Color
                                         color={color}
                                         selected={color === selectedColor}

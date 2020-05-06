@@ -113,19 +113,20 @@ export const setGameCode = (gameCode: string, isClient: boolean = false) => {
                 Object.entries(players).every(([pid, p]) => notepads[p.currentNotepad]?.ownerId === pid) &&
                 Object.values(notepads).every(n => n.pages.length > 1);
 
-            if (gameIsOver) game.set({status: "finished"}, {merge: true});
+            if (gameIsOver) await game.set({status: "finished"}, {merge: true});
         } else {
             const {uid} = store.getState().client.user;
             const {currentNotepad, queue} = players[uid];
 
-            if (!currentNotepad && queue.length > 0) {
+            if (!currentNotepad && queue?.length > 0) {
                 const newQueue = [...queue];
                 const newNotepad = newQueue.shift();
 
                 await (firebase
                     .firestore()
                     .doc(`games/${gameCode}/players/${uid}`) as DocumentReference<Partial<Player>>)
-                    .set({queue: newQueue, currentNotepad: newNotepad}, {merge: true})
+                    .set({queue: newQueue, currentNotepad: newNotepad}, {merge: true});
+                store.dispatch(clientSlice.actions.setGameState(GameState.IN_GAME));
             }
         }
     });
