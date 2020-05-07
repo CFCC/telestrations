@@ -22,17 +22,17 @@ const PlayerLabel = styled(Typography)`
     margin-bottom: 0.75rem;
 `;
 
-const DeleteGameContainer = styled.div`
-    margin-top: 5rem;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-    & > * {
-        margin: 1rem;
-    }
-`;
+// const DeleteGameContainer = styled.div`
+//     margin-top: 5rem;
+//     width: 100%;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//
+//     & > * {
+//         margin: 1rem;
+//     }
+// `;
 
 export default function LoadingScreen() {
     const dispatch = useDispatch();
