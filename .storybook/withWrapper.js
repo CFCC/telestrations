@@ -14,7 +14,6 @@ const Container = styled.div`
     height: 100vh;
     background: linear-gradient(180deg, ${primary} 50%, ${darkPrimary} 100%);
     margin: 0;
-    overflow-x: hidden;
     overflow-y: auto;
     display: flex;
     align-items: center;

@@ -3,6 +3,7 @@ import {createGlobalStyle} from "styled-components";
 
 export const primary = "hsl(50, 100%, 65%)";
 export const darkPrimary = "hsl(40, 100%, 45%)";
+export const secondary = "hsl(210, 100%, 33%)";
 
 function headers(styles: object): object {
     return {

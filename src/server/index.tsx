@@ -1,10 +1,10 @@
 import React from "react";
 
-import BirdsEye from "../server/BirdsEye";
-import LoadingScreen from "../server/LoadingScreen";
-import History from "../server/History";
-import PlayerStream from "../server/PlayerStream";
-import GameCodeScreen from "../server/GameCodeScreen";
+import BirdsEye from "./BirdsEye";
+import LoadingScreen from "./LoadingScreen";
+import History from "./History";
+import PlayerStream from "./PlayerStream";
+import GameCodeScreen from "./GameCodeScreen";
 import {GameState} from "../utils/store";
 import {useReduxState} from "../utils/hooks";
 import LoginScreen from "../components/LoginScreen";

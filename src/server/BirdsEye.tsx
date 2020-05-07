@@ -92,10 +92,10 @@ export default function BirdsEye() {
                 anchorEl={menu.anchorElement}
             >
                 <MenuItem onClick={handleViewPlayerHistory}>
-                    View Player History (Coming Soon!)
+                    View Player History
                 </MenuItem>
                 <MenuItem onClick={handleViewNotepadHistory}>
-                    View Notepad History (Coming Soon!)
+                    View Notepad History
                 </MenuItem>
                 <MenuItem>
                     Make Stream Fullscreen (Coming Soon!)

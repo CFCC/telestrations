@@ -1,19 +1,81 @@
-import React, {useState} from "react";
-import {Button, MobileStepper, Typography} from "@material-ui/core";
-import {KeyboardArrowLeft, KeyboardArrowRight} from "@material-ui/icons";
+import React, {useEffect, useState} from "react";
+import {Button, Card, CardMedia, Paper, Typography} from "@material-ui/core";
+import {Pagination} from "@material-ui/lab";
+import {KeyboardArrowLeft} from "@material-ui/icons";
 import SwipeableViews from "react-swipeable-views";
 import _ from "lodash";
+import styled from "styled-components";
+import {useDispatch} from "react-redux";
 
 import {useReduxState} from "../utils/hooks";
-import {Page} from "../utils/firebase";
-import styled from "styled-components";
+import {getImageURL, Page} from "../utils/firebase";
+import {clientSlice, GameState} from "../utils/store";
+import * as theme from "../utils/theme";
 
 const Header = styled.div`
-    width: 100%;
+    background-color: ${theme.secondary};
+    color: white;
+    width: calc(100% - 2rem);
     height: 2rem;
-    line-height: 2rem;
+    padding: 1rem;
+    margin-bottom: 2rem;
     display: flex;
+    align-items: center;
     justify-content: space-between;
+    line-height: 2rem !important;
+`;
+
+const BackButton = styled(Button)`
+    color: white;
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.04);
+    }
+`;
+
+const PageStepper = styled(Pagination)`
+    button {
+        color: white;
+    }
+    
+    .Mui-selected {
+        background-color: rgba(255, 255, 255, 0.08);
+        
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.12);
+        }
+    }
+    
+    .MuiPaginationItem-page:hover {
+        background-color: rgba(255, 255, 255, 0.04);
+    }
+`;
+
+const Carousel = styled(SwipeableViews)`
+    width: 100%;
+    flex: 1;
+    
+    & > div, .slide {
+        height: 100%;
+    }
+`;
+
+const TextContainer = styled(Paper)`
+    width: calc(100% - 10rem);
+    height: calc(100% - 10rem);
+    margin: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+const ImageContainer = styled(Card)`
+    max-width: calc(100% - 10rem);
+    max-height: calc(100% - 10rem);
+    margin: 5rem;
+`;
+
+const Image = styled(CardMedia)`
+    padding-top: 56.25%; // 16:9
 `;
 
 interface HistoryProps {
@@ -23,8 +85,7 @@ interface HistoryProps {
 
 export default function History({ownerId, playerId}: HistoryProps) {
     const [index, setIndex] = useState(0);
-    const indexUp = () => setIndex(index + 1);
-    const indexDown = () => setIndex(index - 1);
+    const handleIndexChange = (e: any, v: number) => setIndex(v - 1);
 
     const {firebase: {notepads}} = useReduxState();
     let pages: Page[];
@@ -40,45 +101,59 @@ export default function History({ownerId, playerId}: HistoryProps) {
         ).map(x => x[1]);
     }
 
-    const nextButton = (
-        <Button size="small" onClick={indexUp} disabled={!pages.length || index === pages.length - 1}>
-            Next
-            <KeyboardArrowRight />
-        </Button>
-    );
-    const backButton = (
-        <Button size="small" onClick={indexDown} disabled={index === 0}>
-            <KeyboardArrowLeft />
-            Back
-        </Button>
-    );
+    const dispatch = useDispatch();
+    function goBack() {
+        dispatch(clientSlice.actions.setGameState(GameState.BIRDS_EYE));
+    }
+
+    const [content, setContent] = useState(pages);
+    useEffect(() => {
+        Promise
+            .all(pages.map(async (page, i) => i % 2 === 0
+                ? page
+                : {...page, content: await getImageURL(page.content)}))
+            .then(setContent);
+    }, [pages]);
 
     return (
         <React.Fragment>
             <Header>
-                <Typography><KeyboardArrowLeft /> Back to Birds Eye View</Typography>
-                <Typography>{ownerId ? "Notepad History" : "Player History"}</Typography>
-                <Typography />
+                <BackButton onClick={goBack}>
+                    <KeyboardArrowLeft />
+                    <Typography>Back to Birds Eye View</Typography>
+                </BackButton>
+                <Typography variant="h5">
+                    {ownerId ? "Notepad History" : "Player History"}
+                </Typography>
+                <PageStepper
+                    count={pages.length}
+                    page={index + 1}
+                    onChange={handleIndexChange}
+                    size="large"
+                />
             </Header>
-            <SwipeableViews
+            <Carousel
                 axis="x"
                 index={index}
                 onChangeIndex={setIndex}
                 enableMouseEvents={true}
+                slideClassName="slide"
             >
-                {pages.map((page, i) => (
-                    <div key={page.lastUpdated}>
-                        {page.content}
-                    </div>
-                ))}
-            </SwipeableViews>
-            <MobileStepper
-                steps={pages.length}
-                position="static"
-                activeStep={index}
-                nextButton={nextButton}
-                backButton={backButton}
-            />
+                {content.map((page, i) => i % 2 === 0
+                    ? (
+                        <TextContainer key={page.lastUpdated}>
+                            <Typography variant="h1">{page.content}</Typography>
+                        </TextContainer>
+                    ) : (
+                        <ImageContainer key={page.lastUpdated}>
+                            <Image
+                                image={page.content}
+                                title=""
+                            />
+                        </ImageContainer>
+                    )
+                )}
+            </Carousel>
         </React.Fragment>
     );
 }
