@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useRef, useState} from "react";
 import {
     Card, CardContent, CardHeader,
     Grid,
@@ -48,6 +48,7 @@ export default function BirdsEye() {
         anchorElement: null,
         playerId: "",
     } as BirdsEyeState);
+    const fullScreenUser = useRef<HTMLDivElement>(null);
 
     const closeMenu = () => {
         setMenu({anchorElement: null, playerId: ""});
@@ -58,6 +59,10 @@ export default function BirdsEye() {
     const handleViewNotepadHistory = () => {
         dispatch(clientSlice.actions.viewNotepadHistory(notepads[players[menu.playerId].currentNotepad].ownerId));
     };
+    const handleViewFullScreen = () => {
+        fullScreenUser.current?.requestFullscreen();
+        closeMenu();
+    }
 
     return (
         <React.Fragment>
@@ -83,7 +88,7 @@ export default function BirdsEye() {
 
                     return (
                         <Grid item={true} xs={12} sm={6} lg={4} xl={3} key={id}>
-                            <Card>
+                            <Card ref={id === menu.playerId ? fullScreenUser : undefined}>
                                 <CardHeader
                                     title={player.name}
                                     subheader={`Currently ${playerState}`}
@@ -117,8 +122,8 @@ export default function BirdsEye() {
                 <MenuItem onClick={handleViewNotepadHistory}>
                     View Notepad History
                 </MenuItem>
-                <MenuItem>
-                    Make Stream Fullscreen (Coming Soon!)
+                <MenuItem onClick={handleViewFullScreen}>
+                    Make Stream Fullscreen
                 </MenuItem>
             </Menu>
         </React.Fragment>
