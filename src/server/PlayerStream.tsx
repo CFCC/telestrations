@@ -55,7 +55,10 @@ export default function PlayerStream({playerId}: PlayerStreamProps) {
     }
 
     useEffect(() => {
-        getImageURL(picture).then(p => setPictureUrl(p));
+        (async function() {
+            const url = await getImageURL(picture);
+            setPictureUrl(url);
+        })();
     }, [picture, t]);
 
     return (

@@ -5,18 +5,32 @@ import {
     Icon,
     IconButton,
     Menu,
-    MenuItem,
+    MenuItem, Typography,
 } from "@material-ui/core";
 import styled from "styled-components";
 import {useDispatch} from "react-redux";
+import _ from "lodash";
 
 import {clientSlice, useSelector} from "../utils/store";
 import PlayerStream from "./PlayerStream";
+import * as theme from "../utils/theme";
 
 interface BirdsEyeState {
     anchorElement: HTMLElement | null;
     playerId: string;
 }
+
+const Header = styled.div`
+    background-color: ${theme.secondary};
+    color: white;
+    width: calc(100% - 4rem);
+    height: 2rem;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    line-height: 2rem !important;
+`;
 
 const Content = styled(CardContent)`
     padding: 0;
@@ -24,10 +38,11 @@ const Content = styled(CardContent)`
 
 const StyledGrid = styled(Grid)`
     padding: 16px;
+    width: 100%;
 `;
 
 export default function BirdsEye() {
-    const {players, notepads} = useSelector(state => state.firebase);
+    const {players, notepads, game: {id: gameCode, status}} = useSelector(state => state.firebase);
     const dispatch = useDispatch();
     const [menu, setMenu] = useState({
         anchorElement: null,
@@ -46,7 +61,12 @@ export default function BirdsEye() {
 
     return (
         <React.Fragment>
-            <StyledGrid container={true} spacing={4}>
+            <Header>
+                <Typography>Game Code: {gameCode}</Typography>
+                <Typography variant="h5">Birds Eye View</Typography>
+                <Typography>Game {_.startCase(status)}</Typography>
+            </Header>
+            <StyledGrid container={true} spacing={2}>
                 {Object.entries(players).map(([id, player]) => {
                     let playerState: string;
 

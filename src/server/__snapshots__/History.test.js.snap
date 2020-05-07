@@ -2,136 +2,200 @@
 
 exports[`Notepad History Renders 1`] = `
 <DocumentFragment>
-  <div>
-    <div
-      style="overflow-x: hidden;"
+  <div
+    class="sc-AxjAm gFxRDc"
+  >
+    <button
+      class="MuiButtonBase-root MuiButton-root MuiButton-text sc-AxirZ kcEGGr"
+      tabindex="0"
+      type="button"
     >
-      <div
-        class="react-swipeable-view-container"
-        style="flex-direction: row; transition: all 0s ease 0s; direction: ltr; display: flex; will-change: transform;"
+      <span
+        class="MuiButton-label"
+      >
+        <svg
+          aria-hidden="true"
+          class="MuiSvgIcon-root"
+          focusable="false"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"
+          />
+        </svg>
+        <p
+          class="MuiTypography-root MuiTypography-body1"
+        >
+          Back to Birds Eye View
+        </p>
+      </span>
+      <span
+        class="MuiTouchRipple-root"
       />
-    </div>
-    <div
-      class="MuiPaper-root MuiMobileStepper-root MuiMobileStepper-positionStatic MuiPaper-elevation0"
+    </button>
+    <h5
+      class="MuiTypography-root MuiTypography-h5"
     >
-      <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textSizeSmall MuiButton-sizeSmall Mui-disabled Mui-disabled"
-        disabled=""
-        tabindex="-1"
-        type="button"
+      Player History
+    </h5>
+    <nav
+      aria-label="pagination navigation"
+      class="MuiPagination-root sc-AxiKw ckNwYJ"
+    >
+      <ul
+        class="MuiPagination-ul"
       >
-        <span
-          class="MuiButton-label"
-        >
-          <svg
-            aria-hidden="true"
-            class="MuiSvgIcon-root"
-            focusable="false"
-            viewBox="0 0 24 24"
+        <li>
+          <button
+            aria-label="Go to previous page"
+            class="MuiButtonBase-root MuiPaginationItem-root MuiPaginationItem-page Mui-disabled MuiPaginationItem-sizeLarge Mui-disabled"
+            disabled=""
+            tabindex="-1"
+            type="button"
           >
-            <path
-              d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"
-            />
-          </svg>
-          Back
-        </span>
-      </button>
-      <div
-        class="MuiMobileStepper-dots"
-      />
-      <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textSizeSmall MuiButton-sizeSmall"
-        tabindex="0"
-        type="button"
-      >
-        <span
-          class="MuiButton-label"
-        >
-          Next
-          <svg
-            aria-hidden="true"
-            class="MuiSvgIcon-root"
-            focusable="false"
-            viewBox="0 0 24 24"
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root MuiPaginationItem-icon"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"
+              />
+            </svg>
+          </button>
+        </li>
+        <li>
+          <button
+            aria-label="Go to next page"
+            class="MuiButtonBase-root MuiPaginationItem-root MuiPaginationItem-page Mui-disabled MuiPaginationItem-sizeLarge Mui-disabled"
+            disabled=""
+            tabindex="-1"
+            type="button"
           >
-            <path
-              d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"
-            />
-          </svg>
-        </span>
-        <span
-          class="MuiTouchRipple-root"
-        />
-      </button>
-    </div>
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root MuiPaginationItem-icon"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"
+              />
+            </svg>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <div
+    class="sc-AxhCb inUdXy"
+    style="overflow-x: hidden;"
+  >
+    <div
+      class="react-swipeable-view-container"
+      style="flex-direction: row; transition: all 0s ease 0s; direction: ltr; display: flex; will-change: transform;"
+    />
   </div>
 </DocumentFragment>
 `;
 
 exports[`Player History Renders 1`] = `
 <DocumentFragment>
-  <div>
-    <div
-      style="overflow-x: hidden;"
+  <div
+    class="sc-AxjAm gFxRDc"
+  >
+    <button
+      class="MuiButtonBase-root MuiButton-root MuiButton-text sc-AxirZ kcEGGr"
+      tabindex="0"
+      type="button"
     >
-      <div
-        class="react-swipeable-view-container"
-        style="flex-direction: row; transition: all 0s ease 0s; direction: ltr; display: flex; will-change: transform;"
+      <span
+        class="MuiButton-label"
+      >
+        <svg
+          aria-hidden="true"
+          class="MuiSvgIcon-root"
+          focusable="false"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"
+          />
+        </svg>
+        <p
+          class="MuiTypography-root MuiTypography-body1"
+        >
+          Back to Birds Eye View
+        </p>
+      </span>
+      <span
+        class="MuiTouchRipple-root"
       />
-    </div>
-    <div
-      class="MuiPaper-root MuiMobileStepper-root MuiMobileStepper-positionStatic MuiPaper-elevation0"
+    </button>
+    <h5
+      class="MuiTypography-root MuiTypography-h5"
     >
-      <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textSizeSmall MuiButton-sizeSmall Mui-disabled Mui-disabled"
-        disabled=""
-        tabindex="-1"
-        type="button"
+      Player History
+    </h5>
+    <nav
+      aria-label="pagination navigation"
+      class="MuiPagination-root sc-AxiKw ckNwYJ"
+    >
+      <ul
+        class="MuiPagination-ul"
       >
-        <span
-          class="MuiButton-label"
-        >
-          <svg
-            aria-hidden="true"
-            class="MuiSvgIcon-root"
-            focusable="false"
-            viewBox="0 0 24 24"
+        <li>
+          <button
+            aria-label="Go to previous page"
+            class="MuiButtonBase-root MuiPaginationItem-root MuiPaginationItem-page Mui-disabled MuiPaginationItem-sizeLarge Mui-disabled"
+            disabled=""
+            tabindex="-1"
+            type="button"
           >
-            <path
-              d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"
-            />
-          </svg>
-          Back
-        </span>
-      </button>
-      <div
-        class="MuiMobileStepper-dots"
-      />
-      <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textSizeSmall MuiButton-sizeSmall"
-        tabindex="0"
-        type="button"
-      >
-        <span
-          class="MuiButton-label"
-        >
-          Next
-          <svg
-            aria-hidden="true"
-            class="MuiSvgIcon-root"
-            focusable="false"
-            viewBox="0 0 24 24"
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root MuiPaginationItem-icon"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"
+              />
+            </svg>
+          </button>
+        </li>
+        <li>
+          <button
+            aria-label="Go to next page"
+            class="MuiButtonBase-root MuiPaginationItem-root MuiPaginationItem-page Mui-disabled MuiPaginationItem-sizeLarge Mui-disabled"
+            disabled=""
+            tabindex="-1"
+            type="button"
           >
-            <path
-              d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"
-            />
-          </svg>
-        </span>
-        <span
-          class="MuiTouchRipple-root"
-        />
-      </button>
-    </div>
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root MuiPaginationItem-icon"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"
+              />
+            </svg>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <div
+    class="sc-AxhCb inUdXy"
+    style="overflow-x: hidden;"
+  >
+    <div
+      class="react-swipeable-view-container"
+      style="flex-direction: row; transition: all 0s ease 0s; direction: ltr; display: flex; will-change: transform;"
+    />
   </div>
 </DocumentFragment>
 `;
