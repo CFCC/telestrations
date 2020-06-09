@@ -74,8 +74,15 @@ export interface Game {
 export const getImageURL = async (image: string): Promise<string> => {
     return await firebase.storage().ref(image).getDownloadURL() as string;
 };
+export const getAllGameCodes = async () => {
+    return (await firebase
+        .firestore()
+        .collection("games")
+        .get())
+        .docs;
+};
 export const getGameCodes = (callback: (ids: string[]) => void) => {
-    firebase
+    return firebase
         .firestore()
         .collection("games")
         .where("status", "==", "lobby")
@@ -87,13 +94,20 @@ export const getGameCodes = (callback: (ids: string[]) => void) => {
 export const setGameCode = (gameCode: string, isClient: boolean = false) => {
     const game = firebase.firestore().doc(`games/${gameCode}`) as DocumentReference<Partial<Game>>;
 
-    game.onSnapshot(snapshot => {
+    game.onSnapshot(async snapshot => {
         const newGame = snapshot.data();
         if (!newGame) return;
 
         if (isClient) {
-            if (newGame.status === "in progress") store.dispatch(setGameState(GameState.IN_GAME));
-            else if (newGame.status === "finished") store.dispatch(setGameState(GameState.FINISHED));
+            if (newGame.status === "in progress") {
+                store.dispatch(setGameState(GameState.IN_GAME));
+            } else if (newGame.status === "finished") {
+                store.dispatch(setGameState(GameState.FINISHED));
+                const currentUser = firebase.auth().currentUser;
+                if (currentUser?.isAnonymous) {
+                    await currentUser.delete();
+                }
+            }
         }
 
         store.dispatch(updateGame({...newGame, id: snapshot.id}));
