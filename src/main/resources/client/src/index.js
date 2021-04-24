@@ -1,4 +1,4 @@
-import "./utils/firebase";
+import "./main/resources/client/src/utils/firebase";
 import "./app";
 
 // react-scripts requires an index.js and refuses to run in index.tsx,

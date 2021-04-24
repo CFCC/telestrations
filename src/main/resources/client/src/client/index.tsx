@@ -3,11 +3,11 @@ import _ from "lodash";
 
 import TitleScreen from "../components/TitleScreen";
 import {GameState} from "../utils/store";
-import Drawing from "../client/Drawing";
-import Typing from "../client/Typing";
-import Waiting from "../client/Waiting";
+import Drawing from "./Drawing";
+import Typing from "./Typing";
+import Waiting from "./Waiting";
 import LoginScreen from "../components/LoginScreen";
-import GameSelection from "../client/GameSelection";
+import GameSelection from "./GameSelection";
 import {useReduxState} from "../utils/hooks";
 
 export default function Client() {
