@@ -2,8 +2,8 @@ import React from "react";
 import History from "./History";
 
 export default {
-    name: "Server/History",
-    component: History,
+  name: "Server/History",
+  component: History,
 };
 
 export const PlayerHistory = () => <History playerId="" />;

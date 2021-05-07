@@ -1,13 +1,13 @@
 const snapshot = {
-    onSnapshot: () => {},
-}
+  onSnapshot: () => {},
+};
 const ref = {
-    ...snapshot,
-    where: () => snapshot,
-}
+  ...snapshot,
+  where: () => snapshot,
+};
 
 export const firebaseLoginUi = {
-    start: jest.fn(),
+  start: jest.fn(),
 };
 
 export const loginOptions = [];

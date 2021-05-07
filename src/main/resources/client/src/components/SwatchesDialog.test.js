@@ -1,7 +1,7 @@
-import {render} from "../utils/render";
-import {Standard} from "./SwatchesDialog.stories";
+import { render } from "../utils/render";
+import { Standard } from "./SwatchesDialog.stories";
 
-it('Renders', () => {
-    const {asFragment} = render(Standard());
-    expect(asFragment()).toMatchSnapshot();
+it("Renders", () => {
+  const { asFragment } = render(Standard());
+  expect(asFragment()).toMatchSnapshot();
 });
