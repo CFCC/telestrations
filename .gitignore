@@ -1,4 +1,5 @@
 .idea
 target
 src/main/resources/public
-src/main/resources/client/.parcel-cache
+src/main/resources/client/node_modules
+src/main/resources/client/build
