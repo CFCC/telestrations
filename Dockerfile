@@ -1,7 +1,7 @@
-FROM node:15.9.0 as frontend
+FROM node:15.14.0 as frontend
 WORKDIR /usr/telestrations
-ARG FONTAWESOME_NPM_AUTH_TOKEN
 COPY src/main/resources/client/ ./src/main/resources/client/
+RUN ["npm", "install", "-g", "npm@7.11.1"]
 RUN ["npm", "install", "--prefix", "src/main/resources/client"]
 RUN ["npm", "run", "build", "--prefix", "src/main/resources/client"]
 
