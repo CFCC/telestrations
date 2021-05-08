@@ -95,29 +95,32 @@ class ServerController(private val socket: SimpMessagingTemplate) {
         return server.getGame(gameCode)
     }
 
-    @MessageMapping("/games/{gameCode}/start-round")
-    @SendTo("/topic/games/{gameCode}")
-    fun startRound(@DestinationVariable gameCode: String, @ModelAttribute user: User): Game {
-        server.startRound(gameCode, user.id)
-        socket.convertAndSend("/topic/games", server.getGames())
-        return server.getGame(gameCode)
-    }
-
-    @MessageMapping("/games/{gameCode}/start-play")
+    @MessageMapping("/games/{gameCode}/start")
     @SendTo("/topic/games/{gameCode}")
     fun startPlay(@DestinationVariable gameCode: String, @ModelAttribute user: User): Game {
-        server.startPlay(gameCode, user.id)
+        server.startGame(gameCode, user.id)
         return server.getGame(gameCode)
     }
 
-    @MessageMapping("/games/{gameCode}/play-cards")
-    @SendToUser("/topic/successes")
-    fun playCards(
+    @MessageMapping("/games/{gameCode}/page/write")
+    @SendTo("/topic/games/{gameCode}")
+    fun writeInPage(
         @DestinationVariable gameCode: String,
         @ModelAttribute user: User,
-        @Payload request: List<PlayCardRequest>
+        @Payload content: String
+    ): Game {
+        server.writeInPage(gameCode, user.id, content)
+        return server.getGame(gameCode)
+    }
+
+    @MessageMapping("/games/{gameCode}/page/submit")
+    @SendToUser("/topic/successes")
+    fun submitPage(
+        @DestinationVariable gameCode: String,
+        @ModelAttribute user: User,
+        @Payload content: String?
     ): String {
-        val response = server.playCards(gameCode, user.id, request)
+        val response = server.submitPage(gameCode, user.id, content)
         socket.convertAndSend("/topic/games/$gameCode", server.getGame(gameCode))
         return response
     }
