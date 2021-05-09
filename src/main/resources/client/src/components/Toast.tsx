@@ -10,7 +10,7 @@ export default function Toast() {
   );
 
   useEffect(() => {
-    if (!title || !description) return;
+    if (!description) return;
     setIsOpen(false);
     setIsOpen(true);
   }, [id]);
@@ -18,7 +18,7 @@ export default function Toast() {
   return (
     <Snackbar open={isOpen} autoHideDuration={2000}>
       <Alert severity={status}>
-        <AlertTitle>{title}</AlertTitle>
+        {title && <AlertTitle>{title}</AlertTitle>}
         {description}
       </Alert>
     </Snackbar>

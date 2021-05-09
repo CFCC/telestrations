@@ -4,7 +4,7 @@ import styled from "styled-components";
 import _ from "lodash";
 
 import { clientSlice, GameState } from "../utils/store";
-import { setGuess, submitGuess } from "../utils/firebase";
+import { setGuess, submitGuess } from "../utils/api";
 import { useDispatch } from "react-redux";
 import { useReduxState } from "../utils/hooks";
 

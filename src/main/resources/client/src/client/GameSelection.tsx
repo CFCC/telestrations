@@ -12,8 +12,8 @@ import { useDispatch } from "react-redux";
 
 import TitleScreen from "../components/TitleScreen";
 import { useEvent } from "../utils/hooks";
-import { clientSlice, GameState } from "../utils/store";
-import { getGameCodes, joinGame, setGameCode } from "../utils/firebase";
+import { GameState } from "../utils/types";
+import { actions } from "../utils/store";
 
 const Form = styled.form`
   width: 50%;
@@ -52,14 +52,14 @@ export default function GameSelection() {
     Cookies.set("gameCode", game, { expires: 0.66 });
     setGameCode(game, true);
     await joinGame(game);
-    dispatch(clientSlice.actions.setGameState(GameState.WAITING_TO_START));
+    dispatch(actions.setGameState(GameState.WAITING_TO_START));
   }
 
   useEffect(() => {
     const gameCode = Cookies.get("gameCode");
     if (gameCode) {
       setGameCode(gameCode, true);
-      dispatch(clientSlice.actions.setGameState(GameState.WAITING_TO_START));
+      dispatch(actions.setGameState(GameState.WAITING_TO_START));
     }
   });
 

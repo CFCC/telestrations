@@ -2,19 +2,19 @@ import * as React from "react";
 import _ from "lodash";
 
 import TitleScreen from "../components/TitleScreen";
-import { GameState } from "../utils/store";
+import { useSelector } from "../utils/store";
 import Drawing from "./Drawing";
 import Typing from "./Typing";
 import Waiting from "./Waiting";
 import LoginScreen from "../components/LoginScreen";
 import GameSelection from "./GameSelection";
-import { useReduxState } from "../utils/hooks";
+import { GameState } from "../utils/types";
 
 export default function Client() {
   const {
     client: { gameState, user },
     firebase: { players, notepads },
-  } = useReduxState();
+  } = useSelector((state) => state);
 
   switch (gameState) {
     case GameState.LOGIN:

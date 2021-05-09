@@ -1,13 +1,19 @@
-import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  configureStore,
+  createAsyncThunk,
+  createSlice,
+  PayloadAction,
+} from "@reduxjs/toolkit";
 import {
   TypedUseSelectorHook,
   useSelector as useUntypedSelector,
 } from "react-redux";
 
-import { Game, Notebook, Player } from "../utils/types";
-import { Settings } from "./types";
+import * as api from "./api";
+import { Game, GameState, Settings } from "./types";
 
 interface State {
+  gameState: GameState;
   openGames: string[];
   toast: {
     id: number;
@@ -17,11 +23,69 @@ interface State {
   };
   settings: Settings;
   currentGame: Game;
+  activeContentId: string;
 }
+interface ThunkApi {
+  state: State;
+}
+
+const goToLobby = createAsyncThunk<void, void, ThunkApi>(
+  "goToLobby",
+  (_, { getState }) => {
+    const { settings } = getState();
+    api.connectToServer(settings.id);
+  }
+);
+
+const createAndJoinGame = createAsyncThunk<void, string, ThunkApi>(
+  "createGame",
+  async (code, { getState }) => {
+    const { settings } = getState();
+    await api.createGame(code);
+    await api.joinGame(code, settings);
+  }
+);
+
+const joinGame = createAsyncThunk<void, string, ThunkApi>(
+  "joinGame",
+  async (code, { getState }) => {
+    const { settings } = getState();
+    await api.joinGame(code, settings);
+  }
+);
+
+export const rejoinGame = createAsyncThunk<void, string, ThunkApi>(
+  "rejoinGame",
+  async (code, { getState }) => {
+    if (!code) return;
+
+    const { settings } = getState();
+    await api.joinGame(code, settings, true);
+  }
+);
+
+export const saveSettings = createAsyncThunk<
+  Partial<Settings>,
+  Partial<Settings>,
+  ThunkApi
+>("saveSettings", (settings, { getState }) => {
+  const {
+    currentGame: { code },
+    settings: oldSettings,
+  } = getState();
+
+  api.updateSettings(code, { ...oldSettings, ...settings });
+  Object.entries(settings).forEach(([k, v]) => {
+    localStorage.setItem(k, v.toString());
+  });
+
+  return settings;
+});
 
 export const { actions, reducer } = createSlice({
   name: "app",
   initialState: {
+    gameState: GameState.LOGIN,
     openGames: [],
     toast: { id: 0, title: "", description: "", status: "info" },
     currentGame: {
@@ -39,34 +103,63 @@ export const { actions, reducer } = createSlice({
       name: localStorage.getItem("name"),
       connected: true,
     },
+    activeContentId: "",
   } as State,
   reducers: {
-    updateGame: (state, action: PayloadAction<Partial<WithId<Game>>>) => {
-      state.game = { ...state.game, ...action.payload };
+    handleRequestException: (state, action: PayloadAction<string>) => {
+      state.toast = {
+        id: state.toast.id + 1,
+        title: "Bad Request",
+        description: action.payload,
+        status: "error",
+      };
     },
-    updateNotepads: (state, action: PayloadAction<Record<string, Notepad>>) => {
-      state.notepads = action.payload;
+    handleServerException: (state, action: PayloadAction<string>) => {
+      state.toast = {
+        id: state.toast.id + 1,
+        title: "Server Error",
+        description: action.payload,
+        status: "error",
+      };
     },
-    updatePlayers: (state, action: PayloadAction<Record<string, Player>>) => {
-      state.players = action.payload;
+    handleSuccess: (state, action: PayloadAction<string>) => {
+      state.toast = {
+        id: state.toast.id + 1,
+        title: "",
+        description: action.payload,
+        status: "success",
+      };
+    },
+    handleGamesListMessage: (state, action: PayloadAction<string[]>) => {
+      state.openGames = [...action.payload];
+    },
+    handleGameUpdate: (state, action: PayloadAction<Game>) => {
+      state.currentGame = action.payload;
     },
     viewPlayerHistory: (state, action: PayloadAction<string>) => {
       state.gameState = GameState.PLAYER_HISTORY;
-      state.activePlayerId = action.payload;
+      state.activeContentId = action.payload;
     },
     viewNotepadHistory: (state, action: PayloadAction<string>) => {
       state.gameState = GameState.NOTEPAD_HISTORY;
-      state.activePlayerId = action.payload;
-    },
-    setUser: (state, action: PayloadAction<User>) => {
-      state.user = action.payload;
-      state.gameState = GameState.GAME_CODE;
+      state.activeContentId = action.payload;
     },
     setGameState: (state, action: PayloadAction<GameState>) => {
       state.gameState = action.payload;
     },
   },
-  extraReducers: (builder) => builder,
+  extraReducers: (builder) => {
+    builder
+      .addCase(saveSettings.fulfilled, (state, action) => {
+        state.settings = {
+          ...state.settings,
+          ...action.payload,
+        };
+      })
+      .addCase(rejoinGame.fulfilled, (state, action) => {
+        state.gameState = GameState.IN_GAME;
+      });
+  },
 });
 
 export const store = configureStore({ reducer });

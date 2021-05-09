@@ -1,40 +1,37 @@
+import SockJS from "sockjs-client";
+import { Client } from "@stomp/stompjs";
 import _ from "lodash";
 import { v4 as uuid } from "uuid";
-import { animals, colors, uniqueNamesGenerator } from "unique-names-generator";
 
-import { clientSlice, firebaseSlice, GameState, store } from "./store";
+import { store, actions, rejoinGame } from "./store";
+import { Game, Settings } from "./types";
 
-const {
-  actions: { updatePlayers, updateNotepads, updateGame },
-} = firebaseSlice;
-const {
-  actions: { setGameState, setUser },
-} = clientSlice;
-
-firebase.auth().onAuthStateChanged(function (user: firebase.User | null) {
-  if (!user) return;
-
-  let { displayName, uid } = user;
-  if (!user.displayName) {
-    displayName = _.startCase(
-      uniqueNamesGenerator({
-        dictionaries: [colors, animals],
-        length: 2,
-        separator: "-",
-      })
-    );
-    user.updateProfile({ displayName });
-  }
-
-  store.dispatch(setUser({ uid, displayName }));
+const client = new Client({
+  webSocketFactory: () => new SockJS(`${location.origin}/websocket-server`),
 });
+client.onConnect = () => {
+  client.subscribe("/topic/rejoin-game", ({ body }) => {
+    store.dispatch(rejoinGame(body));
+  });
 
-export const getImageURL = async (image: string): Promise<string> => {
-  return (await firebase.storage().ref(image).getDownloadURL()) as string;
+  client.subscribe("/topic/games", ({ body }) => {
+    const response = JSON.parse(body) as string[];
+    store.dispatch(actions.handleGamesListMessage(response));
+  });
+
+  client.subscribe(`/user/topic/errors/client`, ({ body }) => {
+    store.dispatch(actions.handleRequestException(body));
+  });
+
+  client.subscribe(`/user/topic/errors/server`, ({ body }) => {
+    store.dispatch(actions.handleServerException(body));
+  });
+
+  client.subscribe(`/user/topic/successes`, ({ body }) => {
+    store.dispatch(actions.handleSuccess(body));
+  });
 };
-export const getAllGameCodes = async () => {
-  return (await firebase.firestore().collection("games").get()).docs;
-};
+
 export const getGameCodes = (callback: (ids: string[]) => void) => {
   return firebase
     .firestore()
@@ -116,30 +113,6 @@ export const setGameCode = (gameCode: string, isClient: boolean = false) => {
     }
   });
 };
-export const createGame = async (gameCode: string) => {
-  const {
-    client: { user },
-  } = store.getState();
-
-  await (firebase
-    .firestore()
-    .doc(`games/${gameCode}`) as DocumentReference<Game>).set({
-    created: new Date().getTime(),
-    status: "lobby",
-    serverId: user.uid,
-  } as Game);
-};
-export const joinGame = async (gameCode: string) => {
-  const {
-    client: { user },
-  } = store.getState();
-
-  await (firebase
-    .firestore()
-    .doc(`games/${gameCode}/players/${user.uid}`) as DocumentReference<
-    Partial<Player>
-  >).set({ name: user.displayName as NonNullable<string> });
-};
 export const startGame = async () => {
   const {
     firebase: {
@@ -175,7 +148,7 @@ export const startGame = async () => {
     Partial<Game>
   >).set({ status: "in progress" }, { merge: true });
 };
-const updateGuessInFirebase = _.throttle(async (guess: string) => {
+export const setGuess = _.throttle(async (guess: string) => {
   const {
     client: { user },
     firebase: {
@@ -218,7 +191,6 @@ const updateGuessInFirebase = _.throttle(async (guess: string) => {
     Partial<Notepad>
   >).set({ pages }, { merge: true });
 }, 500);
-export const setGuess = (guess: string) => updateGuessInFirebase(guess);
 export const submitGuess = async () => {
   const {
     client: { user },
@@ -241,3 +213,43 @@ export const submitGuess = async () => {
     Partial<Player>
   >).set({ currentNotepad: "" }, { merge: true });
 };
+
+export function updateSettings(code: string, settings: Settings) {
+  if (!code) return;
+
+  client.publish({
+    destination: `/app/games/${code}/update`,
+    body: JSON.stringify(settings),
+  });
+}
+
+export function connectToServer(uuid: string) {
+  client.connectHeaders = { uuid };
+  client.activate();
+}
+
+export function createGame(code: string) {
+  client.publish({ destination: `/app/games/${code}/create` });
+}
+
+export async function joinGame(
+  code: string,
+  settings: Settings,
+  rejoining: boolean = false
+) {
+  if (!rejoining) {
+    client.publish({
+      destination: `/app/games/${code}/join`,
+      body: JSON.stringify(settings),
+    });
+  }
+
+  // A race condition happens where if we dont wait 1ms, the subscription may happen first
+  // giving an error that the game doesn't exist
+  await new Promise((resolve) => setTimeout(resolve, 1));
+
+  client.subscribe(`/topic/games/${code}`, ({ body }) => {
+    const response = JSON.parse(body) as Game;
+    store.dispatch(actions.handleGameUpdate(response));
+  });
+}

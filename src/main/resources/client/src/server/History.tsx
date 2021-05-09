@@ -8,7 +8,7 @@ import styled from "styled-components";
 import { useDispatch } from "react-redux";
 
 import { useReduxState } from "../utils/hooks";
-import { getImageURL, Page } from "../utils/firebase";
+import { getImageURL, Page } from "../utils/api";
 import { clientSlice, GameState } from "../utils/store";
 import * as theme from "../utils/theme";
 

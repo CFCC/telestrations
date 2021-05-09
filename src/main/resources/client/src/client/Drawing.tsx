@@ -17,11 +17,11 @@ import styled from "styled-components";
 import _ from "lodash";
 import { useDispatch } from "react-redux";
 
-import { clientSlice, GameState, useSelector } from "../utils/store";
+import { actions, useSelector } from "../utils/store";
 import { useBoolean, useEvent } from "../utils/hooks";
 import SwatchesDialog from "../components/SwatchesDialog";
 import ListDialog from "../components/ListDialog";
-import { setGuess, submitGuess } from "../utils/firebase";
+import { GameState } from "../utils/types";
 
 const Container = styled.div`
   width: 100vw;
@@ -118,9 +118,9 @@ export default function Drawing() {
     setCanRedo(sketch.current.canRedo());
   };
 
-  function handleSubmitGuess() {
-    submitGuess();
-    dispatch(clientSlice.actions.setGameState(GameState.WAITING_FOR_CONTENT));
+  async function handleSubmitGuess() {
+    await submitGuess();
+    dispatch(actions.setGameState(GameState.WAITING_FOR_CONTENT));
   }
 
   return (

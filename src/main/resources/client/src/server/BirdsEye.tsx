@@ -14,7 +14,7 @@ import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import _ from "lodash";
 
-import { clientSlice, useSelector } from "../utils/store";
+import { actions, useSelector } from "../utils/store";
 import PlayerStream from "./PlayerStream";
 import * as theme from "../utils/theme";
 
@@ -61,11 +61,11 @@ export default function BirdsEye() {
     setMenu({ anchorElement: null, playerId: "" });
   };
   const handleViewPlayerHistory = () => {
-    dispatch(clientSlice.actions.viewPlayerHistory(menu.playerId));
+    dispatch(actions.viewPlayerHistory(menu.playerId));
   };
   const handleViewNotepadHistory = () => {
     dispatch(
-      clientSlice.actions.viewNotepadHistory(
+      actions.viewNotepadHistory(
         notepads[players[menu.playerId].currentNotepad].ownerId
       )
     );

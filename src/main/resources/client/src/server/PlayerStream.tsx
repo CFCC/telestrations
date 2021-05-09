@@ -3,7 +3,7 @@ import { CardContent, Typography } from "@material-ui/core";
 import styled from "styled-components";
 
 import { useSelector } from "../utils/store";
-import { getImageURL } from "../utils/firebase";
+import { getImageURL } from "../utils/api";
 
 interface PlayerStreamProps {
   playerId: string;

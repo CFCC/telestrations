@@ -21,7 +21,3 @@ export function useEvent<T>(
 
   return [state, wrappedSetState, setState];
 }
-
-export function useReduxState() {
-  return useSelector((state) => state);
-}

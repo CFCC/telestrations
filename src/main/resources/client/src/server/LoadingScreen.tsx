@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useDispatch } from "react-redux";
 
 import { clientSlice, GameState, useSelector } from "../utils/store";
-import { startGame } from "../utils/firebase";
+import { startGame } from "../utils/api";
 import TitleScreen from "../components/TitleScreen";
 
 const PlayerList = styled.div`
