@@ -4,38 +4,42 @@ import {
   useSelector as useUntypedSelector,
 } from "react-redux";
 
-import { Game, Notepad, Player, User, WithId } from "./firebase";
+import { Game, Notebook, Player } from "../utils/types";
+import { Settings } from "./types";
 
-export enum GameState {
-  // Common
-  LOGIN = "login",
-  GAME_CODE = "game code",
-  WAITING_TO_START = "waiting to start",
-
-  // Server
-  BIRDS_EYE = "bird's eye",
-  SINGLE_PLAYER = "single player",
-  PLAYER_HISTORY = "player history",
-  NOTEPAD_HISTORY = "notepad history",
-
-  // Client
-  IN_GAME = "in game",
-  FINISHED = "finished",
-  WAITING_FOR_CONTENT = "waiting for content",
+interface State {
+  openGames: string[];
+  toast: {
+    id: number;
+    title: string;
+    description: string;
+    status: "info" | "warning" | "success" | "error";
+  };
+  settings: Settings;
+  currentGame: Game;
 }
 
-export const firebaseSlice = createSlice({
-  name: "firebase",
+export const { actions, reducer } = createSlice({
+  name: "app",
   initialState: {
-    game: {
-      id: "",
-      created: new Date().getTime(),
-      status: "lobby",
-      serverId: "",
+    openGames: [],
+    toast: { id: 0, title: "", description: "", status: "info" },
+    currentGame: {
+      active: false,
+      code: "",
+      players: [],
+      admin: "",
+      round: 0,
+      adminId: "",
+      isDone: false,
     },
-    players: {} as Record<string, Player>,
-    notepads: {} as Record<string, Notepad>,
-  },
+    settings: {
+      id: localStorage.getItem("id"),
+      avatar: localStorage.getItem("avatar"),
+      name: localStorage.getItem("name"),
+      connected: true,
+    },
+  } as State,
   reducers: {
     updateGame: (state, action: PayloadAction<Partial<WithId<Game>>>) => {
       state.game = { ...state.game, ...action.payload };
@@ -46,16 +50,6 @@ export const firebaseSlice = createSlice({
     updatePlayers: (state, action: PayloadAction<Record<string, Player>>) => {
       state.players = action.payload;
     },
-  },
-});
-export const clientSlice = createSlice({
-  name: "client",
-  initialState: {
-    user: { displayName: "", uid: "" } as User,
-    gameState: GameState.LOGIN,
-    activePlayerId: "",
-  },
-  reducers: {
     viewPlayerHistory: (state, action: PayloadAction<string>) => {
       state.gameState = GameState.PLAYER_HISTORY;
       state.activePlayerId = action.payload;
@@ -75,13 +69,6 @@ export const clientSlice = createSlice({
   extraReducers: (builder) => builder,
 });
 
-export const store = configureStore({
-  reducer: {
-    firebase: firebaseSlice.reducer,
-    client: clientSlice.reducer,
-  },
-});
+export const store = configureStore({ reducer });
 
-export const useSelector: TypedUseSelectorHook<
-  ReturnType<typeof store.getState>
-> = useUntypedSelector;
+export const useSelector: TypedUseSelectorHook<State> = useUntypedSelector;

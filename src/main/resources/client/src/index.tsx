@@ -8,6 +8,7 @@ import ClientApp from "./client";
 import ServerApp from "./server";
 import { darkPrimary, GlobalStyles, primary, theme } from "./utils/theme";
 import { store } from "./utils/store";
+import Toast from "./components/Toast";
 
 const Container = styled.div`
   position: absolute;
@@ -28,6 +29,7 @@ ReactDOM.render(
   <StylesProvider injectFirst={true}>
     <ThemeProvider theme={theme}>
       <GlobalStyles />
+      <Toast />
       <Provider store={store}>
         <Container>
           <App />

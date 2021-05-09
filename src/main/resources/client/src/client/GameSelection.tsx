@@ -48,10 +48,10 @@ export default function GameSelection() {
     setLabelWidth(inputLabel.current?.offsetWidth || 0);
   }, []);
 
-  function onSubmit() {
+  async function onSubmit() {
     Cookies.set("gameCode", game, { expires: 0.66 });
     setGameCode(game, true);
-    joinGame(game);
+    await joinGame(game);
     dispatch(clientSlice.actions.setGameState(GameState.WAITING_TO_START));
   }
 
