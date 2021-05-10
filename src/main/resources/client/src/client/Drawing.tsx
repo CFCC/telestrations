@@ -17,7 +17,7 @@ import styled from "styled-components";
 import _ from "lodash";
 import { useDispatch } from "react-redux";
 
-import { actions, useSelector } from "../utils/store";
+import { actions, setGuess, submitGuess, useSelector } from "../utils/store";
 import { useBoolean, useEvent } from "../utils/hooks";
 import SwatchesDialog from "../components/SwatchesDialog";
 import ListDialog from "../components/ListDialog";
@@ -68,8 +68,8 @@ const StyledSlider = styled(Slider)`
 `;
 
 export default function Drawing() {
-  const { user } = useSelector((state) => state.client);
-  const { players, notepads } = useSelector((state) => state.firebase);
+  const userId = useSelector((state) => state.settings.id);
+  const players = useSelector((state) => state.currentGame.players);
   const dispatch = useDispatch();
 
   const [tool, setTool] = useState(Tools.Pencil);
@@ -91,8 +91,8 @@ export default function Drawing() {
 
   const sketch: MutableRefObject<SketchField> = useRef(new SketchField({}));
 
-  if (!user) return null;
-  const currentNotepad = notepads[players[user.uid]?.currentNotepad];
+  const currentNotepad = _.find(players, ["settings.id", userId])
+    ?.notebookQueue[0];
   const { content } = _.nth(currentNotepad?.pages, -2) ?? {};
 
   const undo = () => {
@@ -112,14 +112,14 @@ export default function Drawing() {
     setCanUndo(sketch.current.canUndo());
     setCanRedo(sketch.current.canRedo());
   };
-  const updateGuess = () => {
-    setGuess(sketch.current.toDataURL());
+  const updateGuess = async () => {
+    await dispatch(setGuess(sketch.current.toDataURL()));
     setCanUndo(sketch.current.canUndo());
     setCanRedo(sketch.current.canRedo());
   };
 
   async function handleSubmitGuess() {
-    await submitGuess();
+    await dispatch(submitGuess(sketch.current.toDataURL()));
     dispatch(actions.setGameState(GameState.WAITING_FOR_CONTENT));
   }
 

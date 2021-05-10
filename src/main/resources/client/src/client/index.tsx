@@ -11,10 +11,9 @@ import GameSelection from "./GameSelection";
 import { GameState } from "../utils/types";
 
 export default function Client() {
-  const {
-    client: { gameState, user },
-    firebase: { players, notepads },
-  } = useSelector((state) => state);
+  const gameState = useSelector((state) => state.gameState);
+  const userId = useSelector((state) => state.settings.id);
+  const players = useSelector((state) => state.currentGame.players);
 
   switch (gameState) {
     case GameState.LOGIN:
@@ -37,16 +36,16 @@ export default function Client() {
         />
       );
     case GameState.IN_GAME: {
-      if (!user.uid) return <div />;
+      if (!userId) return <div />;
 
-      const player = players[user.uid];
+      const player = players.find((p) => p.id === userId);
       if (!player) return <div />;
 
-      const currentNotepad = notepads[player.currentNotepad];
+      const currentNotepad = player.notebookQueue[0];
       if (!currentNotepad) return <div />;
 
       const numPages =
-        _.last(currentNotepad?.pages)?.author === user.uid
+        _.last(currentNotepad?.pages)?.authorId === userId
           ? currentNotepad?.pages.length
           : currentNotepad?.pages.length + 1;
 

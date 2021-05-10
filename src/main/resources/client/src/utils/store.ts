@@ -76,11 +76,28 @@ export const saveSettings = createAsyncThunk<
 
   api.updateSettings(code, { ...oldSettings, ...settings });
   Object.entries(settings).forEach(([k, v]) => {
+    if (!v) return;
     localStorage.setItem(k, v.toString());
   });
 
   return settings;
 });
+
+export const setGuess = createAsyncThunk<void, string, ThunkApi>(
+  "setGuess",
+  async (content, { getState }) => {
+    const { currentGame, settings } = getState();
+    await api.setGuess(currentGame.code, content);
+  }
+);
+
+export const submitGuess = createAsyncThunk<void, string, ThunkApi>(
+  "submitGuess",
+  async (content, { getState }) => {
+    const { currentGame, settings } = getState();
+    await api.submitGuess(currentGame.code, content);
+  }
+);
 
 export const { actions, reducer } = createSlice({
   name: "app",

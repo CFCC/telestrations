@@ -5,14 +5,13 @@ import LoadingScreen from "./LoadingScreen";
 import History from "./History";
 import PlayerStream from "./PlayerStream";
 import GameCodeScreen from "./GameCodeScreen";
-import { GameState } from "../utils/store";
-import { useReduxState } from "../utils/hooks";
 import LoginScreen from "../components/LoginScreen";
+import { GameState } from "../utils/types";
+import { useSelector } from "../utils/store";
 
 export default function Server() {
-  const {
-    client: { gameState, activePlayerId },
-  } = useReduxState();
+  const gameState = useSelector((state) => state.gameState);
+  const activeContentId = useSelector((state) => state.activeContentId);
 
   switch (gameState) {
     case GameState.LOGIN:
@@ -24,11 +23,11 @@ export default function Server() {
     case GameState.BIRDS_EYE:
       return <BirdsEye />;
     case GameState.NOTEPAD_HISTORY:
-      return <History ownerId={activePlayerId} />;
+      return <History ownerId={activeContentId} />;
     case GameState.PLAYER_HISTORY:
-      return <History playerId={activePlayerId} />;
+      return <History playerId={activeContentId} />;
     case GameState.SINGLE_PLAYER:
-      return <PlayerStream playerId={activePlayerId} />;
+      return <PlayerStream playerId={activeContentId} />;
     default:
       return <div />;
   }
