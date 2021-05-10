@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 
 import { useSelector } from "./store";
 
@@ -20,4 +20,20 @@ export function useEvent<T>(
   const wrappedSetState = (...args: any) => setState(getter.apply(null, args));
 
   return [state, wrappedSetState, setState];
+}
+
+export default function useInput<T extends string>(
+  defaultValue: T
+): [T, (e: FormEvent<HTMLInputElement> | T) => void] {
+  const [state, setState] = useState(defaultValue);
+
+  function onChange(e: FormEvent<HTMLInputElement> | T) {
+    if (typeof e === "object") {
+      setState(e.currentTarget.value as T);
+    } else {
+      setState(e);
+    }
+  }
+
+  return [state, onChange];
 }

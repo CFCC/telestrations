@@ -19,7 +19,7 @@ export interface Settings {
 
 export interface Player {
   id: string;
-  setting: Settings;
+  settings: Settings;
   notebookQueue: Notebook[];
   startOfTimeOffline: Date;
 }

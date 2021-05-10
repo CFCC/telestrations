@@ -1,12 +1,89 @@
-import React from "react";
+import React, { FormEvent, useState } from "react";
 
-import { useSelector } from "../utils/store";
-import { useBoolean } from "../utils/hooks";
+import { saveSettings, useSelector } from "../utils/store";
+import useInput from "../utils/hooks";
 import TitleScreen from "./TitleScreen";
+import { createAvatar } from "@dicebear/avatars";
+import sprites from "@dicebear/avatars-human-sprites";
+import { useDispatch } from "react-redux";
+import { v4 as uuidv4 } from "uuid";
+import { animals, colors, uniqueNamesGenerator } from "unique-names-generator";
+import { Button, IconButton } from "@material-ui/core";
+import { SyncOutlined as SyncIcon } from "@material-ui/icons";
+import styled from "styled-components";
+
+const FormControl = styled.div`
+  &:not(:first-child) {
+    margin-top: 1rem;
+  }
+`;
+
+const getRandomName = () =>
+  uniqueNamesGenerator({
+    dictionaries: [colors, animals],
+    length: 2,
+    separator: " ",
+    style: "capital",
+  });
 
 export default function LoginScreen() {
-  const user = useSelector((state) => state.client.user);
-  const [uiLoading, , uiShown] = useBoolean(true);
+  const { id, name: defaultName, avatar: defaultAvatar } = useSelector(
+    (state) => state.settings
+  );
+  const dispatch = useDispatch();
+  const [avatar, setAvatar] = useState(defaultAvatar ?? uuidv4());
+  const [name, setName] = useInput(defaultName ?? getRandomName());
 
-  return <TitleScreen title="Log In" loading={uiLoading} />;
+  async function handleGoToLobby(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    await dispatch(saveSettings({ name, avatar, id: id || uuidv4() }));
+  }
+
+  function randomizeName() {
+    setName(getRandomName());
+  }
+
+  function randomizeImage() {
+    setAvatar(uuidv4());
+  }
+
+  return (
+    <TitleScreen title="Log In">
+      <form onSubmit={handleGoToLobby}>
+        <FormControl id="image">
+          <FormLabel>Avatar</FormLabel>
+          <InputGroup>
+            <img
+              src={createAvatar(sprites, {
+                seed: avatar,
+                width: 150,
+                height: 150,
+                dataUri: true,
+              })}
+            />
+            <InputRightElement>
+              <IconButton onClick={randomizeImage} aria-label="Randomize Image">
+                <SyncIcon />
+              </IconButton>
+            </InputRightElement>
+          </InputGroup>
+        </FormControl>
+        <FormControl id="name">
+          <FormLabel>Name</FormLabel>
+          <InputGroup>
+            <Input value={name} onChange={setName} placeholder="Name" />
+            <InputRightElement>
+              <IconButton onClick={randomizeName} aria-label="Randomize Name">
+                <SyncIcon />
+              </IconButton>
+            </InputRightElement>
+          </InputGroup>
+        </FormControl>
+        <Button type="submit" color="primary">
+          Go to Lobby
+        </Button>
+      </form>
+    </TitleScreen>
+  );
 }

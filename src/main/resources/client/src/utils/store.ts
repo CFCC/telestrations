@@ -99,6 +99,11 @@ export const submitGuess = createAsyncThunk<void, string, ThunkApi>(
   }
 );
 
+export const startGame = createAsyncThunk<void, string, ThunkApi>(
+  "startGame",
+  async (gameCode) => {}
+);
+
 export const { actions, reducer } = createSlice({
   name: "app",
   initialState: {

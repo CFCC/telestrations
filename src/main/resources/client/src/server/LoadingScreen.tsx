@@ -3,9 +3,9 @@ import { Button, Typography } from "@material-ui/core";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 
-import { clientSlice, GameState, useSelector } from "../utils/store";
-import { startGame } from "../utils/api";
+import { actions, startGame, useSelector } from "../utils/store";
 import TitleScreen from "../components/TitleScreen";
+import { GameState } from "../utils/types";
 
 const PlayerList = styled.div`
   display: flex;
@@ -22,32 +22,18 @@ const PlayerLabel = styled(Typography)`
   margin-bottom: 0.75rem;
 `;
 
-// const DeleteGameContainer = styled.div`
-//     margin-top: 5rem;
-//     width: 100%;
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-//
-//     & > * {
-//         margin: 1rem;
-//     }
-// `;
-
 export default function LoadingScreen() {
   const dispatch = useDispatch();
-  const {
-    game: { id: gameCode, status },
-    players,
-  } = useSelector((state) => state.firebase);
+  const players = useSelector((state) => state.currentGame.players);
+  const gameCode = useSelector((state) => state.currentGame.code);
 
   if (status !== "lobby") {
-    dispatch(clientSlice.actions.setGameState(GameState.BIRDS_EYE));
+    dispatch(actions.setGameState(GameState.BIRDS_EYE));
   }
 
-  function handleStartGame() {
-    startGame();
-    dispatch(clientSlice.actions.setGameState(GameState.BIRDS_EYE));
+  async function handleStartGame() {
+    await dispatch(startGame(gameCode));
+    dispatch(actions.setGameState(GameState.BIRDS_EYE));
   }
 
   return (
@@ -57,7 +43,7 @@ export default function LoadingScreen() {
     >
       <PlayerList>
         {Object.values(players).map((player, i) => (
-          <PlayerLabel key={i}>{player.name}</PlayerLabel>
+          <PlayerLabel key={i}>{player.settings.name}</PlayerLabel>
         ))}
       </PlayerList>
       <Button
