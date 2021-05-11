@@ -7,13 +7,12 @@ import {
   Select,
 } from "@material-ui/core";
 import styled from "styled-components";
-import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 
 import TitleScreen from "../components/TitleScreen";
 import { useEvent } from "../utils/hooks";
 import { GameState } from "../utils/types";
-import { actions } from "../utils/store";
+import { actions, joinGame, useSelector } from "../utils/store";
 
 const Form = styled.form`
   width: 50%;
@@ -26,7 +25,7 @@ const Button = styled(UnstyledButton)`
 `;
 
 export default function GameSelection() {
-  const [games, setGames] = useState<string[]>([]);
+  const games = useSelector((state) => state.openGames);
   const [labelWidth, setLabelWidth] = useState(0);
   const inputLabel = useRef<HTMLLabelElement>(null);
   const [game, setGame, rawSetGame] = useEvent(
@@ -35,33 +34,18 @@ export default function GameSelection() {
   );
   const dispatch = useDispatch();
 
-  useEffect(
-    () =>
-      getGameCodes(function (newGames) {
-        setGames(newGames);
-        if (!newGames.includes(game)) rawSetGame("");
-      }),
-    [game, rawSetGame]
-  );
+  useEffect(() => {
+    if (!games.includes(game)) rawSetGame("");
+  }, [game, games]);
 
   useEffect(() => {
     setLabelWidth(inputLabel.current?.offsetWidth || 0);
   }, []);
 
   async function onSubmit() {
-    Cookies.set("gameCode", game, { expires: 0.66 });
-    setGameCode(game, true);
-    await joinGame(game);
+    await dispatch(joinGame(game));
     dispatch(actions.setGameState(GameState.WAITING_TO_START));
   }
-
-  useEffect(() => {
-    const gameCode = Cookies.get("gameCode");
-    if (gameCode) {
-      setGameCode(gameCode, true);
-      dispatch(actions.setGameState(GameState.WAITING_TO_START));
-    }
-  });
 
   return (
     <TitleScreen title="Please select a game to join">

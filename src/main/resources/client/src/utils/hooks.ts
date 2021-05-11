@@ -1,7 +1,5 @@
 import { FormEvent, useState } from "react";
 
-import { useSelector } from "./store";
-
 export function useBoolean(
   initialState: boolean
 ): [boolean, () => void, () => void] {
@@ -22,12 +20,12 @@ export function useEvent<T>(
   return [state, wrappedSetState, setState];
 }
 
-export default function useInput<T extends string>(
+export function useInput<T extends string>(
   defaultValue: T
-): [T, (e: FormEvent<HTMLInputElement> | T) => void] {
+): [T, (e: FormEvent<HTMLInputElement | HTMLTextAreaElement> | T) => void] {
   const [state, setState] = useState(defaultValue);
 
-  function onChange(e: FormEvent<HTMLInputElement> | T) {
+  function onChange(e: FormEvent<HTMLInputElement | HTMLTextAreaElement> | T) {
     if (typeof e === "object") {
       setState(e.currentTarget.value as T);
     } else {

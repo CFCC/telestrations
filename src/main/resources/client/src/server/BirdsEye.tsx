@@ -45,8 +45,7 @@ const StyledGrid = styled(Grid)`
 `;
 
 export default function BirdsEye() {
-  const gameCode = useSelector((state) => state.currentGame.code);
-  const players = useSelector((state) => state.currentGame.players);
+  const currentGame = useSelector((state) => state.currentGame);
   const dispatch = useDispatch();
   const [menu, setMenu] = useState({
     anchorElement: null,
@@ -63,7 +62,8 @@ export default function BirdsEye() {
   const handleViewNotepadHistory = () => {
     dispatch(
       actions.viewNotepadHistory(
-        notepads[players[menu.playerId].currentNotepad].ownerId
+        currentGame.players.find((p) => p.settings.id === menu.playerId)
+          ?.notebookQueue[0]?.originalOwnerId ?? ""
       )
     );
   };
@@ -75,16 +75,15 @@ export default function BirdsEye() {
   return (
     <React.Fragment>
       <Header>
-        <Typography>Game Code: {gameCode}</Typography>
+        <Typography>Game Code: {currentGame.code}</Typography>
         <Typography variant="h5">Birds Eye View</Typography>
-        <Typography>Game {_.startCase(status)}</Typography>
       </Header>
       <StyledGrid container={true} spacing={2}>
-        {Object.entries(players).map(([id, player]) => {
+        {Object.entries(currentGame.players).map(([id, player]) => {
           let playerState: string;
 
-          if (!player.currentNotepad) playerState = "Drawing";
-          else if (notepads[player.currentNotepad]?.pages?.length % 2 === 1)
+          if (!player.notebookQueue[0]) playerState = "Drawing";
+          else if (player.notebookQueue[0]?.pages?.length % 2 === 1)
             playerState = "Writing";
           else playerState = "Drawing";
 
@@ -96,7 +95,7 @@ export default function BirdsEye() {
             <Grid item={true} xs={12} sm={6} lg={4} xl={3} key={id}>
               <Card ref={id === menu.playerId ? fullScreenUser : undefined}>
                 <CardHeader
-                  title={player.name}
+                  title={player.settings.name}
                   subheader={`Currently ${playerState}`}
                   action={
                     <IconButton

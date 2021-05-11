@@ -6,7 +6,8 @@ import { store, actions, rejoinGame } from "./store";
 import { Game, Settings } from "./types";
 
 const client = new Client({
-  webSocketFactory: () => new SockJS(`${location.origin}/websocket-server`),
+  webSocketFactory: () =>
+    new SockJS(`${window.location.origin}/websocket-server`),
 });
 client.onConnect = () => {
   client.subscribe("/topic/rejoin-game", ({ body }) => {

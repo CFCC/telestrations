@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Card, CardMedia, Paper, Typography } from "@material-ui/core";
 import { Pagination } from "@material-ui/lab";
 import { KeyboardArrowLeft } from "@material-ui/icons";
@@ -7,10 +7,9 @@ import _ from "lodash";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 
-import { useReduxState } from "../utils/hooks";
-import { getImageURL, Page } from "../utils/api";
-import { clientSlice, GameState } from "../utils/store";
 import * as theme from "../utils/theme";
+import { GameState, Page } from "../utils/types";
+import { actions, useSelector } from "../utils/store";
 
 const Header = styled.div`
   background-color: ${theme.secondary};
@@ -85,20 +84,22 @@ interface HistoryProps {
 }
 
 export default function History({ ownerId, playerId }: HistoryProps) {
+  const players = useSelector((state) => state.currentGame.players);
   const [index, setIndex] = useState(0);
   const handleIndexChange = (e: any, v: number) => setIndex(v - 1);
 
-  const {
-    firebase: { notepads },
-  } = useReduxState();
   let pages: Page[];
   if (ownerId) {
-    pages = _.find(notepads, { ownerId })?.pages ?? [];
+    pages =
+      players
+        .flatMap((p) => p.notebookQueue)
+        .find((n) => n.originalOwnerId === ownerId)?.pages ?? [];
   } else {
     pages = _.orderBy(
-      Object.values(notepads)
+      players
+        .flatMap((p) => p.notebookQueue)
         .flatMap((n) => n.pages.map((p, i): [number, Page] => [i, p]))
-        .filter((p) => p[1].author === playerId),
+        .filter((p) => p[1].authorId === playerId),
       (x) => x[0]
     ).map((x) => x[1]);
   }
@@ -106,19 +107,8 @@ export default function History({ ownerId, playerId }: HistoryProps) {
   const dispatch = useDispatch();
 
   function goBack() {
-    dispatch(clientSlice.actions.setGameState(GameState.BIRDS_EYE));
+    dispatch(actions.setGameState(GameState.BIRDS_EYE));
   }
-
-  const [content, setContent] = useState(pages);
-  useEffect(() => {
-    Promise.all(
-      pages.map(async (page, i) =>
-        i % 2 === 0
-          ? page
-          : { ...page, content: await getImageURL(page.content) }
-      )
-    ).then(setContent);
-  }, [pages]);
 
   return (
     <React.Fragment>
@@ -144,13 +134,13 @@ export default function History({ ownerId, playerId }: HistoryProps) {
         enableMouseEvents={true}
         slideClassName="slide"
       >
-        {content.map((page, i) =>
+        {pages.map((page, i) =>
           i % 2 === 0 ? (
-            <TextContainer key={page.lastUpdated}>
+            <TextContainer key={page.id}>
               <Typography variant="h1">{page.content}</Typography>
             </TextContainer>
           ) : (
-            <ImageContainer key={page.lastUpdated}>
+            <ImageContainer key={page.id}>
               <Image image={page.content} title="" />
             </ImageContainer>
           )

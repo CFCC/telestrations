@@ -3,10 +3,9 @@ import { Button as UnstyledButton, TextField } from "@material-ui/core";
 import styled from "styled-components";
 import _ from "lodash";
 
-import { clientSlice, GameState } from "../utils/store";
-import { setGuess, submitGuess } from "../utils/api";
 import { useDispatch } from "react-redux";
-import { useReduxState } from "../utils/hooks";
+import { GameState } from "../utils/types";
+import { actions, useSelector, submitGuess, setGuess } from "../utils/store";
 
 interface FormProps {
   content?: string;
@@ -40,28 +39,24 @@ const Image = styled.img`
 
 export default function Typing() {
   const dispatch = useDispatch();
-  const {
-    client: { user },
-    firebase: { players, notepads },
-  } = useReduxState();
-
-  const currentNotepad = notepads[players[user?.uid]?.currentNotepad];
+  const players = useSelector((state) => state.currentGame.players);
+  const settings = useSelector((state) => state.settings);
+  const currentNotepad = players.find((p) => p.id === settings.id)
+    ?.notebookQueue[0];
   const content = _.nth(currentNotepad?.pages, -2)?.content;
   const guess = _.last(currentNotepad?.pages)?.content;
-  const [value, setValue] = useState(guess);
+  const [value, setValue] = useState(guess ?? "");
 
-  const dontRefresh = (e: FormEvent) => {
+  const dontRefresh = async (e: FormEvent) => {
     e.preventDefault();
-    submitGuess();
-    dispatch(clientSlice.actions.setGameState(GameState.WAITING_FOR_CONTENT));
+    await dispatch(submitGuess(value));
+    dispatch(actions.setGameState(GameState.WAITING_FOR_CONTENT));
     return false;
   };
 
-  const updateGuess = ({
-    target: { value: newGuess },
-  }: ChangeEvent<HTMLInputElement>) => {
-    setValue(newGuess);
-    setGuess(newGuess);
+  const updateGuess = async (e: ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+    await dispatch(setGuess(e.target.value));
   };
 
   return (

@@ -1,14 +1,14 @@
 import React, { FormEvent, useState } from "react";
 
 import { saveSettings, useSelector } from "../utils/store";
-import useInput from "../utils/hooks";
+import { useInput } from "../utils/hooks";
 import TitleScreen from "./TitleScreen";
 import { createAvatar } from "@dicebear/avatars";
-import sprites from "@dicebear/avatars-human-sprites";
+import * as sprites from "@dicebear/avatars-human-sprites";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { animals, colors, uniqueNamesGenerator } from "unique-names-generator";
-import { Button, IconButton } from "@material-ui/core";
+import { Button, IconButton, TextField, Typography } from "@material-ui/core";
 import { SyncOutlined as SyncIcon } from "@material-ui/icons";
 import styled from "styled-components";
 
@@ -16,6 +16,10 @@ const FormControl = styled.div`
   &:not(:first-child) {
     margin-top: 1rem;
   }
+`;
+
+const InputGroup = styled.div`
+  display: flex;
 `;
 
 const getRandomName = () =>
@@ -52,7 +56,7 @@ export default function LoginScreen() {
     <TitleScreen title="Log In">
       <form onSubmit={handleGoToLobby}>
         <FormControl id="image">
-          <FormLabel>Avatar</FormLabel>
+          <Typography>Avatar</Typography>
           <InputGroup>
             <img
               src={createAvatar(sprites, {
@@ -62,22 +66,18 @@ export default function LoginScreen() {
                 dataUri: true,
               })}
             />
-            <InputRightElement>
-              <IconButton onClick={randomizeImage} aria-label="Randomize Image">
-                <SyncIcon />
-              </IconButton>
-            </InputRightElement>
+            <IconButton onClick={randomizeImage} aria-label="Randomize Image">
+              <SyncIcon />
+            </IconButton>
           </InputGroup>
         </FormControl>
         <FormControl id="name">
-          <FormLabel>Name</FormLabel>
+          <Typography>Name</Typography>
           <InputGroup>
-            <Input value={name} onChange={setName} placeholder="Name" />
-            <InputRightElement>
-              <IconButton onClick={randomizeName} aria-label="Randomize Name">
-                <SyncIcon />
-              </IconButton>
-            </InputRightElement>
+            <TextField value={name} onChange={setName} placeholder="Name" />
+            <IconButton onClick={randomizeName} aria-label="Randomize Name">
+              <SyncIcon />
+            </IconButton>
           </InputGroup>
         </FormControl>
         <Button type="submit" color="primary">

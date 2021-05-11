@@ -29,7 +29,7 @@ interface ThunkApi {
   state: State;
 }
 
-const goToLobby = createAsyncThunk<void, void, ThunkApi>(
+export const goToLobby = createAsyncThunk<void, void, ThunkApi>(
   "goToLobby",
   (_, { getState }) => {
     const { settings } = getState();
@@ -37,7 +37,7 @@ const goToLobby = createAsyncThunk<void, void, ThunkApi>(
   }
 );
 
-const createAndJoinGame = createAsyncThunk<void, string, ThunkApi>(
+export const createAndJoinGame = createAsyncThunk<void, string, ThunkApi>(
   "createGame",
   async (code, { getState }) => {
     const { settings } = getState();
@@ -46,7 +46,7 @@ const createAndJoinGame = createAsyncThunk<void, string, ThunkApi>(
   }
 );
 
-const joinGame = createAsyncThunk<void, string, ThunkApi>(
+export const joinGame = createAsyncThunk<void, string, ThunkApi>(
   "joinGame",
   async (code, { getState }) => {
     const { settings } = getState();

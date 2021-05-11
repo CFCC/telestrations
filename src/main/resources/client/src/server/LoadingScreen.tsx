@@ -27,10 +27,6 @@ export default function LoadingScreen() {
   const players = useSelector((state) => state.currentGame.players);
   const gameCode = useSelector((state) => state.currentGame.code);
 
-  if (status !== "lobby") {
-    dispatch(actions.setGameState(GameState.BIRDS_EYE));
-  }
-
   async function handleStartGame() {
     await dispatch(startGame(gameCode));
     dispatch(actions.setGameState(GameState.BIRDS_EYE));
