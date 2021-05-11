@@ -12,7 +12,6 @@ import {
 } from "@material-ui/core";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
-import _ from "lodash";
 
 import { actions, useSelector } from "../utils/store";
 import PlayerStream from "./PlayerStream";

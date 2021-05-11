@@ -13,7 +13,7 @@ export default function Toast() {
     if (!description) return;
     setIsOpen(false);
     setIsOpen(true);
-  }, [id]);
+  }, [id, description]);
 
   return (
     <Snackbar open={isOpen} autoHideDuration={2000}>

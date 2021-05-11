@@ -86,7 +86,7 @@ export const saveSettings = createAsyncThunk<
 export const setGuess = createAsyncThunk<void, string, ThunkApi>(
   "setGuess",
   async (content, { getState }) => {
-    const { currentGame, settings } = getState();
+    const { currentGame } = getState();
     await api.setGuess(currentGame.code, content);
   }
 );
@@ -94,7 +94,7 @@ export const setGuess = createAsyncThunk<void, string, ThunkApi>(
 export const submitGuess = createAsyncThunk<void, string, ThunkApi>(
   "submitGuess",
   async (content, { getState }) => {
-    const { currentGame, settings } = getState();
+    const { currentGame } = getState();
     await api.submitGuess(currentGame.code, content);
   }
 );

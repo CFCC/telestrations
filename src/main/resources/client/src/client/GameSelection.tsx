@@ -36,7 +36,7 @@ export default function GameSelection() {
 
   useEffect(() => {
     if (!games.includes(game)) rawSetGame("");
-  }, [game, games]);
+  }, [game, games, rawSetGame]);
 
   useEffect(() => {
     setLabelWidth(inputLabel.current?.offsetWidth || 0);

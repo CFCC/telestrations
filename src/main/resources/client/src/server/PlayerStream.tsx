@@ -34,9 +34,10 @@ const Content = styled(CardContent)`
 `;
 
 export default function PlayerStream({ playerId }: PlayerStreamProps) {
-  const { players, notepads } = useSelector((state) => state.firebase);
+  const players = useSelector((state) => state.currentGame.players);
 
-  const notepad = notepads[players[playerId]?.currentNotepad];
+  const notepad = players.find((p) => p.settings.id === playerId)
+    ?.notebookQueue[0];
   const playerIndexInNotepad = notepad?.pages?.length;
 
   let picture, text;
@@ -45,18 +46,18 @@ export default function PlayerStream({ playerId }: PlayerStreamProps) {
     text = "Waiting for next notepad...";
   } else if (playerIndexInNotepad <= 1) {
     picture = "/question-marks.jpg";
-    text = notepad.pages[playerIndexInNotepad - 1]?.content;
+    text = notepad?.pages[playerIndexInNotepad - 1]?.content;
   } else if (playerIndexInNotepad % 2 === 0) {
-    picture = notepad.pages[playerIndexInNotepad - 1]?.content;
-    text = notepad.pages[playerIndexInNotepad - 2]?.content;
+    picture = notepad?.pages[playerIndexInNotepad - 1]?.content;
+    text = notepad?.pages[playerIndexInNotepad - 2]?.content;
   } else {
-    picture = notepad.pages[playerIndexInNotepad - 2]?.content;
-    text = notepad.pages[playerIndexInNotepad - 1]?.content;
+    picture = notepad?.pages[playerIndexInNotepad - 2]?.content;
+    text = notepad?.pages[playerIndexInNotepad - 1]?.content;
   }
 
   return (
     <React.Fragment>
-      <PictureContainer picture={picture}>
+      <PictureContainer picture={picture ?? ""}>
         {picture !== "/question-marks.jpg" && (
           <Picture src={picture} alt={text} />
         )}

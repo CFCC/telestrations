@@ -65,6 +65,7 @@ export default function LoginScreen() {
                 height: 150,
                 dataUri: true,
               })}
+              alt="Avatar"
             />
             <IconButton onClick={randomizeImage} aria-label="Randomize Image">
               <SyncIcon />
