@@ -1,5 +1,5 @@
 import React, { MutableRefObject, useRef, useState } from "react";
-import { SketchField, Tools } from "react-sketch";
+import { SketchField, Tools } from "react-sketch2";
 import * as colors from "@material-ui/core/colors";
 import {
   Divider,
@@ -78,12 +78,10 @@ export default function Drawing() {
   const [lineWeight, setLineWeight] = useEvent(1, (e, lw: number) => lw);
 
   const [toolPickerOpen, openToolPicker, closeToolPicker] = useBoolean(false);
-  const [colorPickerOpen, openColorPicker, closeColorPicker] = useBoolean(
-    false
-  );
-  const [bgColorPickerOpen, openBgColorPicker, closeBgColorPicker] = useBoolean(
-    false
-  );
+  const [colorPickerOpen, openColorPicker, closeColorPicker] =
+    useBoolean(false);
+  const [bgColorPickerOpen, openBgColorPicker, closeBgColorPicker] =
+    useBoolean(false);
   const [menuOpen, openMenu, closeMenu] = useBoolean(false);
 
   const [canUndo, setCanUndo] = useState(false);

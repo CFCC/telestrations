@@ -1,6 +1,6 @@
 /// <reference types="react-scripts" />
 
-declare module "react-sketch" {
+declare module "react-sketch2" {
   import * as React from "react";
 
   export class SketchField extends React.PureComponent<{

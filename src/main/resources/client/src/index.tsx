@@ -14,7 +14,13 @@ const Container = styled.div`
   position: absolute;
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(180deg, ${primary} 50%, ${darkPrimary} 100%);
+  background: linear-gradient(
+    to right,
+    ${darkPrimary} 0%,
+    ${primary} 33%,
+    ${primary} 66%,
+    ${darkPrimary} 100%
+  );
   margin: 0;
   overflow-y: auto;
   display: flex;
@@ -29,8 +35,8 @@ ReactDOM.render(
   <StylesProvider injectFirst={true}>
     <ThemeProvider theme={theme}>
       <GlobalStyles />
-      <Toast />
       <Provider store={store}>
+        <Toast />
         <Container>
           <App />
         </Container>
