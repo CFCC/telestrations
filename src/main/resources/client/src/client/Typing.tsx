@@ -4,8 +4,7 @@ import styled from "styled-components";
 import _ from "lodash";
 
 import { useDispatch } from "react-redux";
-import { GameState } from "../utils/types";
-import { actions, useSelector, submitGuess, setGuess } from "../utils/store";
+import { useSelector, submitGuess, setGuess } from "../utils/store";
 
 interface FormProps {
   content?: string;
@@ -50,7 +49,6 @@ export default function Typing() {
   const dontRefresh = async (e: FormEvent) => {
     e.preventDefault();
     await dispatch(submitGuess(value));
-    dispatch(actions.setGameState(GameState.WAITING_FOR_CONTENT));
     return false;
   };
 

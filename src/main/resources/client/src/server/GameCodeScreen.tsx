@@ -5,8 +5,7 @@ import { useDispatch } from "react-redux";
 
 import TitleScreen from "../components/TitleScreen";
 import { useInput } from "../utils/hooks";
-import { actions, createAndJoinGame } from "../utils/store";
-import { GameState } from "../utils/types";
+import { createAndJoinGame } from "../utils/store";
 
 const Form = styled.form`
   width: 50%;
@@ -27,7 +26,6 @@ export default function LoadingScreen() {
     e.preventDefault();
     await dispatch(createAndJoinGame(gameCode));
     setGameCode(gameCode);
-    dispatch(actions.setGameState(GameState.WAITING_TO_START));
   }
 
   return (

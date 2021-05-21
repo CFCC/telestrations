@@ -178,8 +178,20 @@ export const { actions, reducer } = createSlice({
           ...action.payload,
         };
       })
-      .addCase(rejoinGame.fulfilled, (state, action) => {
+      .addCase(rejoinGame.fulfilled, (state) => {
         state.gameState = GameState.IN_GAME;
+      })
+      .addCase(goToLobby.fulfilled, (state) => {
+        state.gameState = GameState.GAME_CODE;
+      })
+      .addCase(joinGame.fulfilled, (state) => {
+        state.gameState = GameState.WAITING_TO_START;
+      })
+      .addCase(createAndJoinGame.fulfilled, (state) => {
+        state.gameState = GameState.WAITING_TO_START;
+      })
+      .addCase(submitGuess.fulfilled, (state) => {
+        state.gameState = GameState.WAITING_FOR_CONTENT;
       });
   },
 });

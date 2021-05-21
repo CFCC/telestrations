@@ -17,11 +17,10 @@ import styled from "styled-components";
 import _ from "lodash";
 import { useDispatch } from "react-redux";
 
-import { actions, setGuess, submitGuess, useSelector } from "../utils/store";
+import { setGuess, submitGuess, useSelector } from "../utils/store";
 import { useBoolean, useEvent } from "../utils/hooks";
 import SwatchesDialog from "../components/SwatchesDialog";
 import ListDialog from "../components/ListDialog";
-import { GameState } from "../utils/types";
 
 const Container = styled.div`
   width: 100vw;
@@ -118,7 +117,6 @@ export default function Drawing() {
 
   async function handleSubmitGuess() {
     await dispatch(submitGuess(sketch.current.toDataURL()));
-    dispatch(actions.setGameState(GameState.WAITING_FOR_CONTENT));
   }
 
   return (

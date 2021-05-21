@@ -1,6 +1,6 @@
 import React, { FormEvent, useState } from "react";
 
-import { saveSettings, useSelector } from "../utils/store";
+import { goToLobby, saveSettings, useSelector } from "../utils/store";
 import { useInput } from "../utils/hooks";
 import TitleScreen from "./TitleScreen";
 import { createAvatar } from "@dicebear/avatars";
@@ -59,6 +59,7 @@ export default function LoginScreen() {
     e.preventDefault();
 
     await dispatch(saveSettings({ name, avatar, id: id || uuidv4() }));
+    await dispatch(goToLobby());
   }
 
   function randomizeName() {

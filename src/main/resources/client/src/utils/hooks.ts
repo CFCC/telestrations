@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 
 export function useBoolean(
   initialState: boolean
@@ -20,18 +20,27 @@ export function useEvent<T>(
   return [state, wrappedSetState, setState];
 }
 
-export function useInput<T extends string>(
+type Event = {
+  target: { value: string };
+  currentTarget: { value: string };
+};
+export function useInput<T extends string, U extends Event>(
   defaultValue: T
-): [T, (e: FormEvent<HTMLInputElement | HTMLTextAreaElement> | T) => void] {
+): [T, (e: object | T) => void, () => void] {
   const [state, setState] = useState(defaultValue);
 
-  function onChange(e: FormEvent<HTMLInputElement | HTMLTextAreaElement> | T) {
+  function onChange(e: object | T) {
     if (typeof e === "object") {
-      setState(e.currentTarget.value as T);
+      const target = (e as U).target || (e as U).currentTarget;
+      setState(target.value as T);
     } else {
       setState(e);
     }
   }
 
-  return [state, onChange];
+  function resetInput() {
+    setState(defaultValue);
+  }
+
+  return [state, onChange, resetInput];
 }
