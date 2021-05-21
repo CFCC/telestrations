@@ -17,9 +17,8 @@ interface State {
   openGames: string[];
   toast: {
     id: number;
-    title: string;
-    description: string;
-    status: "info" | "warning" | "success" | "error";
+    content: string;
+    variant: "info" | "warning" | "success" | "error";
   };
   settings: Settings;
   currentGame: Game;
@@ -109,7 +108,7 @@ export const { actions, reducer } = createSlice({
   initialState: {
     gameState: GameState.LOGIN,
     openGames: [],
-    toast: { id: 0, title: "", description: "", status: "info" },
+    toast: { id: 0, content: "", variant: "info" },
     currentGame: {
       active: false,
       code: "",
@@ -128,28 +127,18 @@ export const { actions, reducer } = createSlice({
     activeContentId: "",
   } as State,
   reducers: {
-    handleRequestException: (state, action: PayloadAction<string>) => {
+    handleException: (state, action: PayloadAction<string>) => {
       state.toast = {
         id: state.toast.id + 1,
-        title: "Bad Request",
-        description: action.payload,
-        status: "error",
-      };
-    },
-    handleServerException: (state, action: PayloadAction<string>) => {
-      state.toast = {
-        id: state.toast.id + 1,
-        title: "Server Error",
-        description: action.payload,
-        status: "error",
+        content: action.payload,
+        variant: "error",
       };
     },
     handleSuccess: (state, action: PayloadAction<string>) => {
       state.toast = {
         id: state.toast.id + 1,
-        title: "",
-        description: action.payload,
-        status: "success",
+        content: action.payload,
+        variant: "success",
       };
     },
     handleGamesListMessage: (state, action: PayloadAction<string[]>) => {

@@ -3,6 +3,7 @@ import * as ReactDOM from "react-dom";
 import { StylesProvider, ThemeProvider } from "@material-ui/core/styles";
 import styled from "styled-components";
 import { Provider } from "react-redux";
+import { SnackbarProvider } from "notistack";
 
 import ClientApp from "./client";
 import ServerApp from "./server";
@@ -36,10 +37,12 @@ ReactDOM.render(
     <ThemeProvider theme={theme}>
       <GlobalStyles />
       <Provider store={store}>
-        <Toast />
-        <Container>
-          <App />
-        </Container>
+        <SnackbarProvider>
+          <Toast />
+          <Container>
+            <App />
+          </Container>
+        </SnackbarProvider>
       </Provider>
     </ThemeProvider>
   </StylesProvider>,

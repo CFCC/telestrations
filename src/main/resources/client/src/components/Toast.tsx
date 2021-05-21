@@ -1,26 +1,15 @@
-import { Snackbar } from "@material-ui/core";
-import { Alert, AlertTitle } from "@material-ui/lab";
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSelector } from "../utils/store";
+import { useSnackbar } from "notistack";
 
 export default function Toast() {
-  const [isOpen, setIsOpen] = useState(false);
-  const { id, title, description, status } = useSelector(
-    (state) => state.toast
-  );
+  const { enqueueSnackbar } = useSnackbar();
+  const { id, content, variant } = useSelector((state) => state.toast);
 
   useEffect(() => {
-    if (!description) return;
-    setIsOpen(false);
-    setIsOpen(true);
-  }, [id, description]);
+    if (!id) return;
+    enqueueSnackbar(content, { variant });
+  }, [id, content, variant, enqueueSnackbar]);
 
-  return (
-    <Snackbar open={isOpen} autoHideDuration={2000}>
-      <Alert severity={status}>
-        {title && <AlertTitle>{title}</AlertTitle>}
-        {description}
-      </Alert>
-    </Snackbar>
-  );
+  return null;
 }

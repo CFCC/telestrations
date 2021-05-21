@@ -20,11 +20,11 @@ client.onConnect = () => {
   });
 
   client.subscribe(`/user/topic/errors/client`, ({ body }) => {
-    store.dispatch(actions.handleRequestException(body));
+    store.dispatch(actions.handleException(body));
   });
 
   client.subscribe(`/user/topic/errors/server`, ({ body }) => {
-    store.dispatch(actions.handleServerException(body));
+    store.dispatch(actions.handleException(body));
   });
 
   client.subscribe(`/user/topic/successes`, ({ body }) => {
