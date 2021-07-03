@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.socket.messaging.SessionConnectEvent
 import org.springframework.web.socket.messaging.SessionDisconnectEvent
 
+data class GamesResponse(val notActive: Iterable<String>, val orphaned: Iterable<String>)
 
 @Controller
 class ServerController(private val socket: SimpMessagingTemplate) {
@@ -56,7 +57,7 @@ class ServerController(private val socket: SimpMessagingTemplate) {
     }
 
     @SubscribeMapping("/games")
-    fun getGames(): Iterable<String> {
+    fun getGames(): GamesResponse {
         return server.getGames()
     }
 

@@ -1,11 +1,18 @@
-import React, { FormEvent } from "react";
-import { Button as UnstyledButton, TextField } from "@material-ui/core";
+import React, { FormEvent, MouseEvent } from "react";
+import {
+  Button as UnstyledButton,
+  List as UnstyledList,
+  ListItem,
+  ListItemText,
+  TextField,
+  Typography,
+} from "@material-ui/core";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 
 import TitleScreen from "../components/TitleScreen";
 import { useInput } from "../utils/hooks";
-import { createAndJoinGame } from "../utils/store";
+import { createGame } from "../utils/store";
 
 const Form = styled.form`
   width: 50%;
@@ -18,14 +25,31 @@ const Button = styled(UnstyledButton)`
   margin-top: 1rem;
 `;
 
+const Subtitle = styled(Typography)`
+  margin: 3rem 0 0.5rem;
+  font-weight: bold;
+`;
+
+const List = styled(UnstyledList)`
+  margin-top: 1rem;
+  border: 1px solid black;
+  border-radius: 15px;
+  width: 50%;
+`;
+
 export default function LoadingScreen() {
   const dispatch = useDispatch();
   const [gameCode, setGameCode] = useInput("");
+  const orphanedGames = ["hi", "hello", "yoooo"];
 
   async function submitGameCode(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    await dispatch(createAndJoinGame(gameCode));
+    await dispatch(createGame(gameCode));
     setGameCode(gameCode);
+  }
+
+  function handleSelectOrphanedGame(e: MouseEvent<HTMLDivElement>) {
+    const orphanedGameCode = (e.target as HTMLDivElement).innerText;
   }
 
   return (
@@ -50,6 +74,19 @@ export default function LoadingScreen() {
           Open Lobby
         </Button>
       </Form>
+      {orphanedGames.length > 0 && (
+        <>
+          <Subtitle>Looking to become the admin of an orphaned game?</Subtitle>
+          <Typography>Here is a list of available games</Typography>
+          <List aria-label="orphaned games">
+            {orphanedGames.map((game) => (
+              <ListItem button onClick={handleSelectOrphanedGame} key={game}>
+                <ListItemText primary={game} />
+              </ListItem>
+            ))}
+          </List>
+        </>
+      )}
     </TitleScreen>
   );
 }

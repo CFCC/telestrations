@@ -1,6 +1,5 @@
-import React, { FormEvent, useState } from "react";
-
-import { goToLobby, saveSettings, useSelector } from "../utils/store";
+import React, { FormEvent, useEffect, useState } from "react";
+import { actions, goToLobby, saveSettings, useSelector } from "../utils/store";
 import { useInput } from "../utils/hooks";
 import TitleScreen from "./TitleScreen";
 import { createAvatar } from "@dicebear/avatars";
@@ -54,6 +53,12 @@ export default function LoginScreen() {
   const dispatch = useDispatch();
   const [avatar, setAvatar] = useState(defaultAvatar ?? uuidv4());
   const [name, setName] = useInput(defaultName ?? getRandomName());
+
+  useEffect(() => {
+    if (id && defaultName && defaultAvatar) {
+      dispatch(goToLobby());
+    }
+  }, []);
 
   async function handleGoToLobby(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();

@@ -36,8 +36,15 @@ export const goToLobby = createAsyncThunk<void, void, ThunkApi>(
   }
 );
 
-export const createAndJoinGame = createAsyncThunk<void, string, ThunkApi>(
+export const createGame = createAsyncThunk<void, string>(
   "createGame",
+  async (code) => {
+    await api.createGame(code);
+  }
+);
+
+export const createAndJoinGame = createAsyncThunk<void, string, ThunkApi>(
+  "createAndJoinGame",
   async (code, { getState }) => {
     const { settings } = getState();
     await api.createGame(code);

@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
+import React, { FormEvent, useEffect } from "react";
 import {
   Button as UnstyledButton,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
-  TextField as UnstyledTextField,
 } from "@material-ui/core";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
@@ -24,22 +23,19 @@ const Button = styled(UnstyledButton)`
   margin-top: 1rem;
 `;
 
-const TextField = styled(UnstyledTextField)`
-  margin-top: 1rem;
-`;
-
 export default function GameSelection() {
   const games = useSelector((state) => state.openGames);
   const [selection, setSelection, resetSelection] = useInput("" as string);
-  const [gameCode, setGameCode] = useInput("");
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (![...games, "New Game"].includes(selection)) resetSelection();
+    if (!games.includes(selection)) resetSelection();
   }, [selection, games, resetSelection]);
 
-  async function onSubmit() {
+  async function onSubmit(e: FormEvent) {
+    e.preventDefault();
     await dispatch(joinGame(selection));
+    return false;
   }
 
   return (
@@ -59,25 +55,13 @@ export default function GameSelection() {
                 {gameOption}
               </MenuItem>
             ))}
-            <MenuItem value="New Game">New Game</MenuItem>
           </Select>
         </FormControl>
-        {selection === "New Game" && (
-          <TextField
-            value={gameCode}
-            onChange={setGameCode}
-            placeholder="New Game Code"
-            label="New Game Code"
-            variant="outlined"
-          />
-        )}
         <Button
-          onClick={onSubmit}
+          type="submit"
           variant="contained"
           color="primary"
-          disabled={
-            selection === "" || (selection === "New Game" && gameCode === "")
-          }
+          disabled={selection === ""}
           size="large"
         >
           Join Game

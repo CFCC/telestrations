@@ -27,10 +27,15 @@ data class Player(
     val settings: MutableMap<String, Any>,
     val notebookQueue: List<Notebook> = arrayListOf(),
     var startOfTimeOffline: LocalDateTime? = null
-)
+) {
+    fun isAdminOf(gameCode: String): Boolean {
+        val game = games.find { it.code == gameCode } ?: return false
+        return game.admin.settings["id"] == this.id.toString()
+    }
+}
 data class Game(
     val code: String,
-    var adminId: UUID,
+    var admin: Player,
     val players: ArrayList<Player> = arrayListOf(),
     var active: Boolean = false
 ) {
@@ -57,8 +62,19 @@ class Server {
         return games.find { g -> !g.isDone && g.players.any { p -> p.id == userId } }?.code
     }
 
-    fun getGames(): Iterable<String> {
-        return games.filter { !it.active }.map { it.code }
+    fun getGames(): GamesResponse {
+        val notActive = games
+            .filter { !it.active }
+            .map { it.code }
+        val orphaned = games
+            .filter {
+                val oneMinuteAgo = LocalDateTime.now().minusMinutes(1)
+                val abandonedTime = it.admin.startOfTimeOffline
+                return@filter abandonedTime?.isBefore(oneMinuteAgo) ?: false
+            }
+            .map { it.code }
+
+        return GamesResponse(notActive, orphaned)
     }
 
     fun getGame(gameCode: String): Game {
@@ -103,9 +119,9 @@ class Server {
     }
 
     fun startGame(gameCode: String, userId: UUID) {
-        val (_, game) = getPlayer(gameCode, userId)
+        val (player, game) = getPlayer(gameCode, userId)
 
-        require(game.adminId == userId) { "You are not the admin of this game" }
+        require(player.isAdminOf(gameCode)) { "You are not the admin of this game" }
 
         game.active = true
     }
