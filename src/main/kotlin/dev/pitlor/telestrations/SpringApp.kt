@@ -1,89 +1,91 @@
 package dev.pitlor.telestrations
 
-import com.fasterxml.jackson.module.kotlin.KotlinModule
-import com.fasterxml.jackson.module.kotlin.kotlinModule
+import dev.pitlor.gamekit_spring_boot_starter.User
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import org.springframework.messaging.Message
-import org.springframework.messaging.MessageChannel
-import org.springframework.messaging.simp.config.ChannelRegistration
-import org.springframework.messaging.simp.config.MessageBrokerRegistry
-import org.springframework.messaging.simp.stomp.StompCommand
-import org.springframework.messaging.simp.stomp.StompHeaderAccessor
-import org.springframework.messaging.support.ChannelInterceptor
-import org.springframework.messaging.support.MessageHeaderAccessor
+import org.springframework.messaging.handler.annotation.DestinationVariable
+import org.springframework.messaging.handler.annotation.MessageMapping
+import org.springframework.messaging.handler.annotation.Payload
+import org.springframework.messaging.handler.annotation.SendTo
+import org.springframework.messaging.simp.SimpMessagingTemplate
+import org.springframework.messaging.simp.annotation.SendToUser
+import org.springframework.messaging.simp.annotation.SubscribeMapping
 import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ModelAttribute
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker
-import org.springframework.web.socket.config.annotation.StompEndpointRegistry
-import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer
-import java.security.Principal
-import java.util.*
 
-
-data class User(val id: UUID) : Principal {
-    override fun getName(): String {
-        return id.toString()
-    }
-}
-
-@ControllerAdvice
-class CustomPrincipal {
-    @ModelAttribute
-    fun getPrincipal(principal: Principal?): User? {
-        if (principal == null) return null
-        return principal as User
-    }
-}
+data class GamesResponse(val notActive: Iterable<String>, val orphaned: Iterable<String>)
 
 @Controller
-open class StaticFiles {
-    @RequestMapping(value = ["/{path:^(?!websocket-server)[^\\\\.]*}"])
-    open fun spa(@PathVariable path: String): String {
-        return "forward:/"
-    }
-}
-
-@Configuration
-@EnableWebSocketMessageBroker
-open class SocketConfig : WebSocketMessageBrokerConfigurer {
-    override fun configureMessageBroker(registry: MessageBrokerRegistry) {
-        registry.enableSimpleBroker("/topic")
-        registry.setApplicationDestinationPrefixes("/app", "/topic")
+class ServerController(private val server: TelestrationsServer, private val socket: SimpMessagingTemplate) {
+    @SubscribeMapping("/games/{gameCode}")
+    fun getGame(@DestinationVariable gameCode: String): TelestrationsGame {
+        return server.getGame(gameCode)
     }
 
-    override fun registerStompEndpoints(registry: StompEndpointRegistry) {
-        registry.addEndpoint("/websocket-server").setAllowedOriginPatterns("*").withSockJS()
+    @MessageMapping("/games/{gameCode}/create")
+    @SendToUser("/topic/successes")
+    fun createGame(@DestinationVariable gameCode: String, @ModelAttribute user: User): String {
+        val response = server.createGame(gameCode, user.id)
+        socket.convertAndSend("/topic/games", server.getGames())
+        return response
     }
 
-    override fun configureClientInboundChannel(registration: ChannelRegistration) {
-        registration.interceptors(object : ChannelInterceptor {
-            override fun preSend(message: Message<*>, channel: MessageChannel): Message<*> {
-                val accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor::class.java)
-                if (accessor.command == StompCommand.CONNECT) {
-                    val uuid = accessor.getNativeHeader("uuid")?.get(0)
-                    accessor.user = User(UUID.fromString(uuid))
-                }
-
-                return message
-            }
-        })
+    @MessageMapping("/games/{gameCode}/join")
+    @SendTo("/topic/games/{gameCode}")
+    fun joinGame(
+        @DestinationVariable gameCode: String,
+        @Payload settings: MutableMap<String, Any>,
+        @ModelAttribute user: User
+    ): TelestrationsGame {
+        server.joinGame(gameCode, user.id, settings)
+        return server.getGame(gameCode)
     }
-}
 
-@Bean
-fun getJacksonKotlinModule(): KotlinModule {
-    return kotlinModule()
+    @MessageMapping("/games/{gameCode}/update")
+    @SendTo("/topic/games/{gameCode}")
+    fun updateSettings(
+        @DestinationVariable gameCode: String,
+        @Payload settings: MutableMap<String, Any>,
+        @ModelAttribute user: User
+    ): TelestrationsGame {
+        server.updateSettings(gameCode, user.id, settings)
+        return server.getGame(gameCode)
+    }
+
+    @MessageMapping("/games/{gameCode}/start")
+    @SendTo("/topic/games/{gameCode}")
+    fun startPlay(@DestinationVariable gameCode: String, @ModelAttribute user: User): TelestrationsGame {
+        server.startGame(gameCode, user.id)
+        return server.getGame(gameCode)
+    }
+
+    @MessageMapping("/games/{gameCode}/page/write")
+    @SendTo("/topic/games/{gameCode}")
+    fun writeInPage(
+        @DestinationVariable gameCode: String,
+        @ModelAttribute user: User,
+        @Payload content: String
+    ): TelestrationsGame {
+        server.writeInPage(gameCode, user.id, content)
+        return server.getGame(gameCode)
+    }
+
+    @MessageMapping("/games/{gameCode}/page/submit")
+    @SendToUser("/topic/successes")
+    fun submitPage(
+        @DestinationVariable gameCode: String,
+        @ModelAttribute user: User,
+        @Payload content: String?
+    ): String {
+        val response = server.submitPage(gameCode, user.id, content)
+        socket.convertAndSend("/topic/games/$gameCode", server.getGame(gameCode))
+        return response
+    }
 }
 
 @SpringBootApplication
-open class TelestrationsServer
+open class TelestrationsApplication
 
 fun main(args: Array<String>) {
-    runApplication<TelestrationsServer>(*args)
+    runApplication<TelestrationsApplication>(*args)
 }

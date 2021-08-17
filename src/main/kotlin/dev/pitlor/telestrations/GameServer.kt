@@ -1,14 +1,18 @@
 package dev.pitlor.telestrations
 
+import dev.pitlor.gamekit_spring_boot_starter.Game
+import dev.pitlor.gamekit_spring_boot_starter.Server
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
 
 const val SETTING_CONNECTED = "connected"
 
-val games = arrayListOf<Game>()
+val games = arrayListOf<TelestrationsGame>()
 val mutex = Mutex()
 
 data class Page(val type: String, val authorId: UUID, var content: String = "", val id: UUID = UUID.randomUUID())
@@ -33,12 +37,12 @@ data class Player(
         return game.admin.settings["id"] == this.id.toString()
     }
 }
-data class Game(
+data class TelestrationsGame(
     val code: String,
     var admin: Player,
     val players: ArrayList<Player> = arrayListOf(),
     var active: Boolean = false
-) {
+) : Game {
     val isDone: Boolean get() = players.all {
         it.notebookQueue.size == 1
             && it.notebookQueue[0].originalOwnerId == it.id
@@ -46,8 +50,8 @@ data class Game(
     }
 }
 
-class Server {
-    private fun getPlayer(code: String, user: UUID): Pair<Player, Game> {
+object TelestrationsServer : Server {
+    private fun getPlayer(code: String, user: UUID): Pair<Player, TelestrationsGame> {
         val game = games.find { it.code == code }
         val player = game?.players?.find { it.id == user }
 
@@ -58,26 +62,24 @@ class Server {
         return Pair(player, game)
     }
 
-    fun findPlayer(userId: UUID): String? {
-        return games.find { g -> !g.isDone && g.players.any { p -> p.id == userId } }?.code
+    override fun findCodeOfGameWithPlayer(id: UUID): String? {
+        return games.find { g -> !g.isDone && g.players.any { p -> p.id == id } }?.code
     }
 
-    fun getGames(): GamesResponse {
-        val notActive = games
+    override fun getGameCodes(): List<String> {
+        return games
             .filter { !it.active }
             .map { it.code }
-        val orphaned = games
-            .filter {
-                val oneMinuteAgo = LocalDateTime.now().minusMinutes(1)
-                val abandonedTime = it.admin.startOfTimeOffline
-                return@filter abandonedTime?.isBefore(oneMinuteAgo) ?: false
-            }
-            .map { it.code }
-
-        return GamesResponse(notActive, orphaned)
+//        val orphaned = games
+//            .filter {
+//                val oneMinuteAgo = LocalDateTime.now().minusMinutes(1)
+//                val abandonedTime = it.admin.startOfTimeOffline
+//                return@filter abandonedTime?.isBefore(oneMinuteAgo) ?: false
+//            }
+//            .map { it.code }
     }
 
-    fun getGame(gameCode: String): Game {
+    override fun getGame(gameCode: String): TelestrationsGame {
         val game = games.find { it.code == gameCode }
 
         require(game != null) { "That game does not exist" }
@@ -85,16 +87,16 @@ class Server {
         return game
     }
 
-    fun createGame(gameCode: String, userId: UUID): String {
+    override fun createGame(gameCode: String, adminUserId: UUID): String {
         require(gameCode.isNotEmpty()) { "Code is empty" }
         require(games.firstOrNull { it.code == gameCode } == null) { "That game code is already in use" }
 
-        games += Game(gameCode, userId)
+        games += TelestrationsGame(gameCode, Player(adminUserId, TODO()))
 
         return "Game \"${gameCode}\" Created"
     }
 
-    fun joinGame(gameCode: String, userId: UUID, settings: MutableMap<String, Any>) {
+    override fun joinGame(gameCode: String, userId: UUID, settings: MutableMap<String, Any>) {
         val game = games.find { it.code == gameCode }
 
         require(gameCode.isNotEmpty()) { "Code is empty" }
@@ -106,14 +108,14 @@ class Server {
         game.players += player
     }
 
-    fun updateSettings(gameCode: String, userId: UUID, settings: MutableMap<String, Any>) {
+    override fun updateSettings(gameCode: String, userId: UUID, newSettings: MutableMap<String, Any>) {
         val (player, _) = getPlayer(gameCode, userId)
 
-        player.settings.putAll(settings)
+        player.settings.putAll(newSettings)
 
-        if (settings[SETTING_CONNECTED] == true) {
+        if (newSettings[SETTING_CONNECTED] == true) {
             player.startOfTimeOffline = null
-        } else if (settings[SETTING_CONNECTED] == false) {
+        } else if (newSettings[SETTING_CONNECTED] == false) {
             player.startOfTimeOffline = LocalDateTime.now()
         }
     }
@@ -126,12 +128,12 @@ class Server {
         game.active = true
     }
 
-    suspend fun becomeAdmin(gameCode: String, userId: UUID): String {
-        val (_, game) = getPlayer(gameCode, userId)
+    override suspend fun becomeAdmin(gameCode: String, userId: UUID): String {
+        val (player, game) = getPlayer(gameCode, userId)
 
         mutex.withLock {
-            check(game.players.find { it.id == game.adminId }?.startOfTimeOffline == null) { "Someone already claimed the admin spot" }
-            game.adminId = userId
+            check(game.players.find { it.id == game.admin.id }?.startOfTimeOffline == null) { "Someone already claimed the admin spot" }
+            game.admin = player
         }
 
         return "You are now the game admin"
@@ -159,5 +161,13 @@ class Server {
         }
 
         return "Page submitted"
+    }
+}
+
+@Configuration
+open class Beans {
+    @Bean
+    open fun getServer(): TelestrationsServer {
+        return TelestrationsServer
     }
 }
