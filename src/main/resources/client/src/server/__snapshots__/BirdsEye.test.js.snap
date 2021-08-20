@@ -3,7 +3,7 @@
 exports[`Renders 1`] = `
 <DocumentFragment>
   <div
-    class="sc-AxhCb gWVpzK"
+    class="sc-hKFxyN kIKSnG"
   >
     <p
       class="MuiTypography-root MuiTypography-body1"
@@ -15,14 +15,9 @@ exports[`Renders 1`] = `
     >
       Birds Eye View
     </h5>
-    <p
-      class="MuiTypography-root MuiTypography-body1"
-    >
-      Game Lobby
-    </p>
   </div>
   <div
-    class="MuiGrid-root sc-AxgMl iHiYcP MuiGrid-container MuiGrid-spacing-xs-2"
+    class="MuiGrid-root sc-jSFjdj eaAOOd MuiGrid-container MuiGrid-spacing-xs-2"
   />
 </DocumentFragment>
 `;

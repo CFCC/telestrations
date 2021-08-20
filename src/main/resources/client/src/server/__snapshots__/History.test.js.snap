@@ -3,10 +3,10 @@
 exports[`Notepad History Renders 1`] = `
 <DocumentFragment>
   <div
-    class="sc-AxjAm gFxRDc"
+    class="sc-bdnxRM bziayW"
   >
     <button
-      class="MuiButtonBase-root MuiButton-root MuiButton-text sc-AxirZ kcEGGr"
+      class="MuiButtonBase-root MuiButton-root MuiButton-text sc-gtsrHT hGIPtL"
       tabindex="0"
       type="button"
     >
@@ -40,7 +40,7 @@ exports[`Notepad History Renders 1`] = `
     </h5>
     <nav
       aria-label="pagination navigation"
-      class="MuiPagination-root sc-AxiKw ckNwYJ"
+      class="MuiPagination-root sc-dlnjwi gqXTXF"
     >
       <ul
         class="MuiPagination-ul"
@@ -89,7 +89,7 @@ exports[`Notepad History Renders 1`] = `
     </nav>
   </div>
   <div
-    class="sc-AxhCb inUdXy"
+    class="sc-hKFxyN brFPyk"
     style="overflow-x: hidden;"
   >
     <div
@@ -103,10 +103,10 @@ exports[`Notepad History Renders 1`] = `
 exports[`Player History Renders 1`] = `
 <DocumentFragment>
   <div
-    class="sc-AxjAm gFxRDc"
+    class="sc-bdnxRM bziayW"
   >
     <button
-      class="MuiButtonBase-root MuiButton-root MuiButton-text sc-AxirZ kcEGGr"
+      class="MuiButtonBase-root MuiButton-root MuiButton-text sc-gtsrHT hGIPtL"
       tabindex="0"
       type="button"
     >
@@ -140,7 +140,7 @@ exports[`Player History Renders 1`] = `
     </h5>
     <nav
       aria-label="pagination navigation"
-      class="MuiPagination-root sc-AxiKw ckNwYJ"
+      class="MuiPagination-root sc-dlnjwi gqXTXF"
     >
       <ul
         class="MuiPagination-ul"
@@ -189,7 +189,7 @@ exports[`Player History Renders 1`] = `
     </nav>
   </div>
   <div
-    class="sc-AxhCb inUdXy"
+    class="sc-hKFxyN brFPyk"
     style="overflow-x: hidden;"
   >
     <div

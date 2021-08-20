@@ -3,15 +3,15 @@
 exports[`Renders 1`] = `
 <DocumentFragment>
   <div
-    class="sc-AxjAm kwsLvR"
+    class="sc-bdnxRM loEPuz"
   >
     <img
       alt="Telestrations"
-      class="sc-AxiKw iXGiQC"
+      class="sc-dlnjwi jPLrEe"
       src="/logo.png"
     />
     <p
-      class="MuiTypography-root sc-AxhCb bDZFln MuiTypography-body1"
+      class="MuiTypography-root sc-hKFxyN fjDotz MuiTypography-body1"
     >
       Waiting for clients to connect
     </p>
@@ -21,7 +21,7 @@ exports[`Renders 1`] = `
       Tell people to select game ""
     </p>
     <div
-      class="sc-AxhUy jywaEU"
+      class="sc-eCApnc fHRgmh"
     />
     <button
       class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-containedSizeLarge MuiButton-sizeLarge Mui-disabled Mui-disabled"

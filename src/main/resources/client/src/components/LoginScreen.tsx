@@ -1,12 +1,8 @@
 import React, { FormEvent, useEffect, useState } from "react";
-import { actions, goToLobby, saveSettings, useSelector } from "../utils/store";
+import { goToLobby, saveSettings, useSelector } from "../utils/store";
 import { useInput } from "../utils/hooks";
 import TitleScreen from "./TitleScreen";
-import { createAvatar } from "@dicebear/avatars";
-import * as sprites from "@dicebear/avatars-human-sprites";
 import { useDispatch } from "react-redux";
-import { v4 as uuidv4 } from "uuid";
-import { animals, colors, uniqueNamesGenerator } from "unique-names-generator";
 import {
   Button as UnstyledButton,
   IconButton,
@@ -15,6 +11,7 @@ import {
 } from "@material-ui/core";
 import { SyncOutlined as SyncIcon } from "@material-ui/icons";
 import styled from "styled-components";
+import { getRandomName, asImage, useAvatar } from "@piticent123/gamekit-client";
 
 const Form = styled.form`
   display: flex;
@@ -36,14 +33,6 @@ const Button = styled(UnstyledButton)`
   margin-bottom: 3rem;
 `;
 
-const getRandomName = () =>
-  uniqueNamesGenerator({
-    dictionaries: [colors, animals],
-    length: 2,
-    separator: " ",
-    style: "capital",
-  });
-
 export default function LoginScreen() {
   const {
     id,
@@ -51,7 +40,7 @@ export default function LoginScreen() {
     avatar: defaultAvatar,
   } = useSelector((state) => state.settings);
   const dispatch = useDispatch();
-  const [avatar, setAvatar] = useState(defaultAvatar ?? uuidv4());
+  const [avatar, randomizeImage] = useAvatar()
   const [name, setName] = useInput(defaultName ?? getRandomName());
 
   useEffect(() => {
@@ -63,16 +52,12 @@ export default function LoginScreen() {
   async function handleGoToLobby(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    await dispatch(saveSettings({ name, avatar, id: id || uuidv4() }));
+    await dispatch(saveSettings({ name, avatar }));
     await dispatch(goToLobby());
   }
 
   function randomizeName() {
     setName(getRandomName());
-  }
-
-  function randomizeImage() {
-    setAvatar(uuidv4());
   }
 
   return (
@@ -83,12 +68,7 @@ export default function LoginScreen() {
         </Typography>
         <InputGroup>
           <img
-            src={createAvatar(sprites, {
-              seed: avatar,
-              width: 150,
-              height: 150,
-              dataUri: true,
-            })}
+            src={asImage(avatar)}
             alt="Avatar"
           />
           <IconButton onClick={randomizeImage} aria-label="Randomize Image">

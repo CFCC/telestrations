@@ -3,20 +3,20 @@
 exports[`Renders 1`] = `
 <DocumentFragment>
   <div
-    class="sc-AxjAm kwsLvR"
+    class="sc-bdnxRM loEPuz"
   >
     <img
       alt="Telestrations"
-      class="sc-AxiKw iXGiQC"
+      class="sc-dlnjwi jPLrEe"
       src="/logo.png"
     />
     <p
-      class="MuiTypography-root sc-AxhCb bDZFln MuiTypography-body1"
+      class="MuiTypography-root sc-hKFxyN fjDotz MuiTypography-body1"
     >
       Please select a game to join
     </p>
     <form
-      class="sc-AxhUy knaEeg"
+      class="sc-eCApnc fTetLt"
     >
       <div
         class="MuiFormControl-root"
@@ -43,7 +43,9 @@ exports[`Renders 1`] = `
             </span>
           </div>
           <input
-            type="hidden"
+            aria-hidden="true"
+            class="MuiSelect-nativeInput"
+            tabindex="-1"
             value=""
           />
           <svg
@@ -58,25 +60,23 @@ exports[`Renders 1`] = `
           </svg>
           <fieldset
             aria-hidden="true"
-            class="PrivateNotchedOutline-root-111 MuiOutlinedInput-notchedOutline"
-            style="padding-left: 8px;"
+            class="PrivateNotchedOutline-root-1 MuiOutlinedInput-notchedOutline"
           >
             <legend
-              class="PrivateNotchedOutline-legend-112"
-              style="width: 0.01px;"
+              class="PrivateNotchedOutline-legendLabelled-3"
             >
               <span>
-                ​
+                Game Code
               </span>
             </legend>
           </fieldset>
         </div>
       </div>
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-contained sc-AxgMl dwWkfH MuiButton-containedPrimary MuiButton-containedSizeLarge MuiButton-sizeLarge Mui-disabled Mui-disabled"
+        class="MuiButtonBase-root MuiButton-root MuiButton-contained sc-jSFjdj erauwF MuiButton-containedPrimary MuiButton-containedSizeLarge MuiButton-sizeLarge Mui-disabled Mui-disabled"
         disabled=""
         tabindex="-1"
-        type="button"
+        type="submit"
       >
         <span
           class="MuiButton-label"
