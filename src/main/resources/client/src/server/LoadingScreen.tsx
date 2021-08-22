@@ -24,8 +24,8 @@ const PlayerLabel = styled(Typography)`
 
 export default function LoadingScreen() {
   const dispatch = useDispatch();
-  const players = useSelector((state) => state.currentGame.players);
-  const gameCode = useSelector((state) => state.currentGame.code);
+  const players = useSelector((state) => state.gamekit.currentGame.players);
+  const gameCode = useSelector((state) => state.gamekit.currentGame.code);
 
   async function handleStartGame() {
     await dispatch(startGame(gameCode));

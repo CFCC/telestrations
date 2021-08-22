@@ -3,40 +3,134 @@
 exports[`Renders 1`] = `
 <DocumentFragment>
   <div
-    class="sc-AxjAm kwsLvR"
+    class="sc-bdnxRM loEPuz"
   >
     <img
       alt="Telestrations"
-      class="sc-AxiKw iXGiQC"
+      class="sc-dlnjwi jPLrEe"
       src="/logo.png"
     />
     <p
-      class="MuiTypography-root sc-AxhCb bDZFln MuiTypography-body1"
+      class="MuiTypography-root sc-hKFxyN fjDotz MuiTypography-body1"
     >
       Log In
     </p>
-    <div
-      id="firebaseui-auth-container"
-    />
-    <div
-      class="MuiCircularProgress-root sc-AxirZ eovyrP MuiCircularProgress-colorPrimary MuiCircularProgress-indeterminate"
-      role="progressbar"
-      style="width: 40px; height: 40px;"
+    <form
+      class="sc-eCApnc iHOios"
     >
-      <svg
-        class="MuiCircularProgress-svg"
-        viewBox="22 22 44 44"
+      <span
+        class="MuiTypography-root MuiTypography-caption MuiTypography-colorTextSecondary"
       >
-        <circle
-          class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
-          cx="44"
-          cy="44"
-          fill="none"
-          r="20.2"
-          stroke-width="3.6"
+        Profile Picture:
+      </span>
+      <div
+        class="sc-jSFjdj dAEGKk"
+      >
+        <img
+          alt="Avatar"
+          src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3Adc%3D%22http%3A%2F%2Fpurl.org%2Fdc%2Felements%2F1.1%2F%22%20xmlns%3Acc%3D%22http%3A%2F%2Fcreativecommons.org%2Fns%23%22%20xmlns%3Ardf%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2F02%2F22-rdf-syntax-ns%23%22%20xmlns%3Asvg%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%20shape-rendering%3D%22crispEdges%22%20width%3D%22150%22%20height%3D%22150%22%3E%3Cmetadata%3E%3Crdf%3ARDF%3E%3Ccc%3AWork%3E%3Cdc%3Aformat%3Eimage%2Fsvg%2Bxml%3C%2Fdc%3Aformat%3E%3Cdc%3Atype%20rdf%3Aresource%3D%22http%3A%2F%2Fpurl.org%2Fdc%2Fdcmitype%2FStillImage%22%2F%3E%3Cdc%3Atitle%3EHuman%20%2F%208biticon%3C%2Fdc%3Atitle%3E%3Cdc%3Acreator%3E%3Ccc%3AAgent%3E%3Cdc%3Atitle%3EPlastic%20Jam%3C%2Fdc%3Atitle%3E%3C%2Fcc%3AAgent%3E%3C%2Fdc%3Acreator%3E%3Cdc%3Asource%3Ehttps%3A%2F%2Fgithub.com%2Fdicebear%2Fdicebear%3C%2Fdc%3Asource%3E%3Ccc%3Alicense%20rdf%3Aresource%3D%22https%3A%2F%2Fgithub.com%2Fdicebear%2Fdicebear%2Fblob%2Fv4%2Fpackages%2Favatars-human-sprites%2FLICENSE%22%2F%3E%3Cdc%3Acontributor%3E%3Ccc%3AAgent%3E%3Cdc%3Atitle%3EFlorian%20K%C3%B6rner%3C%2Fdc%3Atitle%3E%3C%2Fcc%3AAgent%3E%3C%2Fdc%3Acontributor%3E%3C%2Fcc%3AWork%3E%3C%2Frdf%3ARDF%3E%3C%2Fmetadata%3E%3Crect%20fill%3D%22transparent%22%20width%3D%2220%22%20height%3D%2220%22%20x%3D%220%22%20y%3D%220%22%2F%3E%3Cg%20transform%3D%22translate(3%2C%203)%22%3E%3Cg%20transform%3D%22scale(0.7)%22%3E%3Crect%20fill%3D%22none%22%20width%3D%2220%22%20height%3D%2220%22%20x%3D%220%22%20y%3D%220%22%2F%3E%3Cpath%20d%3D%22M8%2015v1H4v1H3v3h14v-3h-1v-1h-4v-1h3v-1h1v-1h1v-3h1V7h-1V4h-1V3h-1V2H5v1H4v1H3v3H2v3h1v3h1v1h1v1h3z%22%20fill%3D%22%23EAC393%22%2F%3E%3Cpath%20d%3D%22M5%2015v-1H4v-1H3v-3H2V7h1V4h1V3h1V2h10v1h1v1h1v3h1v3h-1v3h-1v1h-1v1H5z%22%20fill%3D%22%23FFF%22%20fill-opacity%3D%22.1%22%2F%3E%3Cpath%20d%3D%22M5%207h3v2H5V7zm7%200h3v2h-3V7z%22%20fill%3D%22%23FFF%22%2F%3E%3Cpath%20d%3D%22M7%208h1v1H7V8zm5%200h1v1h-1V8z%22%20fill%3D%22%2376778b%22%2F%3E%3Cpath%20d%3D%22M7%205v1H5v1H4V6h1V5h2zm7%200v1h-2v1h-1V6h1V5h2z%22%20fill-rule%3D%22evenodd%22%20fill%3D%22%23784632%22%2F%3E%3Cpath%20d%3D%22M3%207v6h1v1h1v1h10v-1h1v-1h1V7h-1v2h-1v1h-1v1H6v-1H5V9H4V7H3z%22%20id%3D%22Path%22%20fill%3D%22%2391553d%22%20fill-opacity%3D%220.75%22%2F%3E%3Cpath%20d%3D%22M8%2013h3v1H8v-1z%22%20fill%3D%22%23d1a490%22%2F%3E%3Cpath%20d%3D%22M3%2020v-3h1v-1h12v1h1v3H3z%22%20fill%3D%22%23ffe28a%22%2F%3E%3Cpath%20d%3D%22M5%2020v-2h1v-1h8v1h1v2h-2v-1h-2v1H9v-1H7v1H5z%22%20fill%3D%22%23FFF%22%20fill-opacity%3D%22.2%22%2F%3E%3Cpath%20d%3D%22M3%207h1V5h2V4h2V3h1v1h2v1h2v1h2v1h2V4h-1V3h-1V2H5v1H4v1H3v3z%22%20fill%3D%22%2391553d%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"
         />
-      </svg>
-    </div>
+        <button
+          aria-label="Randomize Image"
+          class="MuiButtonBase-root MuiIconButton-root"
+          tabindex="0"
+          type="button"
+        >
+          <span
+            class="MuiIconButton-label"
+          >
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"
+              />
+            </svg>
+          </span>
+          <span
+            class="MuiTouchRipple-root"
+          />
+        </button>
+      </div>
+      <div
+        class="sc-jSFjdj dAEGKk"
+      >
+        <div
+          class="MuiFormControl-root MuiTextField-root sc-gKAaRy cjllEy"
+        >
+          <label
+            class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-filled"
+            data-shrink="true"
+          >
+            Name
+          </label>
+          <div
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-formControl"
+          >
+            <input
+              aria-invalid="false"
+              class="MuiInputBase-input MuiOutlinedInput-input"
+              placeholder="Name"
+              type="text"
+              value="Plum Tortoise"
+            />
+            <fieldset
+              aria-hidden="true"
+              class="PrivateNotchedOutline-root-1 MuiOutlinedInput-notchedOutline"
+            >
+              <legend
+                class="PrivateNotchedOutline-legendLabelled-3 PrivateNotchedOutline-legendNotched-4"
+              >
+                <span>
+                  Name
+                </span>
+              </legend>
+            </fieldset>
+          </div>
+        </div>
+        <button
+          aria-label="Randomize Name"
+          class="MuiButtonBase-root MuiIconButton-root"
+          tabindex="0"
+          type="button"
+        >
+          <span
+            class="MuiIconButton-label"
+          >
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"
+              />
+            </svg>
+          </span>
+          <span
+            class="MuiTouchRipple-root"
+          />
+        </button>
+      </div>
+      <button
+        class="MuiButtonBase-root MuiButton-root MuiButton-contained sc-iCoGMd lioMgj MuiButton-containedPrimary"
+        tabindex="0"
+        type="submit"
+      >
+        <span
+          class="MuiButton-label"
+        >
+          Go to Lobby
+        </span>
+        <span
+          class="MuiTouchRipple-root"
+        />
+      </button>
+    </form>
   </div>
 </DocumentFragment>
 `;

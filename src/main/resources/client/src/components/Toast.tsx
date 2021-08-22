@@ -4,12 +4,14 @@ import { useSnackbar } from "notistack";
 
 export default function Toast() {
   const { enqueueSnackbar } = useSnackbar();
-  const { id, content, variant } = useSelector((state) => state.toast);
+  const { id, status, title, description } = useSelector(
+    (state) => state.gamekit.message
+  );
 
   useEffect(() => {
     if (!id) return;
-    enqueueSnackbar(content, { variant });
-  }, [id, content, variant, enqueueSnackbar]);
+    enqueueSnackbar(`${title}: ${description}`, { variant: status });
+  }, [id, status, title, description, enqueueSnackbar]);
 
   return null;
 }

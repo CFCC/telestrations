@@ -1,3 +1,5 @@
+import { Game, Player } from "@piticent123/gamekit-client/lib/types";
+
 export interface Page {
   type: "image" | "text";
   authorId: string;
@@ -10,25 +12,11 @@ export interface Notebook {
   pages: Page[];
 }
 
-export interface Settings {
-  id: string;
-  avatar: string;
-  name: string;
-  connected: boolean;
-}
-
-export interface Player {
-  id: string;
-  settings: Settings;
+export interface TelestrationsPlayer extends Player {
   notebookQueue: Notebook[];
-  startOfTimeOffline: Date;
 }
 
-export interface Game {
-  code: string;
-  adminId: string;
-  players: Player[];
-  active: boolean;
+export interface TelestrationsGame extends Game<TelestrationsPlayer> {
   isDone: boolean;
 }
 

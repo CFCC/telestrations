@@ -1,5 +1,5 @@
-import React, { FormEvent, useEffect, useState } from "react";
-import { goToLobby, saveSettings, useSelector } from "../utils/store";
+import React, { FormEvent, useEffect } from "react";
+import { connectToServer, saveSettings, useSelector } from "../utils/store";
 import { useInput } from "../utils/hooks";
 import TitleScreen from "./TitleScreen";
 import { useDispatch } from "react-redux";
@@ -38,14 +38,14 @@ export default function LoginScreen() {
     id,
     name: defaultName,
     avatar: defaultAvatar,
-  } = useSelector((state) => state.settings);
+  } = useSelector((state) => state.gamekit.settings);
   const dispatch = useDispatch();
-  const [avatar, randomizeImage] = useAvatar()
+  const [avatar, randomizeImage] = useAvatar();
   const [name, setName] = useInput(defaultName ?? getRandomName());
 
   useEffect(() => {
     if (id && defaultName && defaultAvatar) {
-      dispatch(goToLobby());
+      dispatch(connectToServer());
     }
   }, []);
 
@@ -53,7 +53,7 @@ export default function LoginScreen() {
     e.preventDefault();
 
     await dispatch(saveSettings({ name, avatar }));
-    await dispatch(goToLobby());
+    await dispatch(connectToServer());
   }
 
   function randomizeName() {
@@ -67,10 +67,7 @@ export default function LoginScreen() {
           Profile Picture:
         </Typography>
         <InputGroup>
-          <img
-            src={asImage(avatar)}
-            alt="Avatar"
-          />
+          <img src={asImage(avatar)} alt="Avatar" />
           <IconButton onClick={randomizeImage} aria-label="Randomize Image">
             <SyncIcon />
           </IconButton>

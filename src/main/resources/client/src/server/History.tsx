@@ -84,7 +84,7 @@ interface HistoryProps {
 }
 
 export default function History({ ownerId, playerId }: HistoryProps) {
-  const players = useSelector((state) => state.currentGame.players);
+  const players = useSelector((state) => state.gamekit.currentGame.players);
   const [index, setIndex] = useState(0);
   const handleIndexChange = (e: any, v: number) => setIndex(v - 1);
 

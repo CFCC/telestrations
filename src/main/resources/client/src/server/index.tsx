@@ -10,8 +10,8 @@ import { GameState } from "../utils/types";
 import { useSelector } from "../utils/store";
 
 export default function Server() {
-  const gameState = useSelector((state) => state.gameState);
-  const activeContentId = useSelector((state) => state.activeContentId);
+  const gameState = useSelector((state) => state.app.gameState);
+  const activeContentId = useSelector((state) => state.app.activeContentId);
 
   switch (gameState) {
     case GameState.LOGIN:

@@ -34,7 +34,7 @@ const Content = styled(CardContent)`
 `;
 
 export default function PlayerStream({ playerId }: PlayerStreamProps) {
-  const players = useSelector((state) => state.currentGame.players);
+  const players = useSelector((state) => state.gamekit.currentGame.players);
 
   const notepad = players.find((p) => p.settings.id === playerId)
     ?.notebookQueue[0];

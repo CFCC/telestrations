@@ -44,7 +44,7 @@ const StyledGrid = styled(Grid)`
 `;
 
 export default function BirdsEye() {
-  const currentGame = useSelector((state) => state.currentGame);
+  const currentGame = useSelector((state) => state.gamekit.currentGame);
   const dispatch = useDispatch();
   const [menu, setMenu] = useState({
     anchorElement: null,

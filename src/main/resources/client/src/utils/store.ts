@@ -1,3 +1,4 @@
+import { createGamekitSlice, sendEvent } from "@piticent123/gamekit-client";
 import {
   configureStore,
   createAsyncThunk,
@@ -9,151 +10,83 @@ import {
   useSelector as useUntypedSelector,
 } from "react-redux";
 
-import * as api from "./api";
-import { Game, GameState, Settings } from "./types";
+import { GameState, TelestrationsGame, TelestrationsPlayer } from "./types";
+import _ from "lodash";
 
-interface State {
+const { reducer: gamekitReducer, actions: gamekitActions } =
+  createGamekitSlice<{}, TelestrationsPlayer, TelestrationsGame>();
+
+interface AppState {
   gameState: GameState;
-  openGames: string[];
-  toast: {
-    id: number;
-    content: string;
-    variant: "info" | "warning" | "success" | "error";
-  };
-  settings: Settings;
-  currentGame: Game;
   activeContentId: string;
+}
+interface State {
+  app: AppState;
+  gamekit: ReturnType<typeof gamekitReducer>;
 }
 interface ThunkApi {
   state: State;
 }
 
-export const goToLobby = createAsyncThunk<void, void, ThunkApi>(
-  "goToLobby",
-  (_, { getState }) => {
-    const { settings } = getState();
-    api.connectToServer(settings.id);
-  }
-);
-
-export const createGame = createAsyncThunk<void, string>(
-  "createGame",
-  async (code) => {
-    await api.createGame(code);
-  }
-);
-
-export const createAndJoinGame = createAsyncThunk<void, string, ThunkApi>(
-  "createAndJoinGame",
-  async (code, { getState }) => {
-    const { settings } = getState();
-    await api.createGame(code);
-    await api.joinGame(code, settings);
-  }
-);
-
-export const joinGame = createAsyncThunk<void, string, ThunkApi>(
-  "joinGame",
-  async (code, { getState }) => {
-    const { settings } = getState();
-    await api.joinGame(code, settings);
-  }
-);
-
-export const rejoinGame = createAsyncThunk<void, string, ThunkApi>(
-  "rejoinGame",
-  async (code, { getState }) => {
-    if (!code) return;
-
-    const { settings } = getState();
-    await api.joinGame(code, settings, true);
-  }
-);
-
-export const saveSettings = createAsyncThunk<
-  Partial<Settings>,
-  Partial<Settings>,
-  ThunkApi
->("saveSettings", (settings, { getState }) => {
-  const {
-    currentGame: { code },
-    settings: oldSettings,
-  } = getState();
-
-  api.updateSettings(code, { ...oldSettings, ...settings });
-  Object.entries(settings).forEach(([k, v]) => {
-    if (!v) return;
-    localStorage.setItem(k, v.toString());
+// This has to be at the top level to be throttled correctly
+const _sendWritePageEvent = _.throttle((gameCode: string, content: string) => {
+  sendEvent({
+    route: `/app/games/${gameCode}/page/write`,
+    data: content,
   });
-
-  return settings;
-});
-
+}, 500);
 export const setGuess = createAsyncThunk<void, string, ThunkApi>(
   "setGuess",
   async (content, { getState }) => {
-    const { currentGame } = getState();
-    await api.setGuess(currentGame.code, content);
+    const {
+      gamekit: { currentGame },
+    } = getState();
+
+    _sendWritePageEvent(currentGame.code, content);
   }
 );
 
 export const submitGuess = createAsyncThunk<void, string, ThunkApi>(
   "submitGuess",
   async (content, { getState }) => {
-    const { currentGame } = getState();
-    await api.submitGuess(currentGame.code, content);
+    const {
+      gamekit: { currentGame },
+    } = getState();
+
+    sendEvent({
+      route: `/app/games/${currentGame.code}/page/submit`,
+      data: content,
+    });
   }
 );
 
 export const startGame = createAsyncThunk<void, string, ThunkApi>(
   "startGame",
-  async (gameCode) => {}
+  async (__, { getState }) => {
+    const {
+      gamekit: { currentGame },
+    } = getState();
+
+    sendEvent({ route: `/games/${currentGame.code}/start` });
+  }
 );
 
-export const { actions, reducer } = createSlice({
+export const {
+  createGame,
+  joinGame,
+  rejoinGame,
+  connectToServer,
+  saveSettings,
+  becomeAdmin,
+} = gamekitActions;
+
+export const { actions, reducer: appReducer } = createSlice({
   name: "app",
   initialState: {
     gameState: GameState.LOGIN,
-    openGames: [],
-    toast: { id: 0, content: "", variant: "info" },
-    currentGame: {
-      active: false,
-      code: "",
-      players: [],
-      admin: "",
-      round: 0,
-      adminId: "",
-      isDone: false,
-    },
-    settings: {
-      id: localStorage.getItem("id"),
-      avatar: localStorage.getItem("avatar"),
-      name: localStorage.getItem("name"),
-      connected: true,
-    },
     activeContentId: "",
-  } as State,
+  } as AppState,
   reducers: {
-    handleException: (state, action: PayloadAction<string>) => {
-      state.toast = {
-        id: state.toast.id + 1,
-        content: action.payload,
-        variant: "error",
-      };
-    },
-    handleSuccess: (state, action: PayloadAction<string>) => {
-      state.toast = {
-        id: state.toast.id + 1,
-        content: action.payload,
-        variant: "success",
-      };
-    },
-    handleGamesListMessage: (state, action: PayloadAction<string[]>) => {
-      state.openGames = [...action.payload];
-    },
-    handleGameUpdate: (state, action: PayloadAction<Game>) => {
-      state.currentGame = action.payload;
-    },
     viewPlayerHistory: (state, action: PayloadAction<string>) => {
       state.gameState = GameState.PLAYER_HISTORY;
       state.activeContentId = action.payload;
@@ -168,22 +101,13 @@ export const { actions, reducer } = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(saveSettings.fulfilled, (state, action) => {
-        state.settings = {
-          ...state.settings,
-          ...action.payload,
-        };
-      })
-      .addCase(rejoinGame.fulfilled, (state) => {
+      .addCase(gamekitActions.rejoinGame.fulfilled, (state) => {
         state.gameState = GameState.IN_GAME;
       })
-      .addCase(goToLobby.fulfilled, (state) => {
+      .addCase(gamekitActions.connectToServer.fulfilled, (state) => {
         state.gameState = GameState.GAME_CODE;
       })
-      .addCase(joinGame.fulfilled, (state) => {
-        state.gameState = GameState.WAITING_TO_START;
-      })
-      .addCase(createAndJoinGame.fulfilled, (state) => {
+      .addCase(gamekitActions.joinGame.fulfilled, (state) => {
         state.gameState = GameState.WAITING_TO_START;
       })
       .addCase(submitGuess.fulfilled, (state) => {
@@ -192,6 +116,8 @@ export const { actions, reducer } = createSlice({
   },
 });
 
-export const store = configureStore({ reducer });
+export const store = configureStore({
+  reducer: { gamekit: gamekitReducer, app: appReducer },
+});
 
 export const useSelector: TypedUseSelectorHook<State> = useUntypedSelector;
