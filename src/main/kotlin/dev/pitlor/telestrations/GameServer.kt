@@ -33,13 +33,6 @@ class TelestrationsGame(
             && it.notebookQueue[0].originalOwnerId == it.id
             && it.notebookQueue[0].pages.size > 1
     }
-
-    fun safeGetPlayer(id: UUID): TelestrationsPlayer {
-        val player = players.find { it.id == id }
-
-        require(player != null) { "That player is not in this game" }
-        return player
-    }
 }
 
 @Component
@@ -49,20 +42,12 @@ open class TelestrationsServer(
     playerFactory: (id: UUID, settings: MutableMap<String, Any>) -> TelestrationsPlayer
 ) : Server<TelestrationsPlayer, TelestrationsGame>(gameRepository, gameFactory, playerFactory) {
     fun startGame(gameCode: String, userId: UUID) {
-        require(gameCode.isNotEmpty()) { "Code is empty" }
-        val game = gameRepository.getByCode(gameCode)
-
-        require(game != null) { "That game does not exist" }
-        require(game.adminId == userId) { "You are not the admin of this game" }
-
+        val game = gameRepository.safeGetByCode(gameCode, withAdmin = userId)
         game.isActive = true
     }
 
     fun writeInPage(gameCode: String, userId: UUID, content: String) {
-        require(gameCode.isNotEmpty()) { "Code is empty" }
-        val game = gameRepository.getByCode(gameCode)
-
-        require(game != null) { "That game does not exist" }
+        val game = gameRepository.safeGetByCode(gameCode)
         val player = game.safeGetPlayer(userId)
 
         require(player.notebookQueue.isNotEmpty()) { "You have no notebooks in your queue" }
@@ -73,10 +58,7 @@ open class TelestrationsServer(
     }
 
     fun submitPage(gameCode: String, userId: UUID, content: String?): String {
-        require(gameCode.isNotEmpty()) { "Code is empty" }
-        val game = gameRepository.getByCode(gameCode)
-
-        require(game != null) { "That game does not exist" }
+        val game = gameRepository.safeGetByCode(gameCode)
         val player = game.safeGetPlayer(userId)
 
         require(player.notebookQueue.isNotEmpty()) { "You have no notebooks in your queue" }
