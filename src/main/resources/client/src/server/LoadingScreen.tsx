@@ -3,7 +3,7 @@ import { Button, Typography } from "@material-ui/core";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 
-import { actions, startGame, useSelector } from "../utils/store";
+import { setGameState, startGame, useSelector } from "../utils/store";
 import TitleScreen from "../components/TitleScreen";
 import { GameState } from "../utils/types";
 
@@ -29,7 +29,7 @@ export default function LoadingScreen() {
 
   async function handleStartGame() {
     await dispatch(startGame(gameCode));
-    dispatch(actions.setGameState(GameState.BIRDS_EYE));
+    dispatch(setGameState(GameState.BIRDS_EYE));
   }
 
   return (

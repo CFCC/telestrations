@@ -11,9 +11,9 @@ import GameSelection from "./GameSelection";
 import { GameState } from "../utils/types";
 
 export default function Client() {
-  const gameState = useSelector((state) => state.gameState);
-  const userId = useSelector((state) => state.settings.id);
-  const players = useSelector((state) => state.currentGame.players);
+  const gameState = useSelector((state) => state.app.gameState);
+  const userId = useSelector((state) => state.gamekit.settings.id);
+  const players = useSelector((state) => state.gamekit.currentGame.players);
 
   switch (gameState) {
     case GameState.LOGIN:

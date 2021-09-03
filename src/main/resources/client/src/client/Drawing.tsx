@@ -18,7 +18,7 @@ import _ from "lodash";
 import { useDispatch } from "react-redux";
 
 import { setGuess, submitGuess, useSelector } from "../utils/store";
-import { useBoolean, useEvent } from "../utils/hooks";
+import { useBoolean, useEvent } from "@piticent123/utils/hooks";
 import SwatchesDialog from "../components/SwatchesDialog";
 import ListDialog from "../components/ListDialog";
 
@@ -67,8 +67,8 @@ const StyledSlider = styled(Slider)`
 `;
 
 export default function Drawing() {
-  const userId = useSelector((state) => state.settings.id);
-  const players = useSelector((state) => state.currentGame.players);
+  const userId = useSelector((state) => state.gamekit.settings.id);
+  const players = useSelector((state) => state.gamekit.currentGame.players);
   const dispatch = useDispatch();
 
   const [tool, setTool] = useState(Tools.Pencil);

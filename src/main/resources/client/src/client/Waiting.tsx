@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Typography } from "@material-ui/core";
+import { sleep } from "@piticent123/utils";
 import styled from "styled-components";
-
-import { sleep } from "../utils";
 
 interface Dog {
   url: string;

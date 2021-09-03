@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux";
 
 import * as theme from "../utils/theme";
 import { GameState, Page } from "../utils/types";
-import { actions, useSelector } from "../utils/store";
+import { setGameState, useSelector } from "../utils/store";
 
 const Header = styled.div`
   background-color: ${theme.secondary};
@@ -107,7 +107,7 @@ export default function History({ ownerId, playerId }: HistoryProps) {
   const dispatch = useDispatch();
 
   function goBack() {
-    dispatch(actions.setGameState(GameState.BIRDS_EYE));
+    dispatch(setGameState(GameState.BIRDS_EYE));
   }
 
   return (

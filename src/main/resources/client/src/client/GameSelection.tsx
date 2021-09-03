@@ -24,7 +24,7 @@ const Button = styled(UnstyledButton)`
 `;
 
 export default function GameSelection() {
-  const games = useSelector((state) => state.openGames);
+  const games = useSelector((state) => state.gamekit.openGames);
   const [selection, setSelection, resetSelection] = useInput("" as string);
   const dispatch = useDispatch();
 

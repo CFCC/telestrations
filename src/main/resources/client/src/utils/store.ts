@@ -12,9 +12,10 @@ import {
 
 import { GameState, TelestrationsGame, TelestrationsPlayer } from "./types";
 import _ from "lodash";
+import { Settings } from "@piticent123/gamekit-client/lib/types";
 
 const { reducer: gamekitReducer, actions: gamekitActions } =
-  createGamekitSlice<{}, TelestrationsPlayer, TelestrationsGame>();
+  createGamekitSlice<Settings, TelestrationsPlayer, TelestrationsGame>();
 
 interface AppState {
   gameState: GameState;
@@ -80,7 +81,7 @@ export const {
   becomeAdmin,
 } = gamekitActions;
 
-export const { actions, reducer: appReducer } = createSlice({
+const { actions, reducer: appReducer } = createSlice({
   name: "app",
   initialState: {
     gameState: GameState.LOGIN,
@@ -115,6 +116,12 @@ export const { actions, reducer: appReducer } = createSlice({
       });
   },
 });
+
+export const {
+  viewNotepadHistory,
+  viewPlayerHistory,
+  setGameState
+} = actions;
 
 export const store = configureStore({
   reducer: { gamekit: gamekitReducer, app: appReducer },

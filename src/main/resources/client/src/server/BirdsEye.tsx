@@ -13,7 +13,7 @@ import {
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 
-import { actions, useSelector } from "../utils/store";
+import { useSelector, viewNotepadHistory, viewPlayerHistory } from "../utils/store";
 import PlayerStream from "./PlayerStream";
 import * as theme from "../utils/theme";
 
@@ -56,11 +56,11 @@ export default function BirdsEye() {
     setMenu({ anchorElement: null, playerId: "" });
   };
   const handleViewPlayerHistory = () => {
-    dispatch(actions.viewPlayerHistory(menu.playerId));
+    dispatch(viewPlayerHistory(menu.playerId));
   };
   const handleViewNotepadHistory = () => {
     dispatch(
-      actions.viewNotepadHistory(
+      viewNotepadHistory(
         currentGame.players.find((p) => p.settings.id === menu.playerId)
           ?.notebookQueue[0]?.originalOwnerId ?? ""
       )

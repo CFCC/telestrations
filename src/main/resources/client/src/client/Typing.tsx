@@ -38,8 +38,8 @@ const Image = styled.img`
 
 export default function Typing() {
   const dispatch = useDispatch();
-  const players = useSelector((state) => state.currentGame.players);
-  const settings = useSelector((state) => state.settings);
+  const players = useSelector((state) => state.gamekit.currentGame.players);
+  const settings = useSelector((state) => state.gamekit.settings);
   const currentNotepad = players.find((p) => p.id === settings.id)
     ?.notebookQueue[0];
   const content = _.nth(currentNotepad?.pages, -2)?.content;
