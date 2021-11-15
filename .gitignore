@@ -1,8 +1,8 @@
 .idea
 target
 src/main/resources/public
-src/main/resources/client/node_modules
-src/main/resources/client/build
+src/main/client/node_modules
+src/main/client/build
 
 .yalc*
 yalc.lock

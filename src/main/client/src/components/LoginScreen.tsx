@@ -11,7 +11,7 @@ import {
 import { SyncOutlined as SyncIcon } from "@material-ui/icons";
 import styled from "styled-components";
 import { getRandomName, asImage, useAvatar } from "@piticent123/gamekit-client";
-import { useInput } from "@piticent123/utils/lib/hooks"
+import { useInput } from ".yalc/@piticent123/utils/lib/hooks"
 
 const Form = styled.form`
   display: flex;
