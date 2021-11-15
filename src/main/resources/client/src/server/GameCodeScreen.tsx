@@ -7,11 +7,11 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
+import { useInput } from "@piticent123/utils/lib/hooks"
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 
 import TitleScreen from "../components/TitleScreen";
-import { useInput } from "../utils/hooks";
 import { createGame } from "../utils/store";
 
 const Form = styled.form`

@@ -18,7 +18,7 @@ import _ from "lodash";
 import { useDispatch } from "react-redux";
 
 import { setGuess, submitGuess, useSelector } from "../utils/store";
-import { useBoolean, useEvent } from "@piticent123/utils/hooks";
+import { useBoolean, useEvent } from "@piticent123/utils/lib/hooks";
 import SwatchesDialog from "../components/SwatchesDialog";
 import ListDialog from "../components/ListDialog";
 

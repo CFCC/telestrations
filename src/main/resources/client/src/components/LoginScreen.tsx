@@ -1,6 +1,5 @@
 import React, { FormEvent, useEffect } from "react";
 import { connectToServer, saveSettings, useSelector } from "../utils/store";
-import { useInput } from "../utils/hooks";
 import TitleScreen from "./TitleScreen";
 import { useDispatch } from "react-redux";
 import {
@@ -12,6 +11,7 @@ import {
 import { SyncOutlined as SyncIcon } from "@material-ui/icons";
 import styled from "styled-components";
 import { getRandomName, asImage, useAvatar } from "@piticent123/gamekit-client";
+import { useInput } from "@piticent123/utils/lib/hooks"
 
 const Form = styled.form`
   display: flex;
