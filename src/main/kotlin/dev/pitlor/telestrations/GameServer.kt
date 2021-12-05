@@ -69,4 +69,13 @@ open class TelestrationsServer(
 
         return "Page submitted"
     }
+
+    fun getOrphanedGameCodes(): Iterable<String> {
+        return gameRepository
+            .findAll {
+                val player = it.players.find { p -> p.id == it.adminId }
+                return@findAll player?.startOfTimeOffline != null
+            }
+            .map { it.code }
+    }
 }

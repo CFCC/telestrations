@@ -1,4 +1,4 @@
-import { createGamekitSlice, sendEvent } from "@piticent123/gamekit-client";
+import { createGamekitSlice, sendEvent, Settings, subscribe } from "@piticent123/gamekit-client";
 import {
   configureStore,
   createAsyncThunk,
@@ -12,14 +12,14 @@ import {
 
 import { GameState, TelestrationsGame, TelestrationsPlayer } from "./types";
 import _ from "lodash";
-import { Settings } from "@piticent123/gamekit-client/lib/types";
 
-const { reducer: gamekitReducer, actions: gamekitActions } =
+const { reducer: gamekitReducer, actions: gamekitActions, createThunk } =
   createGamekitSlice<Settings, TelestrationsPlayer, TelestrationsGame>();
 
 interface AppState {
   gameState: GameState;
   activeContentId: string;
+  orphanedGames: string[];
 }
 interface State {
   app: AppState;
@@ -28,6 +28,19 @@ interface State {
 interface ThunkApi {
   state: State;
 }
+
+export const getOrphanedGames = createThunk(
+  "getOrphanedGames",
+  async ({ dispatch }) => {
+    subscribe({
+      route: `/app/games/orphaned`,
+      callback: message => {
+        const orphanedGames = JSON.parse(message.body)
+        dispatch(actions.setOrphanedGames(orphanedGames))
+      }
+    });
+  }
+);
 
 // This has to be at the top level to be throttled correctly
 const _sendWritePageEvent = _.throttle((gameCode: string, content: string) => {
@@ -86,6 +99,7 @@ const { actions, reducer: appReducer } = createSlice({
   initialState: {
     gameState: GameState.LOGIN,
     activeContentId: "",
+    orphanedGames: []
   } as AppState,
   reducers: {
     viewPlayerHistory: (state, action: PayloadAction<string>) => {
@@ -99,6 +113,9 @@ const { actions, reducer: appReducer } = createSlice({
     setGameState: (state, action: PayloadAction<GameState>) => {
       state.gameState = action.payload;
     },
+    setOrphanedGames: (state, action: PayloadAction<string[]>) => {
+      state.orphanedGames = action.payload
+    }
   },
   extraReducers: (builder) => {
     builder

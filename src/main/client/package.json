@@ -7,7 +7,7 @@
     "@material-ui/core": "^4.11.4",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.58",
-    "@piticent123/gamekit-client": "^1.1.7",
+    "@piticent123/gamekit-client": "^1.2.5",
     "@piticent123/utils": "^1.0.2",
     "@reduxjs/toolkit": "^1.5.1",
     "jsdom": "^16.5.3",

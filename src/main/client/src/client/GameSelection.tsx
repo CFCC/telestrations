@@ -6,7 +6,7 @@ import {
   MenuItem,
   Select,
 } from "@material-ui/core";
-import { useInput } from ".yalc/@piticent123/utils/lib/hooks"
+import { useInput } from "@piticent123/utils/lib/hooks"
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 

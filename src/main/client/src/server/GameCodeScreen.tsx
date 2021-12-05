@@ -7,12 +7,12 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import { useInput } from ".yalc/@piticent123/utils/lib/hooks"
+import { useInput } from "@piticent123/utils/lib/hooks"
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 
 import TitleScreen from "../components/TitleScreen";
-import { createGame } from "../utils/store";
+import { createGame, useSelector } from "../utils/store";
 
 const Form = styled.form`
   width: 50%;
@@ -31,7 +31,7 @@ const Subtitle = styled(Typography)`
 `;
 
 const List = styled(UnstyledList)`
-  margin-top: 1rem;
+  margin: 1rem 0;
   border: 1px solid black;
   border-radius: 15px;
   width: 50%;
@@ -40,7 +40,7 @@ const List = styled(UnstyledList)`
 export default function LoadingScreen() {
   const dispatch = useDispatch();
   const [gameCode, setGameCode] = useInput("");
-  const orphanedGames = ["hi", "hello", "yoooo"];
+  const orphanedGames = useSelector(state => state.app.orphanedGames)
 
   async function submitGameCode(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();

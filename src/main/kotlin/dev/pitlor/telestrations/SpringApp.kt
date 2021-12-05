@@ -11,11 +11,10 @@ import org.springframework.messaging.handler.annotation.Payload
 import org.springframework.messaging.handler.annotation.SendTo
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.messaging.simp.annotation.SendToUser
+import org.springframework.messaging.simp.annotation.SubscribeMapping
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.ModelAttribute
 import java.util.*
-
-data class GamesResponse(val notActive: Iterable<String>, val orphaned: Iterable<String>)
 
 @Configuration
 open class Factories {
@@ -32,6 +31,11 @@ open class Factories {
 
 @Controller
 class ServerController(private val server: TelestrationsServer, private val socket: SimpMessagingTemplate) {
+    @SubscribeMapping("/games/orphaned")
+    fun getOrphanedGames(): Iterable<String> {
+        return server.getOrphanedGameCodes()
+    }
+
     @MessageMapping("/games/{gameCode}/start")
     @SendTo("/topic/games/{gameCode}")
     fun startPlay(@DestinationVariable gameCode: String, @ModelAttribute user: User): TelestrationsGame {
